@@ -1,0 +1,10 @@
+{
+    "('p0', ':instance', 'politician')": "((7, <politician>),)",
+    "('n1', ':op3', '\"II\"')": "((3, <II>),)",
+    "('n1', ':op2', '\"Hussein\"')": "((1, <Hussein>),)",
+    "('n1', ':op1', '\"Barack\"')": "((0, <Barack>),)",
+    "('s0', ':instance', 'serve-01')": "((9, <served>),)",
+    "('d1', ':year', '2009')": "((19, <2009>),)",
+    "('p2', ':instance', 'president')": "((13, <president>),)",
+    "('n0', ':op1', '\"America\"')": "((6, <American>),)"
+}

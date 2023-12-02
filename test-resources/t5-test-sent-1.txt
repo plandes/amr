@@ -1,0 +1,33 @@
+# ::snt Barack Hussein Obama II is an American politician who served as the 44th president of the United States from 2009 to 2017.
+(p / politician
+   :mod (c / country
+           :name (n / name
+                    :op1 "United"
+                    :op2 "States"
+                    :toki1 "90"
+                    :toki1 "97"))
+   :domain (p2 / person
+               :name (n2 / name
+                         :op1 "Barack"
+                         :op2 "Hussein"
+                         :op3 "Obama"
+                         :op4 "II"
+                         :toki1 "0"
+                         :toki1 "7"
+                         :toki1 "15"
+                         :toki1 "21"))
+   :ARG0-of (s / serve-01
+               :ARG1 (p3 / president
+                         :ord (o / ordinal-entity
+                                 :value 44)
+                         :toki1 "73")
+               :ARG2 c
+               :time (d / date-interval
+                        :op1 (d2 / date-entity
+                                 :year 2009
+                                 :toki1 "109")
+                        :op2 (d3 / date-entity
+                                 :year 2017
+                                 :toki1 "117"))
+               :toki1 "54")
+   :toki1 "39")

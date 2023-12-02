@@ -1,0 +1,24 @@
+# ::snt Barack Hussein Obama II is an American politician who served as the 44th president of the United States from 2009 to 2017.
+# ::tokens ["Barack", "Hussein", "Obama", "II", "is", "an", "American", "politician", "who", "served", "as", "the", "44th", "president", "of", "the", "United", "States", "from", "2009", "to", "2017", "."]
+# ::ner_tags ["PERSON", "PERSON", "PERSON", "PERSON", "O", "O", "NORP", "O", "O", "O", "O", "O", "ORDINAL", "O", "O", "GPE", "GPE", "GPE", "O", "DATE", "O", "DATE", "O"]
+# ::ner_iob ["B", "I", "I", "I", "O", "O", "B", "O", "O", "O", "O", "O", "B", "O", "O", "B", "I", "I", "O", "B", "O", "B", "O"]
+# ::pos_tags ["NNP", "NNP", "NNP", "NNP", "VBZ", "DT", "JJ", "NN", "WP", "VBD", "IN", "DT", "JJ", "NN", "IN", "DT", "NNP", "NNP", "IN", "CD", "IN", "CD", "."]
+# ::lemmas ["Barack", "Hussein", "Obama", "II", "be", "an", "American", "politician", "who", "serve", "as", "the", "44th", "president", "of", "the", "United", "States", "from", "2009", "to", "2017", "."]
+# ::alignments 0-1.1.1.3 1-1.1.1.2 3-1.1.1.1 6-1.3.1.1 7-1 9-1.2 13-1.2.2 19-1.2.1.2.1
+(p0 / politician~e.7
+    :domain (p1 / person
+                :name (n1 / name
+                          :op3 "II"~e.3
+                          :op2 "Hussein"~e.1
+                          :op1 "Barack"~e.0))
+    :ARG0-of (s0 / serve-01~e.9
+                 :time (d0 / date-interval
+                           :op2 (d2 / date-entity)
+                           :op1 (d1 / date-entity
+                                    :year 2009~e.19))
+                 :ARG1 (p2 / president~e.13
+                           :ord (o0 / ordinal-entity
+                                    :value 14)))
+    :mod (c0 / country
+             :name (n0 / name
+                       :op1 "America"~e.6)))

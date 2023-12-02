@@ -1,0 +1,6 @@
+summary:
+    A man got caught in the door of a train he just missed.
+sections:
+    no section sentences
+        The man ran to make the train.
+        He just missed it and caught his arm in the door.

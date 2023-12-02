@@ -1,0 +1,23 @@
+# base AMR requirements
+amrlib~=0.7.1
+graphviz~=0.20.1
+sentencepiece~=0.1.96
+word2number==1.1
+
+# annotation
+pandas
+
+# spring model
+cached-property~=1.5.2
+networkx~=2.8.5
+
+# scoring (wlk)
+pyemd~=0.5.1
+
+# model download/paths
+zensols.install~=1.0.0
+# langugae parsing/features
+zensols.nlp~=1.8.0
+
+# coref
+zensols.amr_coref~=0.0.1

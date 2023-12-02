@@ -1,0 +1,46 @@
+# AMR (Abstract Meaning Representation) release v3.0
+# Le Petit Prince ("The Little Prince"), a 1943 novel by Antoine de Saint-Exupery (1562 sentences)
+# generated on Thu Jan 25, 2018 at 16:14:36
+
+# ::id lpp_1943.1 ::date 2012-06-07T17:06:07 ::annotator ISI-AMR-05 ::preferred
+# ::snt Chapter 1 .
+# ::save-date Thu Jun 7, 2012 ::file lpp_1943_1.txt
+(c / chapter
+  :mod 1)
+
+# ::id lpp_1943.2 ::date 2012-06-07T17:06:20 ::annotator ISI-AMR-05 ::preferred
+# ::snt Once when I was six years old I saw a magnificent picture in a book , called True Stories from Nature , about the primeval forest .
+# ::save-date Mon May 13, 2013 ::file lpp_1943_2.txt
+(s / see-01
+      :ARG0 (i / i)
+      :ARG1 (p / picture
+            :mod (m / magnificent)
+            :location (b2 / book :wiki -
+                  :name (n / name :op1 "True" :op2 "Stories" :op3 "from" :op4 "Nature")
+                  :topic (f / forest
+                        :mod (p2 / primeval))))
+      :mod (o / once)
+      :time (a / age-01
+            :ARG1 i
+            :ARG2 (t / temporal-quantity :quant 6
+                  :unit (y / year))))
+
+# ::id lpp_1943.3 ::date 2012-06-07T17:06:23 ::annotator ISI-AMR-05 ::preferred
+# ::snt It was a picture of a boa constrictor in the act of swallowing an animal .
+# ::save-date Mon Apr 15, 2013 ::file lpp_1943_3.txt
+(p / picture
+  :domain (i / it)
+  :topic (b2 / boa
+           :mod (c2 / constrictor)
+           :ARG0-of (s / swallow-01
+                      :ARG1 (a / animal))))
+
+# ::id lpp_1943.4 ::date 2012-06-07T17:06:28 ::annotator ISI-AMR-05 ::preferred
+# ::snt Here is a copy of the drawing .
+# ::save-date Thu Oct 29, 2015 ::file lpp_1943_4.txt
+(b / be-located-at-91
+      :ARG1 (t2 / thing
+            :ARG2-of (c / copy-01
+                  :ARG1 (p / picture
+                        :ARG1-of (d / draw-01))))
+      :ARG2 (h / here))

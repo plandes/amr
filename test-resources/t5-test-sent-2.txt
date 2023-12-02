@@ -1,0 +1,27 @@
+# ::snt A member of the Democratic Party, he was the first African-American president of the United States.
+(h / have-org-role-91
+   :ARG0 (h2 / he
+             :toki1 "34")
+   :ARG1 (c / country
+            :name (n / name
+                     :op1 "United"
+                     :op2 "States"
+                     :toki1 "85"
+                     :toki1 "92"))
+   :ARG2 (p / president
+            :toki1 "68")
+   :ord (o / ordinal-entity
+           :value 1)
+   :mod (e / ethnic-group
+           :name (n2 / name
+                     :op1 "African-American"))
+   :ARG0 h
+   :ARG1 c
+   :ARG2 (m / member
+            :toki1 "2")
+   :ARG3 (p2 / political-party
+             :name (n3 / name
+                       :op1 "Democratic"
+                       :op2 "Party"
+                       :toki1 "16"
+                       :toki1 "27")))
