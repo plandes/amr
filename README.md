@@ -1,9 +1,8 @@
 # AMR annotation and feature generation
 
 [![PyPI][pypi-badge]][pypi-link]
-[![Python 3.7][python37-badge]][python37-link]
-[![Python 3.8][python38-badge]][python38-link]
-[![Python 3.9][python39-badge]][python39-link]
+[![Python 3.10][python310-badge]][python310-link]
+[![Python 3.11][python311-badge]][python311-link]
 
 
 Provides support for AMR annotations and feature generation.
@@ -67,10 +66,10 @@ print('tuples:')
 pgraph: Graph = amr_sent.graph
 print(f'variables: {", ".join(pgraph.variables())}')
 for t in pgraph.triples:
-    print(' ', t)
+	print(' ', t)
 print('edges:')
 for e in pgraph.edges():
-    print(' ', e)
+	print(' ', e)
 ```
 
 Per the example, the [t5.conf](test-resources/t5.conf) and
@@ -104,13 +103,13 @@ $ amr parse -c test-resources/t5.conf 'This is a test of the AMR command line ut
 # ::snt This is a test of the AMR command line utility.
 (t / test-01
    :ARG1 (u / utility
-            :mod (c / command-line)
-            :name (n / name
-                     :op1 "AMR"
-                     :toki1 "6")
-            :toki1 "9")
+			:mod (c / command-line)
+			:name (n / name
+					 :op1 "AMR"
+					 :toki1 "6")
+			:toki1 "9")
    :domain (t2 / this
-               :toki1 "0")
+			   :toki1 "0")
    :toki1 "3")
 ```
 
@@ -147,23 +146,38 @@ This project, or reference model code, uses:
 ## Citation
 
 If you use this project in your research please use the following BibTeX entry:
+
 ```bibtex
-@article{Landes_DiEugenio_Caragea_2021,
-  title={DeepZensols: Deep Natural Language Processing Framework},
-  url={http://arxiv.org/abs/2109.03383},
-  note={arXiv: 2109.03383},
-  journal={arXiv:2109.03383 [cs]},
-  author={Landes, Paul and Di Eugenio, Barbara and Caragea, Cornelia},
-  year={2021},
-  month={Sep}
+@inproceedings{landes-etal-2023-deepzensols,
+	title = "{D}eep{Z}ensols: A Deep Learning Natural Language Processing Framework for Experimentation and Reproducibility",
+	author = "Landes, Paul  and
+	  Di Eugenio, Barbara  and
+	  Caragea, Cornelia",
+	editor = "Tan, Liling  and
+	  Milajevs, Dmitrijs  and
+	  Chauhan, Geeticka  and
+	  Gwinnup, Jeremy  and
+	  Rippeth, Elijah",
+	booktitle = "Proceedings of the 3rd Workshop for Natural Language Processing Open Source Software (NLP-OSS 2023)",
+	month = dec,
+	year = "2023",
+	address = "Singapore, Singapore",
+	publisher = "Empirical Methods in Natural Language Processing",
+	url = "https://aclanthology.org/2023.nlposs-1.16",
+	pages = "141--146"
 }
 ```
-
 
 
 ## Changelog
 
 An extensive changelog is available [here](CHANGELOG.md).
+
+
+## Community
+
+Please star this repository and let me know how and where you use this API.
+Contributions as pull requests, feedback and any input is welcome.
 
 
 ## License
@@ -181,10 +195,10 @@ Copyright (c) 2021 - 2023 Paul Landes
 [python37-link]: https://www.python.org/downloads/release/python-370
 [python38-badge]: https://img.shields.io/badge/python-3.8-blue.svg
 [python38-link]: https://www.python.org/downloads/release/python-380
-[python39-badge]: https://img.shields.io/badge/python-3.9-blue.svg
-[python39-link]: https://www.python.org/downloads/release/python-390
-[build-badge]: https://github.com/plandes/amr/workflows/CI/badge.svg
-[build-link]: https://github.com/plandes/amr/actions
+[python310-badge]: https://img.shields.io/badge/python-3.10-blue.svg
+[python310-link]: https://www.python.org/downloads/release/python-3100
+[python311-badge]: https://img.shields.io/badge/python-3.11-blue.svg
+[python311-link]: https://www.python.org/downloads/release/python-3110
 
 [spaCy]: https://spacy.io
 [amrlib]: https://github.com/bjascob/amrlib
