@@ -1,0 +1,7 @@
+<map id="inheritanced23f5d7bba" name="inheritanced23f5d7bba">
+<area shape="rect" id="node1" href="#zensols.amr.app.Application" target="_top" title="Parse and plot AMR graphs in Penman notation." alt="" coords="5,5,116,36"/>
+<area shape="rect" id="node2" title="Create a collection of name/value pairs." alt="" coords="205,5,277,36"/>
+<area shape="rect" id="node3" href="#zensols.amr.app.Format" target="_top" title="Format output type for AMR corpous documents." alt="" coords="201,84,281,115"/>
+<area shape="rect" id="node4" href="#zensols.amr.app.ScorerApplication" target="_top" title="Creates parsed files for comparing, and scores." alt="" coords="333,5,495,36"/>
+<area shape="rect" id="node5" href="#zensols.amr.app.TrainerApplication" target="_top" title="Trains and evaluates models." alt="" coords="536,5,703,36"/>
+</map>

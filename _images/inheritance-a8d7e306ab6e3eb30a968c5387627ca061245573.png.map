@@ -1,0 +1,7 @@
+<map id="inheritancecfb6ec6cd9" name="inheritancecfb6ec6cd9">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="79,5,151,36"/>
+<area shape="rect" id="node4" title="An interface for classes that have multi&#45;line debuging capability." alt="" coords="5,163,93,193"/>
+<area shape="rect" id="node5" title="All subclasses have the ability to deallocate any resources. &#160;This is" alt="" coords="131,84,261,115"/>
+<area shape="rect" id="node2" href="#zensols.amr.sent.AmrSentence" target="_top" title="Contains a sentence that contains an AMR graph and a Penman string" alt="" coords="70,241,202,272"/>
+<area shape="rect" id="node3" title="Classes can extend this that want to persist :class:`.PersistedWork`" alt="" coords="117,163,307,193"/>
+</map>

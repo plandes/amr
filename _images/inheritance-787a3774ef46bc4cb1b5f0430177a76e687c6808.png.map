@@ -1,0 +1,7 @@
+<map id="inheritancee16fa96824" name="inheritancee16fa96824">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="63,5,135,36"/>
+<area shape="rect" id="node5" title="Called by :class:`.Component` to do post spaCy initialization." alt="" coords="5,84,192,115"/>
+<area shape="rect" id="node2" href="#zensols.amr.amrparser.AmrGenerator" target="_top" title="A callable that generates natural language text from an AMR graph." alt="" coords="223,163,361,193"/>
+<area shape="rect" id="node3" href="#zensols.amr.amrparser.ModelContainer" target="_top" title="Contains an installer used to download and install a model that&#39;s then" alt="" coords="217,84,367,115"/>
+<area shape="rect" id="node4" href="#zensols.amr.amrparser.AmrParser" target="_top" title="Parses natural language into AMR graphs. &#160;It has the ability to change" alt="" coords="67,163,176,193"/>
+</map>

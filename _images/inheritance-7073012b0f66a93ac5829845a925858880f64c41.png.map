@@ -1,0 +1,6 @@
+<map id="inheritance6abaffc0bb" name="inheritance6abaffc0bb">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="13,5,85,36"/>
+<area shape="rect" id="node3" title="An interface for classes that have multi&#45;line debuging capability." alt="" coords="5,84,93,115"/>
+<area shape="rect" id="node2" title="A class that that generates a dictionary recursively from data classes" alt="" coords="6,163,93,193"/>
+<area shape="rect" id="node4" href="#zensols.amr.trainer.Trainer" target="_top" title="Interface in to the :mod:`amrlib` package&#39;s HuggingFace T5 model trainer." alt="" coords="10,241,89,272"/>
+</map>

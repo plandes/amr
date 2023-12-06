@@ -1,0 +1,4 @@
+<map id="inheritance0ac4abdeb1" name="inheritance0ac4abdeb1">
+<area shape="rect" id="node1" href="#zensols.amr.alignpop.AlignmentPopulator" target="_top" title="Adds alignments from an ISI formatted string." alt="" coords="5,5,185,36"/>
+<area shape="rect" id="node2" href="#zensols.amr.alignpop.PathAlignment" target="_top" title="An alignment that contains the path and alignment to node, or an edge for" alt="" coords="333,5,473,36"/>
+</map>

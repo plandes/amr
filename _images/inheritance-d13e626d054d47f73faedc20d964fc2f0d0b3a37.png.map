@@ -1,0 +1,18 @@
+<map id="inheritancedb0ba592cd" name="inheritancedb0ba592cd">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="259,5,331,36"/>
+<area shape="rect" id="node6" title="All subclasses have the ability to deallocate any resources. &#160;This is" alt="" coords="305,84,435,115"/>
+<area shape="rect" id="node8" title="An interface for classes that have multi&#45;line debuging capability." alt="" coords="178,84,266,115"/>
+<area shape="rect" id="node2" href="#zensols.amr.container.AmrFeatureDocument" target="_top" title="A feature document that contains an :obj:`amr` graph." alt="" coords="5,477,207,508"/>
+<area shape="rect" id="node3" title="A container class of tokens that make a document. &#160;This class contains a" alt="" coords="31,399,197,429"/>
+<area shape="rect" id="node4" href="#zensols.amr.container.AmrFeatureSentence" target="_top" title="A sentence that holds an instance of :class:`.AmrSentence`." alt="" coords="214,556,409,587"/>
+<area shape="rect" id="node5" title="A container class of tokens that make a sentence. &#160;Instances of this" alt="" coords="231,477,391,508"/>
+<area shape="rect" id="node11" title="Classes can extend this that want to persist :class:`.PersistedWork`" alt="" coords="283,163,473,193"/>
+<area shape="rect" id="node7" title="A class that that generates a dictionary recursively from data classes" alt="" coords="172,163,259,193"/>
+<area shape="rect" id="node13" href="#zensols.amr.container.ReferenceObject" target="_top" title="A base class reference and relation classes." alt="" coords="328,241,487,272"/>
+<area shape="rect" id="node16" title="A *writable* class that has a ``text`` property or attribute. &#160;All" alt="" coords="119,241,253,272"/>
+<area shape="rect" id="node9" title="A base class for token container classes such as" alt="" coords="112,320,260,351"/>
+<area shape="rect" id="node10" title="A span of tokens as a :class:`.TokenContainer`, much like" alt="" coords="239,399,365,429"/>
+<area shape="rect" id="node12" href="#zensols.amr.container.Reference" target="_top" title="A multi&#45;document coreference target, which points to a node in an AMR" alt="" coords="284,320,389,351"/>
+<area shape="rect" id="node14" href="#zensols.amr.container.Relation" target="_top" title="A relation makes up a set of references across multuiple sentences of a" alt="" coords="414,320,502,351"/>
+<area shape="rect" id="node15" href="#zensols.amr.container.RelationSet" target="_top" title="All coreference relations for a given document." alt="" coords="526,320,641,351"/>
+</map>
