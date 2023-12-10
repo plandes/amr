@@ -36,6 +36,11 @@ appinfo:
 modeldeps:
 			$(PIP_BIN) install $(PIP_ARGS) -r $(PY_SRC)/requirements-model.txt
 
+# requirements for scoring (i.e. WLK)
+.PHONY:			scoredeps
+scoredeps:
+			$(PIP_BIN) install $(PIP_ARGS) -r $(PY_SRC)/requirements-score.txt
+
 # test parsing text
 .PHONY:			testparse
 testparse:

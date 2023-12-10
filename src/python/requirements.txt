@@ -11,13 +11,10 @@ pandas
 cached-property~=1.5.2
 networkx~=3.2.1
 
-# scoring (wlk)
-pymed~=0.8.9
-
 # model download/paths
 zensols.install~=1.1.0
 # langugae parsing/features
 zensols.nlp~=1.9.0
 
 # coref
-zensols.amr_coref~=0.0.1
+zensols.amr_coref~=0.0.2
