@@ -40,7 +40,7 @@ class TestApplication(unittest.TestCase):
         fail: AmrFailure = fails[0]
         self.assertEqual(AmrFailure, type(fail))
         should = """\
-AmrError: Could not parse: 
+Could not parse: 
   line 1
     (h / have-org-role-91
                          ^
