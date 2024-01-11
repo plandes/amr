@@ -133,11 +133,10 @@ class TokenFeatureAnnotator(object):
 @dataclass
 class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
     """A document parser that adds and further annotates AMR graphs.  This has
-    the advantage of avoiding a second AMR construction when annotated a graph
-    with features (i.e. ent, POS tag, etc) because it goes directly to using the
-    adapted spaCy classes from the normalized features in
-    :class:`.AmrDocumentAnnotator`.  For this reason, use this class if your
-    application needs annotation.
+    the advantage of avoiding a second AMR construction when annotating a graph
+    with features (i.e. ent, POS tag, etc) because it uses (adapted) spaCy
+    class's normalized features.  For this reason, use this class if your
+    application needs such annotations.
 
     This parses and popluates AMR graphs as :class:`~zensols.amr.AmrDocument` at
     the document level and a :class:`~zensols.amr.AmrSentence` at the sentence
