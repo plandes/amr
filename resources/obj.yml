@@ -51,6 +51,7 @@ amr_pipline_doc_parser:
   components: 'instance: list: amr_parser_component, amr_align_component'
   reload_components: true
 
+
 # used for parsing human annotated AMR graphs with ``snt`` metadata, which is
 # useful for scoring
 amr_human_anon_doc_parser:

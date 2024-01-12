@@ -8,6 +8,7 @@ from pathlib import Path
 from spacy.tokens.doc import Doc
 from spacy.tokens.span import Span
 from penman.graph import Graph
+from zensols.util import Failure
 from zensols.cli import CliHarness
 from zensols.amr import (
     AmrSentence, AmrDocument, AmrFeatureDocument, AmrFeatureSentence,
@@ -171,6 +172,8 @@ Party, he was the first African-American president of the United States.\
 
     def test_filtering_annotator(self):
         app: Application = self._app('gsii-filter-test', 'test-filter')
+        if isinstance(app, Failure):
+            app.rethrow()
         doc_parser = app.config_factory('amr_anon_doc_parser')
         doc: AmrFeatureDocument = doc_parser(self.sent)
         self.assertEquals(AmrFeatureDocument, type(doc))

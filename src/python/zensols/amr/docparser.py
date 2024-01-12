@@ -14,15 +14,14 @@ from spacy.tokens import Doc, Token, Span
 from penman import constant, surface
 from penman.graph import Graph
 from penman.surface import Alignment
-from zensols.util import APIError
 from zensols.persist import persisted
 from zensols.nlp import (
     SplitTokenMapper, TokenNormalizer, MapTokenNormalizer,
     FeatureSentence, FeatureDocument, FeatureToken,
-    CachingFeatureDocumentParser,
+    CachingFeatureDocumentParser, FeatureDocumentDecorator,
 )
 from . import (
-    AmrSentence, AmrDocument, AmrFeatureSentence, AmrFeatureDocument,
+    AmrError, AmrSentence, AmrDocument, AmrFeatureSentence, AmrFeatureDocument,
     AmrParser, AmrAlignmentPopulator, CoreferenceResolver,
 )
 from .spacyadapt import SpacyDocAdapter
@@ -30,8 +29,12 @@ from .spacyadapt import SpacyDocAdapter
 logger = logging.getLogger(__name__)
 
 
+class AmrParseError(AmrError):
+    pass
+
+
 @dataclass
-class TokenFeatureAnnotator(object):
+class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
     """Annotate features in AMR sentence graphs from indexes annotated from
     :class:`.AmrAlignmentPopulator`.
 
@@ -53,7 +56,10 @@ class TokenFeatureAnnotator(object):
     :obj:`zensols.nlp.FeatureToken.NONE`.
 
     """
-    def __call__(self, doc: AmrFeatureDocument):
+    def decorate(self, doc: FeatureDocument):
+        if not isinstance(doc, AmrFeatureDocument):
+            raise AmrParseError(
+                f'Expecting AmrFeatureDocument but got: {type(doc)}')
         updates: List[AmrSentence] = []
         sent: AmrSentence
         for sent in doc.sents:
@@ -171,10 +177,6 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
     amr_parser: AmrParser = field(default=None)
     """The AMR parser used to induce the graphs."""
 
-    token_feature_annotators: Tuple[TokenFeatureAnnotator, ...] = field(
-        default=())
-    """Annotates the AMR graph with a feature."""
-
     alignment_populator: AmrAlignmentPopulator = field(default=None)
     """Adds the alighment markings."""
 
@@ -200,7 +202,7 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
     def __post_init__(self):
         super().__post_init__()
         if self.amr_parser is None:
-            raise APIError(f"Missing 'amr_parser' field in {self}")
+            raise AmrParseError(f"Missing 'amr_parser' field in {self}")
 
     @persisted('_token_normalize')
     def _get_token_normalizer(self) -> TokenNormalizer:
@@ -251,7 +253,7 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
         """
         fdoc.update_indexes()
         if fdoc.spacy_doc is None:
-            raise APIError('Expecting spaCy doc present')
+            raise AmrParseError('Expecting spaCy doc present')
         # add spacy_token back to tokens
         fdoc.set_spacy_doc(fdoc.spacy_doc)
         sdoc: Doc = SpacyDocAdapter(fdoc)
@@ -292,8 +294,7 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
             fsents.append(amr_fsent)
         amr_fdoc: AmrFeatureDocument = doc.clone(
             self.amr_doc_class, sents=tuple(fsents), amr=amr_doc)
-        for populator in self.token_feature_annotators:
-            populator(amr_fdoc)
+        super().decorate(amr_fdoc)
         if self.coref_resolver is not None:
             self.coref_resolver(amr_fdoc)
         return amr_fdoc

@@ -14,7 +14,7 @@ networkx~=3.2.1
 # model download/paths
 zensols.install~=1.1.0
 # langugae parsing/features
-zensols.nlp~=1.9.0
+zensols.nlp~=1.9.2
 
 # coref
 zensols.amr_coref~=0.0.2
