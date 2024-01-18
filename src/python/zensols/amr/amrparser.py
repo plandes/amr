@@ -88,6 +88,8 @@ class AmrParser(ModelContainer, ComponentInitializer):
         new_parser: AmrParser = doc_parser.config_factory(self.name)
         self.installer = new_parser.installer
 
+    # if the model doesn't change after its app configuration does for the life
+    # of the interpreter, turn off caching in config amr_anon_feature_doc_stash
     @persisted('_parse_model', cache_global=True)
     def _get_parse_model(self) -> STOGInferenceBase:
         """The model that parses text in to AMR graphs.  This model is cached
