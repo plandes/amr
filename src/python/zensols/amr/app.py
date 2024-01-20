@@ -38,15 +38,27 @@ class Format(Enum):
 
 
 @dataclass
-class Application(object):
+class BaseApplication(object):
+    log_config: LogConfigurator = field()
+    """Used to update logging levels based on the ran action."""
+
+    def _set_level(self, level: int, verbose: bool = False):
+        self.log_config.level = level
+        self.log_config()
+        if verbose:
+            # this doesn't cross over to (multi) sub-processes; for that set
+            # log configuration in app.conf or train-t5.conf
+            for n in 'persist multi install'.split():
+                logging.getLogger(f'zensols.{n}').setLevel(logging.INFO)
+
+
+@dataclass
+class Application(BaseApplication):
     """Parse and plot AMR graphs in Penman notation.
 
     """
     config_factory: ConfigFactory = field()
     """Application context."""
-
-    log_config: LogConfigurator = field()
-    """Used to update logging levels based on the ran action."""
 
     amr_parser: AmrParser = field()
     """Parses natural language in to AMR graphs."""
@@ -62,15 +74,6 @@ class Application(object):
 
     dumper: Dumper = field()
     """Plots and writes AMR content in human readable formats."""
-
-    def _set_level(self, level: int, verbose: bool = False):
-        self.log_config.level = level
-        self.log_config()
-        if verbose:
-            # this doesn't cross over to (multi) sub-processes; for that set
-            # log configuration in app.conf or train-t5.conf
-            for n in 'persist multi install'.split():
-                logging.getLogger(f'zensols.{n}').setLevel(logging.INFO)
 
     def count(self, input_file: Path):
         """Provide counts on an AMR corpus file.
@@ -390,7 +393,7 @@ class ScorerApplication(object):
 
 
 @dataclass
-class TrainerApplication(object):
+class TrainerApplication(BaseApplication):
     """Trains and evaluates models.
 
     """
@@ -442,3 +445,26 @@ class TrainerApplication(object):
         for to_clean in (self.doc_parser, self.anon_doc_stash):
             logger.info(f'cleaning {type(to_clean)}')
             to_clean.clear()
+
+    def proto(self):
+        if 1:
+            self.trainer()
+            return
+        if 0:
+            parser = self.config_factory('amr_parser')
+            #print(type(parser.parse_model))
+            parser.installer.write()
+            #parser.installer()
+            return
+        if 0:
+            self.config_factory.config.write()
+            return
+        if 1:
+            #print(type(self.config_factory('amr_parser').parse_model))
+            app = self.config_factory('app')
+            parser = app.doc_parser
+            parser.clear()
+            #print(type(parser.parse_model))
+            doc = parser.parse('Obama was the 44th president.')
+            doc.write()
+            return

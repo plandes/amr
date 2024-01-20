@@ -232,7 +232,7 @@ class AmrGenerator(ModelContainer):
 
 
 @Language.factory('amr_parser')
-def create_amr_parser(nlp: Language, name: str, parser_name: str):
+def create_amr_parser(nlp: Language, name: str, parser_name: str) -> AmrParser:
     """Create an instance of :class:`.AmrParser`.
 
     """
@@ -240,4 +240,5 @@ def create_amr_parser(nlp: Language, name: str, parser_name: str):
     if logger.isEnabledFor(logging.INFO):
         logger.info(f'creating AMR component {name}: doc parser: {doc_parser}')
     parser: AmrParser = doc_parser.config_factory(parser_name)
+    assert isinstance(parser, AmrParser)
     return parser

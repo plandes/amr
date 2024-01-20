@@ -1,10 +1,11 @@
 """Continues training on an AMR model.
 
 """
+from __future__ import annotations
 __author__ = 'Paul Landes'
-
-from typing import Dict, Any, Type, Tuple, ClassVar, Set
+from typing import Dict, Tuple, Set, Any, Type, ClassVar, Callable
 from dataclasses import dataclass, field
+from enum import Enum, auto
 import logging
 import json
 import re
@@ -13,6 +14,7 @@ import copy as cp
 import shutil
 from datetime import date
 from pathlib import Path
+import tarfile as tf
 from zensols.config import Dictable
 from zensols.persist import persisted
 from zensols.install import Installer
@@ -22,17 +24,42 @@ from . import AmrError, AmrParser
 logger = logging.getLogger(__name__)
 
 
+class _ModelType(Enum):
+    """The type of model to train, such as XFM T5, spring etc.
+
+    """
+    _ignore_ = ['_MOD_RE']
+    _MOD_RE: ClassVar[re.Pattern]
+
+    # supported models
+    xfm = auto()
+    spring = auto()
+
+    @classmethod
+    def from_meta(cls: Type[_ModelType], meta: Dict[str, Any]) -> _ModelType:
+        mod: str = meta['inference_module']
+        m: re.Pattern = cls._MOD_RE.match(mod)
+        model_type_str: str = m.group(1)
+        model_type: _ModelType = cls.__members__.get(model_type_str)
+        if model_type is None:
+            raise AmrError(f'No such (trainable) model: {model_type_str}')
+        return model_type
+
+
+_ModelType._MOD_RE = re.compile(r'^\.parse_([^.]+)\.inference$')
+
+
 @dataclass
 class Trainer(Dictable):
     """Interface in to the :mod:`amrlib` package's HuggingFace T5 model trainer.
 
     """
-    _INFERENCE_MOD_REGEX: ClassVar[re.Pattern] = re.compile(
-        r'.*(parse_[a-z]+).*')
-
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
         'corpus_file', 'pretrained_path', 'trainer_class', 'training_config',
         'token_model_name'}
+
+    _INFERENCE_MOD_REGEX: ClassVar[re.Pattern] = re.compile(
+        r'.*(parse_[a-z]+).*')
 
     corpus_installer: Installer = field(repr=False)
     """Points to the AMR corpus file(s)."""
@@ -68,6 +95,9 @@ class Trainer(Dictable):
     :obj:`training_config_file`.
 
     """
+    package_dir: Path = field(default=Path('.'))
+    """The directory to install the compressed distribution file."""
+
     def __post_init__(self):
         os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
@@ -94,7 +124,10 @@ class Trainer(Dictable):
     def _get_input_metadata(self) -> str:
         model_dir: Path = self.parser.installer.get_singleton_path()
         meta_file: Path = model_dir / 'amrlib_meta.json'
-        if meta_file.is_file():
+        self.parser.installer()
+        if not meta_file.is_file():
+            raise AmrError(f'No metadata file: {meta_file}')
+        else:
             with open(meta_file) as f:
                 content = json.load(f)
             return content
@@ -124,22 +157,32 @@ class Trainer(Dictable):
                 paths))
             if len(cans) != 1:
                 logger.warning(
-                    "Expecting a single file starts with 'model' " +
+                    "expecting a single file starts with 'model' " +
                     f"but got {', '.join(map(lambda p: p.name, paths))}")
             else:
                 path = cans[0]
+        if path is None:
+            logger.warning(
+                f'missing training config file: {self.training_config_file}')
         return path
 
     @persisted('_training_config_content')
     def _get_training_config_content(self) -> Dict[str, Any]:
         train_file: Path = self._get_training_config_file()
         if train_file is not None:
+            overrides: Dict[str, Any] = self.training_config_overrides
             with open(train_file) as f:
                 conf = json.load(f)
-            if self.training_config_overrides is not None:
-                for k in 'gen_args hf_args model_args'.split():
-                    if k in self.training_config_overrides:
-                        conf[k] = conf[k] | self.training_config_overrides[k]
+            if self._get_model_type() == _ModelType.xfm:
+                if overrides is not None:
+                    for k in 'gen_args hf_args model_args'.split():
+                        if k in self.training_config_overrides:
+                            conf[k] = conf[k] | overrides[k]
+                # by 4.35 HF defaults to safe tensors, but amrlib models were
+                # trained before, this
+                conf['hf_args']['save_safetensors'] = False
+            else:
+                conf.update(overrides)
             return conf
 
     @property
@@ -150,9 +193,15 @@ class Trainer(Dictable):
 
         """
         train_conf: Dict[str, Any] = self._get_training_config_content()
+        return
         if train_conf is not None:
             ga: Dict[str, str] = train_conf['gen_args']
             return ga['model_name_or_path']
+
+    @persisted('_model_type')
+    def _get_model_type(self) -> _ModelType:
+        meta: Dict[str, str] = self._get_input_metadata()
+        return _ModelType.from_meta(meta)
 
     @property
     @persisted('_training_config')
@@ -164,14 +213,19 @@ class Trainer(Dictable):
         corpus_file: Path = self.corpus_file
         conf: Dict[str, Any] = self._get_training_config_content()
         if conf is not None:
-            ga: Dict[str, str] = conf['gen_args']
-            hf: Dict[str, str] = conf['hf_args']
-            ga['corpus_dir'] = str(corpus_file.parent.absolute())
-            ga['train_fn'] = corpus_file.name
-            ga['tok_name_or_path'] = self.token_model_name
-            ga['model_name_or_path'] = str(self.pretrained_path.absolute())
-            ga['eval_fn'] = corpus_file.name
-            hf['output_dir'] = str(self.temporary_dir)
+            if self._get_model_type() == _ModelType.spring:
+                conf['model_dir'] = str(self.pretrained_path.absolute())
+                conf['train'] = str(corpus_file.parent.absolute()) + '/*.txt'
+                conf['dev'] = conf['train']
+            else:
+                ga: Dict[str, str] = conf['gen_args']
+                hf: Dict[str, str] = conf['hf_args']
+                ga['corpus_dir'] = str(corpus_file.parent.absolute())
+                ga['train_fn'] = corpus_file.name
+                ga['tok_name_or_path'] = self.token_model_name
+                ga['model_name_or_path'] = str(self.pretrained_path.absolute())
+                ga['eval_fn'] = corpus_file.name
+                hf['output_dir'] = str(self.temporary_dir)
             return conf
 
     def _write_config(self, config: Dict[str, any]):
@@ -223,7 +277,8 @@ class Trainer(Dictable):
         new_config = self.output_dir / 'config.json'
         with open(new_config, 'w') as f:
             json.dump(content, f, indent=4)
-        logger.info(f'wrote: {new_config}')
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'wrote: {new_config}')
 
     def _copy_model_files(self):
         fname: str = 'pytorch_model.bin'
@@ -232,22 +287,51 @@ class Trainer(Dictable):
         dst: Path = self.output_dir / fname
         shutil.copy(src, dst)
 
+    def _package(self):
+        """Create a compressed file with the model and metadata used by the
+        :class:`~zensols.install.installer.Installer` using resource library
+        ``amr_parser:installer``.
+
+        """
+        out_tar_file: Path = self.package_dir / f'{self.output_dir.stem}.tar.gz'
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'compressing model: {self.output_dir}')
+        with tf.open(out_tar_file, "w:gz") as tar:
+            tar.add(self.output_dir, arcname=self.output_dir.name)
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'wrote: {out_tar_file}')
+
     def __call__(self, dry_run: bool = False):
         """Train the model (see class docs).
 
         :param dry_run: when ``True``, don't do anything, just act like it.
 
         """
+        self.write_to_log(logger)
         trainer_class: Type = self.trainer_class
         config: Dict[str, Any] = self.training_config
-        trainer = trainer_class(config)
-        self.write()
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-        logger.info(f'training: {self.corpus_file} with {trainer}')
+        train: Callable = trainer_class(config)
+        if self._get_model_type() == _ModelType.spring:
+            cp: str = str(self.pretrained_path.absolute() / 'model.pt')
+            if logger.isEnabledFor(logging.INFO):
+                logger.info(f'using check point: {cp}')
+            train_fn: Callable = train.train
+            train = (lambda: train_fn(checkpoint=cp))
+        elif not isinstance(train, Callable):
+            train = train.train
+        dir_path: Path
+        for dir_path in (self.temporary_dir, self.output_dir):
+            if dir_path.is_dir():
+                shutil.rmtree(dir_path)
+        self.output_dir.mkdir(parents=True)
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'training on {self.corpus_file} to {self.output_dir}')
         if not dry_run:
-            trainer()
+            train()
             self._write_config(config)
             self._write_metadata()
             self._rewrite_config()
             self._copy_model_files()
-            logger.info(f'model written to {self.output_dir.parent}')
+            if logger.isEnabledFor(logging.INFO):
+                logger.info(f'model written to {self.output_dir}')
+            self._package()

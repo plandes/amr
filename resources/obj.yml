@@ -1,25 +1,32 @@
+# @meta {desc: 'AMR API resource library', date: '2024-01-20'}
+
+
 ## spaCy pipeline components
 #
-amr_parser:
-  class_name: zensols.amr.AmrParser
-  installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
-
-amr_align_populator:
-  class_name: zensols.amr.AmrAlignmentPopulator
-  aligner: best
-
+# spaCy pipeline component to parse AMR and add as an attribute to `Doc`s
 amr_parser_component:
   class_name: zensols.nlp.Component
   modules: 'list: zensols.amr'
   pipe_name: 'amr_parser'
   pipe_config:
     parser_name: 'amr_parser'
+  # set the doc parser (via passed spaCy language model) to AmrParser
   initializers: 'instance: tuple: amr_parser'
 
+amr_parser:
+  class_name: zensols.amr.AmrParser
+  installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
+
+# spaCy pipeline component to add text-to-graph alignments to AMR graphs parsed
+# by `amr_parser`
 amr_align_component:
   class_name: zensols.nlp.Component
   modules: 'list: zensols.amr'
   pipe_name: 'amralign'
+
+amr_align_populator:
+  class_name: zensols.amr.AmrAlignmentPopulator
+  aligner: best
 
 
 ## Client usable objects
@@ -80,8 +87,9 @@ amr_trainer:
   corpus_installer: 'instance: amr_trainer_corpus_installer'
   parser: 'instance: amr_parser'
   model_name: '${amr_trainer_default:model_name}'
-  temporary_dir: 'path: ${default:data_dir}/trained_output/${model_name}'
+  temporary_dir: 'path: ${default:temporary_dir}/model-train-output/${model_name}'
   output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'
+  package_dir: 'path: ${amr_trainer_default:package_dir}'
 
 
 ## Plotting and writing
