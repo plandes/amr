@@ -18,7 +18,7 @@ CLEAN_DEPS +=		cleanexample
 CLEAN_ALL_DEPS +=	cleanalldep
 
 # file, models and entry point
-MODEL_CONF_DIR = 	models
+MODEL_CONF_DIR = 	etc
 MODEL_NAME = 		lp
 MODEL_FILE =		corpus/amr-bank-struct-v3.0.txt
 ABIN =			./amr
@@ -79,7 +79,8 @@ renderexamples:
 .PHONY:			trainlp
 trainlp:
 			$(eval CF=$(MODEL_CONF_DIR)/spring-$(MODEL_NAME).conf)
-			$(ABIN) train -c $(CF)
+			$(eval OR=amr_default.parse_model=spring)
+			$(ABIN) train -c $(CF) --override '$(OR)'
 
 # evaluate the little prince corpus
 .PHONY:			evallp
