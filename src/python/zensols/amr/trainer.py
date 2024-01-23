@@ -3,7 +3,7 @@
 """
 from __future__ import annotations
 __author__ = 'Paul Landes'
-from typing import Dict, Tuple, Set, Any, Type, ClassVar, Callable
+from typing import Dict, Tuple, Set, Any, Type, Union, ClassVar, Callable
 from dataclasses import dataclass, field
 from enum import Enum, auto
 import logging
@@ -90,9 +90,14 @@ class Trainer(Dictable):
     configuration file genereted by the last pretrained model.
 
     """
-    training_config_overrides: Dict[str, Any] = field(default=None)
+    training_config_overrides: Dict[str, Any] = field(default_factory=dict)
     """More configuration that overrides/clobbers from the contents found in
     :obj:`training_config_file`.
+
+    """
+    pretrained_path: Union[Path, str] = field(default=None)
+    """The path to the checkpoint file or the string ``scratch`` if starting
+    from scratch.
 
     """
     package_dir: Path = field(default=Path('.'))
@@ -115,10 +120,18 @@ class Trainer(Dictable):
         return self.output_model_dir / model_name
 
     @property
-    @persisted('_pretrained_path')
-    def pretrained_path(self) -> Path:
+    def _pretrained_path(self) -> Path:
         """The path to the pretrained ``pytorch_model.bin`` file."""
-        return self.parser.installer.get_singleton_path()
+        if self._pretrained_path_val == 'scratch':
+            return None
+        elif self._pretrained_path_val is None:
+            self._pretrained_path_val = \
+                self.parser.installer.get_singleton_path()
+        return self._pretrained_path_val
+
+    @_pretrained_path.setter
+    def _pretrained_path(self, path: Path):
+        self._pretrained_path_val = path
 
     @persisted('_input_metadata')
     def _get_input_metadata(self) -> str:
@@ -174,10 +187,9 @@ class Trainer(Dictable):
             with open(train_file) as f:
                 conf = json.load(f)
             if self._get_model_type() == _ModelType.xfm:
-                if overrides is not None:
-                    for k in 'gen_args hf_args model_args'.split():
-                        if k in self.training_config_overrides:
-                            conf[k] = conf[k] | overrides[k]
+                for k in 'gen_args hf_args model_args'.split():
+                    if k in self.training_config_overrides:
+                        conf[k] = conf[k] | overrides[k]
                 # by 4.35 HF defaults to safe tensors, but amrlib models were
                 # trained before, this
                 conf['hf_args']['save_safetensors'] = False
@@ -214,7 +226,11 @@ class Trainer(Dictable):
         conf: Dict[str, Any] = self._get_training_config_content()
         if conf is not None:
             if self._get_model_type() == _ModelType.spring:
-                conf['model_dir'] = str(self.pretrained_path.absolute())
+                pt_path: Path = self.pretrained_path
+                if pt_path is None or True:
+                    conf['model_dir'] = str(self.temporary_dir.absolute())
+                else:
+                    conf['model_dir'] = str(self.pretrained_path.absolute())
                 conf['train'] = str(corpus_file.parent.absolute()) + '/*.txt'
                 conf['dev'] = conf['train']
             else:
@@ -301,6 +317,30 @@ class Trainer(Dictable):
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'wrote: {out_tar_file}')
 
+    def _setup_spring(self, config: Dict[str, Any], train: Callable):
+        pt_path: Path = self.pretrained_path
+        cp: str = None
+        if pt_path is None:
+            logger.info('training from scratch')
+        else:
+            cp = str(self.pretrained_path.absolute() / 'model.pt')
+            if logger.isEnabledFor(logging.INFO):
+                logger.info(f'using check point: {cp}')
+        train_fn: Callable = train.train
+        train = (lambda: train_fn(checkpoint=cp))
+        output_dir: Path = Path(config['model_dir'])
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'output dir: {output_dir}')
+        # __call__ removed this
+        assert not output_dir.is_dir()
+        conf_file = output_dir / 'config.json'
+        output_dir.mkdir(parents=True)
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'copy {self.training_config_file} to {conf_file}')
+            with open(conf_file, 'w') as f:
+                json.dump(config, f, indent=4)
+        return train
+
     def __call__(self, dry_run: bool = False):
         """Train the model (see class docs).
 
@@ -311,19 +351,16 @@ class Trainer(Dictable):
         trainer_class: Type = self.trainer_class
         config: Dict[str, Any] = self.training_config
         train: Callable = trainer_class(config)
-        if self._get_model_type() == _ModelType.spring:
-            cp: str = str(self.pretrained_path.absolute() / 'model.pt')
-            if logger.isEnabledFor(logging.INFO):
-                logger.info(f'using check point: {cp}')
-            train_fn: Callable = train.train
-            train = (lambda: train_fn(checkpoint=cp))
-        elif not isinstance(train, Callable):
-            train = train.train
         dir_path: Path
         for dir_path in (self.temporary_dir, self.output_dir):
             if dir_path.is_dir():
                 shutil.rmtree(dir_path)
-        self.output_dir.mkdir(parents=True)
+        if self._get_model_type() == _ModelType.spring:
+            train = self._setup_spring(config, train)
+        elif not isinstance(train, Callable):
+            train = train.train
+        # _setup_spring created this directory for that model's config
+        self.output_dir.mkdir(parents=True, exist_ok=True)
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'training on {self.corpus_file} to {self.output_dir}')
         if not dry_run:
@@ -335,3 +372,6 @@ class Trainer(Dictable):
             if logger.isEnabledFor(logging.INFO):
                 logger.info(f'model written to {self.output_dir}')
             self._package()
+
+
+Trainer.pretrained_path = Trainer._pretrained_path

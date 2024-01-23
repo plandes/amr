@@ -447,6 +447,9 @@ class TrainerApplication(BaseApplication):
             to_clean.clear()
 
     def proto(self):
+        if 0:
+            self.trainer.write()
+            return
         if 1:
             self.trainer()
             return
