@@ -30,7 +30,8 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
     """
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
-        'corpus_file', 'pretrained_path', 'trainer_class', 'training_config'}
+        'corpus_file', 'pretrained_path_or_model',
+        'trainer_class', 'training_config'}
 
     _INFERENCE_MOD_REGEX: ClassVar[re.Pattern] = re.compile(
         r'.*(parse_[a-z]+).*')
@@ -69,7 +70,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
     :obj:`training_config_file`.
 
     """
-    pretrained_path: Union[Path, str] = field(default=None)
+    pretrained_path_or_model: Union[Path, str] = field(default=None)
     """The path to the checkpoint file or the string ``scratch`` if starting
     from scratch.
 
@@ -94,18 +95,16 @@ class Trainer(Dictable, metaclass=ABCMeta):
         return self.output_model_dir / model_name
 
     @property
-    def _pretrained_path(self) -> Path:
+    def _pretrained_path_or_model(self) -> Union[str, Path]:
         """The path to the pretrained ``pytorch_model.bin`` file."""
-        if self._pretrained_path_val == 'scratch':
-            return None
-        elif self._pretrained_path_val is None:
-            self._pretrained_path_val = \
-                self.parser.installer.get_singleton_path()
-        return self._pretrained_path_val
+        if self._pretrained_path_or_model_val is None:
+            return self.parser.installer.get_singleton_path()
+        else:
+            return self._pretrained_path_or_model_val
 
-    @_pretrained_path.setter
-    def _pretrained_path(self, path: Path):
-        self._pretrained_path_val = path
+    @_pretrained_path_or_model.setter
+    def _pretrained_path_or_model(self, path: Path):
+        self._pretrained_path_or_model_val = path
 
     @persisted('_input_metadata')
     def _get_input_metadata(self) -> str:
@@ -138,7 +137,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
     def _get_training_config_file(self) -> Path:
         path: Path = self.training_config_file
         if path is None:
-            paths: Tuple[Path, ...] = tuple(self.pretrained_path.iterdir())
+            paths: Tuple[Path, ...] = tuple(self.pretrained_path_or_model.iterdir())
             cans: Tuple[Path, ...] = tuple(filter(
                 lambda p: p.name.startswith('model') and p.suffix == '.json',
                 paths))
@@ -250,22 +249,18 @@ class Trainer(Dictable, metaclass=ABCMeta):
         """
         self.write_to_log(logger)
         dir_path: Path
-        for dir_path in (
-                #self.temporary_dir,
-                self.output_dir,):
+        for dir_path in (self.temporary_dir, self.output_dir,):
             if dir_path.is_dir():
                 shutil.rmtree(dir_path)
         train = self._get_train_method()
         if not dry_run:
-            if False:
-                train()
-                return
+            train()
             self._compile_model()
             self._copy_model_files()
             self._package()
 
 
-Trainer.pretrained_path = Trainer._pretrained_path
+Trainer.pretrained_path_or_model = Trainer._pretrained_path_or_model
 
 
 @dataclass
@@ -289,10 +284,13 @@ class XfmTrainer(Trainer):
         corpus_file: Path = self.corpus_file
         ga: Dict[str, str] = config['gen_args']
         hf: Dict[str, str] = config['hf_args']
+        model_or_path: Union[str, Path] = self.pretrained_path_or_model
+        if isinstance(model_or_path, Path):
+            model_or_path = str(model_or_path.absolute())
         ga['corpus_dir'] = str(corpus_file.parent.absolute())
         ga['train_fn'] = corpus_file.name
         ga['tok_name_or_path'] = self.token_model_name
-        ga['model_name_or_path'] = str(self.pretrained_path.absolute())
+        ga['model_name_or_path'] = model_or_path
         ga['eval_fn'] = corpus_file.name
         hf['output_dir'] = str(self.temporary_dir)
 
@@ -324,12 +322,6 @@ class XfmTrainer(Trainer):
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'wrote: {new_config}')
 
-    def _compile_model(self):
-        config: Dict[str, Any] = self.training_config
-        self._write_config(config)
-        self._write_metadata()
-        self._rewrite_config()
-
     def _massage_training_config(self, config: Dict[str, Any]):
         overrides: Dict[str, Any] = self.training_config_overrides
         for k in 'gen_args hf_args model_args'.split():
@@ -343,24 +335,30 @@ class XfmTrainer(Trainer):
         config: Dict[str, Any] = self.training_config
         return self.trainer_class(config).train
 
+    def _compile_model(self):
+        config: Dict[str, Any] = self.training_config
+        self._write_config(config)
+        self._write_metadata()
+        self._rewrite_config()
+
 
 @dataclass
 class SpringTrainer(Trainer):
     def _populate_training_config(self, config: Dict[str, Any]):
         corpus_file: Path = self.corpus_file
-        pt_path: Path = self.pretrained_path
-        # pt_path: Path = self.pretrained_path
+        pt_path: Path = self.pretrained_path_or_model
+        # pt_path: Path = self.pretrained_path_or_model
         # if pt_path is None:
         config['model_dir'] = str(self.temporary_dir.absolute())
         # else:
-        #     conf['model_dir'] = str(self.pretrained_path.absolute())
+        #     conf['model_dir'] = str(self.pretrained_path_or_model.absolute())
         config['train'] = str(corpus_file.parent.absolute()) + '/*.txt'
         config['dev'] = config['train']
 
     def _get_train_method(self) -> Callable:
         config: Dict[str, Any] = self.training_config
         trainer: Callable = self.trainer_class.trainer_class(config)
-        pt_path: Path = self.pretrained_path
+        pt_path: Path = self.pretrained_path_or_model
         cp: str = None
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'setup spring config, pretrain path: {pt_path}')
@@ -370,7 +368,7 @@ class SpringTrainer(Trainer):
             config['smatch_dev'] = -1
             config['last_epoch'] = -1
         else:
-            cp = str(self.pretrained_path.absolute() / 'model.pt')
+            cp = str(self.pretrained_path_or_model.absolute() / 'model.pt')
             if logger.isEnabledFor(logging.INFO):
                 logger.info(f'using check point: {cp}')
         output_dir: Path = Path(config['model_dir'])
