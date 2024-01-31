@@ -82,8 +82,8 @@ amr_trainer_corpus_installer:
   base_directory: 'path: ${amr_trainer_default:corpus_dir}'
   resources: 'instance: list: amr_trainer_corpus'
 
-amr_trainer:
-  class_name: zensols.amr.Trainer
+amr_xfm_trainer:
+  class_name: zensols.amr.XfmTrainer
   corpus_installer: 'instance: amr_trainer_corpus_installer'
   parser: 'instance: amr_parser'
   model_name: '${amr_trainer_default:model_name}'

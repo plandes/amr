@@ -14,6 +14,7 @@ PY_DEP_POST_DEPS +=	modeldeps
 # additional cleanup
 ADD_CLEAN +=		amr-bank-struct-v3.0-scored.csv \
 			corpus/amr-bank-struct-v3.0-parsed.txt
+ADD_CLEAN_ALL +=	dist
 CLEAN_DEPS +=		cleanexample
 CLEAN_ALL_DEPS +=	cleanalldep
 

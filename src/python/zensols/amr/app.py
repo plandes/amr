@@ -400,8 +400,13 @@ class TrainerApplication(BaseApplication):
     config_factory: ConfigFactory = field()
     """Application context."""
 
-    trainer: Trainer = field()
+    trainer_type: str = field()
     """The AMR model trainer."""
+
+    @property
+    def trainer(self) -> Trainer:
+        sec: str = f'amr_{self.trainer_type}_trainer'
+        return self.config_factory(sec)
 
     def _get_text(self, text_or_file: str):
         path = Path(text_or_file)
@@ -451,7 +456,7 @@ class TrainerApplication(BaseApplication):
             self.trainer.write()
             return
         if 1:
-            self.trainer()
+            self.trainer.train()
             return
         if 0:
             parser = self.config_factory('amr_parser')
