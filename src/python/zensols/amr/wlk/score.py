@@ -56,5 +56,5 @@ class WeisfeilerLemanKernelScoreCalculator(ScoreMethod):
                 scores: List[np.float64] = predictor.predict(g1s, g2s)
                 yield FloatScore(float(scores[0]))
             except Exception as e:
-                logger.error('could not score <{g1}>::<{g2}>: {e}', e)
+                logger.error('could not score <{g1}>::<{g2}>: {e}')
                 yield ErrorScore(meth, e, FloatScore.NAN_INSTANCE)
