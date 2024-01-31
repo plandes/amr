@@ -84,10 +84,19 @@ amr_trainer_corpus_installer:
 
 amr_xfm_trainer:
   class_name: zensols.amr.XfmTrainer
-  corpus_installer: 'instance: amr_trainer_corpus_installer'
-  parser: 'instance: amr_parser'
+  corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
+  parser: 'instance: ${amr_trainer_default:parser}'
   model_name: '${amr_trainer_default:model_name}'
-  temporary_dir: 'path: ${default:temporary_dir}/model-train-output/${model_name}'
+  temporary_dir: 'path: ${amr_trainer_default:temporary_dir}/${model_name}'
+  output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'
+  package_dir: 'path: ${amr_trainer_default:package_dir}'
+
+amr_spring_trainer:
+  class_name: zensols.amr.SpringTrainer
+  corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
+  parser: 'instance: ${amr_trainer_default:parser}'
+  model_name: '${amr_trainer_default:model_name}'
+  temporary_dir: 'path: ${amr_trainer_default:temporary_dir}/${model_name}'
   output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'
   package_dir: 'path: ${amr_trainer_default:package_dir}'
 

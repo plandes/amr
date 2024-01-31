@@ -400,12 +400,11 @@ class TrainerApplication(BaseApplication):
     config_factory: ConfigFactory = field()
     """Application context."""
 
-    trainer_type: str = field()
-    """The AMR model trainer."""
-
     @property
     def trainer(self) -> Trainer:
-        sec: str = f'amr_{self.trainer_type}_trainer'
+        trainer_type: str = self.config_factory.\
+            config['amr_trainer_default']['trainer_type']
+        sec: str = f'amr_{trainer_type}_trainer'
         return self.config_factory(sec)
 
     def _get_text(self, text_or_file: str):

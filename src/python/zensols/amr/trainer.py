@@ -30,8 +30,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
     """
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
-        'corpus_file', 'pretrained_path_or_model',
-        'trainer_class', 'training_config'}
+        'pretrained_path_or_model', 'trainer_class', 'training_config'}
 
     _INFERENCE_MOD_REGEX: ClassVar[re.Pattern] = re.compile(
         r'.*(parse_[a-z]+).*')
@@ -80,12 +79,6 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
     def __post_init__(self):
         os.environ['TOKENIZERS_PARALLELISM'] = 'false'
-
-    @property
-    @persisted('_corpus_file')
-    def corpus_file(self) -> Path:
-        self.corpus_installer()
-        return self.corpus_installer.get_singleton_path()
 
     @property
     @persisted('_output_dir')
@@ -266,7 +259,13 @@ Trainer.pretrained_path_or_model = Trainer._pretrained_path_or_model
 @dataclass
 class XfmTrainer(Trainer):
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
-        'token_model_name'} | Trainer._DICTABLE_ATTRIBUTES
+        'corpus_file', 'token_model_name'} | Trainer._DICTABLE_ATTRIBUTES
+
+    @property
+    @persisted('_corpus_file')
+    def corpus_file(self) -> Path:
+        self.corpus_installer()
+        return self.corpus_installer.get_singleton_path()
 
     @property
     @persisted('_token_model_name')
@@ -344,16 +343,42 @@ class XfmTrainer(Trainer):
 
 @dataclass
 class SpringTrainer(Trainer):
+    _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
+        'train_files', 'dev_files'} | Trainer._DICTABLE_ATTRIBUTES
+
+    train_files: str = field(default=None)
+    dev_files: str = field(default=None)
+
+    @persisted('_corpus_file')
+    def _get_corpus_file(self) -> Path:
+        self.corpus_installer()
+        return self.corpus_installer.get_singleton_path()
+
+    @property
+    def _train_files(self) -> str:
+        if self._train_files_val is None:
+            return str(self._get_corpus_file.parent.absolute()) + '/*.txt'
+        return self._train_files_val
+
+    @_train_files.setter
+    def _train_files(self, _train_files: str):
+        self._train_files_val = _train_files
+
     def _populate_training_config(self, config: Dict[str, Any]):
-        corpus_file: Path = self.corpus_file
-        pt_path: Path = self.pretrained_path_or_model
+        corpus_file: Path = self.corpus_installer.get_singleton_path()
+        train_files: str = self.train_files
+        dev_files: str = self.dev_files
+        if train_files is None:
+            train_files = str(corpus_file.parent.absolute()) + '/*.txt'
+        if dev_files is None:
+            dev_files = str(corpus_file.parent.absolute()) + '/*.txt'
+        config['train'] = train_files
+        config['dev'] = dev_files
         # pt_path: Path = self.pretrained_path_or_model
         # if pt_path is None:
         config['model_dir'] = str(self.temporary_dir.absolute())
         # else:
         #     conf['model_dir'] = str(self.pretrained_path_or_model.absolute())
-        config['train'] = str(corpus_file.parent.absolute()) + '/*.txt'
-        config['dev'] = config['train']
 
     def _get_train_method(self) -> Callable:
         config: Dict[str, Any] = self.training_config
@@ -385,3 +410,6 @@ class SpringTrainer(Trainer):
         train_fn: Callable = trainer.train
         train = (lambda: train_fn(checkpoint=cp))
         return train
+
+
+SpringTrainer.train_files = SpringTrainer._train_files
