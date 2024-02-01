@@ -63,9 +63,6 @@ class Application(BaseApplication):
     amr_parser: AmrParser = field()
     """Parses natural language in to AMR graphs."""
 
-    doc_parser: FeatureDocumentParser = field()
-    """The feature document parser for the app."""
-
     anon_doc_stash: Stash = field()
     """The annotated document stash."""
 
@@ -74,6 +71,16 @@ class Application(BaseApplication):
 
     dumper: Dumper = field()
     """Plots and writes AMR content in human readable formats."""
+
+    @property
+    def doc_parser(self) -> FeatureDocumentParser:
+        """The feature document parser for the app.  This is not done via the
+        application config to allow overriding of the defaults.
+
+        """
+        sec: str = self.config_factory.config['amr_default']['doc_parser']
+        print('SEC', sec)
+        return self.config_factory(sec)
 
     def count(self, input_file: Path):
         """Provide counts on an AMR corpus file.
@@ -402,6 +409,10 @@ class TrainerApplication(BaseApplication):
 
     @property
     def trainer(self) -> Trainer:
+        """Interface in to the :mod:`amrlib` package's trainer.  This is not
+        done via the application config to allow overriding of the defaults.
+
+        """
         trainer_type: str = self.config_factory.\
             config['amr_trainer_default']['trainer_type']
         sec: str = f'amr_{trainer_type}_trainer'

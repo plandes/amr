@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class Trainer(Dictable, metaclass=ABCMeta):
-    """Interface in to the :mod:`amrlib` package's HuggingFace T5 model trainer.
+    """Interface in to the :mod:`amrlib` package's trainers
 
     """
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
@@ -130,7 +130,8 @@ class Trainer(Dictable, metaclass=ABCMeta):
     def _get_training_config_file(self) -> Path:
         path: Path = self.training_config_file
         if path is None:
-            paths: Tuple[Path, ...] = tuple(self.pretrained_path_or_model.iterdir())
+            paths: Tuple[Path, ...] = tuple(
+                self.pretrained_path_or_model.iterdir())
             cans: Tuple[Path, ...] = tuple(filter(
                 lambda p: p.name.startswith('model') and p.suffix == '.json',
                 paths))
@@ -258,6 +259,9 @@ Trainer.pretrained_path_or_model = Trainer._pretrained_path_or_model
 
 @dataclass
 class XfmTrainer(Trainer):
+    """Interface in to the :mod:`amrlib` package's HuggingFace T5 model trainer.
+
+    """
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
         'corpus_file', 'token_model_name'} | Trainer._DICTABLE_ATTRIBUTES
 
