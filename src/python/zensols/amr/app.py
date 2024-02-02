@@ -449,7 +449,7 @@ class TrainerApplication(BaseApplication):
 
         """
         self._set_level(logging.INFO, True)
-        self.trainer(dry_run)
+        self.trainer.train(dry_run)
 
     def stats(self):
         """Write corpus status and print paths info."""
@@ -462,27 +462,9 @@ class TrainerApplication(BaseApplication):
             to_clean.clear()
 
     def proto(self):
-        if 0:
+        if 1:
             self.trainer.write()
             return
         if 1:
             self.trainer.train()
-            return
-        if 0:
-            parser = self.config_factory('amr_parser')
-            #print(type(parser.parse_model))
-            parser.installer.write()
-            #parser.installer()
-            return
-        if 0:
-            self.config_factory.config.write()
-            return
-        if 1:
-            #print(type(self.config_factory('amr_parser').parse_model))
-            app = self.config_factory('app')
-            parser = app.doc_parser
-            parser.clear()
-            #print(type(parser.parse_model))
-            doc = parser.parse('Obama was the 44th president.')
-            doc.write()
             return

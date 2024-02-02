@@ -126,25 +126,35 @@ class Trainer(Dictable, metaclass=ABCMeta):
             class_name = f'amrlib.models.{mod}.trainer.Trainer'
             return ClassImporter(class_name, False).get_class()
 
-    @persisted('_training_config_file')
-    def _get_training_config_file(self) -> Path:
-        path: Path = self.training_config_file
-        if path is None:
-            paths: Tuple[Path, ...] = tuple(
-                self.pretrained_path_or_model.iterdir())
-            cans: Tuple[Path, ...] = tuple(filter(
-                lambda p: p.name.startswith('model') and p.suffix == '.json',
-                paths))
-            if len(cans) != 1:
-                logger.warning(
-                    "expecting a single file starts with 'model' " +
-                    f"but got {', '.join(map(lambda p: p.name, paths))}")
-            else:
-                path = cans[0]
-        if path is None:
+    def _guess_training_config_file(self) -> Path:
+        pt_path: Path = self.pretrained_path_or_model
+        paths: Tuple[Path, ...] = tuple(pt_path.iterdir())
+        path: Path = None
+        cans: Tuple[Path, ...] = tuple(filter(
+            lambda p: p.name.startswith('model') and p.suffix == '.json',
+            paths))
+        if len(cans) != 1:
+            paths: str = ', '.join(map(lambda p: f"'{p.name}'", paths))
             logger.warning(
-                f'missing training config file: {self.training_config_file}')
+                f"expecting a single in '{pt_path}' file that starts " +
+                f"with 'model' but got files: {paths}")
+        else:
+            path = cans[0]
         return path
+
+    @property
+    def _training_config_file(self) -> Path:
+        path: Path = self._training_config_file_val
+        if path is None:
+            path = self._guess_training_config_file()
+        if path is None:
+            logger.warning('missing training config file')
+            return path
+        return path
+
+    @_training_config_file.setter
+    def _training_config_file(self, path: Path):
+        self._training_config_file_val = path
 
     def _massage_training_config(self, config: Dict[str, Any]):
         overrides: Dict[str, Any] = self.training_config_overrides
@@ -152,7 +162,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
     @persisted('_training_config_content')
     def _get_training_config_content(self) -> Dict[str, Any]:
-        train_file: Path = self._get_training_config_file()
+        train_file: Path = self.training_config_file
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'loading train config from: {train_file}')
         if train_file is not None:
@@ -178,14 +188,6 @@ class Trainer(Dictable, metaclass=ABCMeta):
             self._populate_training_config(config)
             return config
 
-    def _get_checkpoint_dir(self) -> Path:
-        paths: Tuple[Path, ...] = tuple(self.temporary_dir.iterdir())
-        cps = tuple(filter(lambda p: p.name.startswith('checkpoint'), paths))
-        if len(cps) != 1:
-            raise AmrError(
-                f'Expecting 1 path at {self.temporary_dir} but got: {paths}')
-        return cps[0]
-
     def _write_metadata(self):
         meta: Dict[str, str] = self._get_input_metadata()
         path = self.output_dir / 'amrlib_meta.json'
@@ -203,15 +205,6 @@ class Trainer(Dictable, metaclass=ABCMeta):
         with open(path, 'w') as f:
             json.dump(content, f, indent=4)
 
-    def _copy_model_files(self):
-        fname: str = 'pytorch_model.bin'
-        cp_dir: Path = self._get_checkpoint_dir()
-        src: Path = cp_dir / fname
-        dst: Path = self.output_dir / fname
-        shutil.copy(src, dst)
-        if logger.isEnabledFor(logging.INFO):
-            logger.info(f'copied model weights and state: {dst}')
-
     def _package(self):
         """Create a compressed file with the model and metadata used by the
         :class:`~zensols.install.installer.Installer` using resource library
@@ -226,6 +219,10 @@ class Trainer(Dictable, metaclass=ABCMeta):
             tar.add(self.output_dir, arcname=self.output_dir.name)
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'wrote compressed model: {out_tar_file}')
+
+    @abstractmethod
+    def _copy_model_files(self):
+        pass
 
     @abstractmethod
     def _compile_model(self):
@@ -243,10 +240,11 @@ class Trainer(Dictable, metaclass=ABCMeta):
         """
         self.write_to_log(logger)
         dir_path: Path
-        for dir_path in (self.temporary_dir, self.output_dir,):
+        for dir_path in (self.temporary_dir, self.output_dir):
+            logger.debug(f'removing directory: {dir_path}')
             if dir_path.is_dir():
                 shutil.rmtree(dir_path)
-        train = self._get_train_method()
+        train: Callable = self._get_train_method()
         if not dry_run:
             train()
             self._compile_model()
@@ -255,6 +253,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
 
 Trainer.pretrained_path_or_model = Trainer._pretrained_path_or_model
+Trainer.training_config_file = Trainer._training_config_file
 
 
 @dataclass
@@ -309,6 +308,23 @@ class XfmTrainer(Trainer):
             json.dump(config, f, indent=4)
         logger.info(f'wrote: {cfile}')
 
+    def _get_checkpoint_dir(self) -> Path:
+        paths: Tuple[Path, ...] = tuple(self.temporary_dir.iterdir())
+        cps = tuple(filter(lambda p: p.name.startswith('checkpoint'), paths))
+        if len(cps) != 1:
+            raise AmrError(
+                f'Expecting 1 path at {self.temporary_dir} but got: {paths}')
+        return cps[0]
+
+    def _copy_model_files(self):
+        fname: str = 'pytorch_model.bin'
+        cp_dir: Path = self._get_checkpoint_dir()
+        src: Path = cp_dir / fname
+        dst: Path = self.output_dir / fname
+        shutil.copy(src, dst)
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'copied model weights and state: {dst}')
+
     def _rewrite_config(self):
         meta: Dict[str, str] = self._get_input_metadata()
         base_model: str = meta['base_model']
@@ -350,6 +366,8 @@ class SpringTrainer(Trainer):
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
         'train_files', 'dev_files'} | Trainer._DICTABLE_ATTRIBUTES
 
+    _SMATCH_RE: ClassVar[re.Pattern] = re.compile(
+        r'^checkpoint.+smatch_([0-9]+)\.pt$')
     train_files: str = field(default=None)
     dev_files: str = field(default=None)
 
@@ -361,12 +379,22 @@ class SpringTrainer(Trainer):
     @property
     def _train_files(self) -> str:
         if self._train_files_val is None:
-            return str(self._get_corpus_file.parent.absolute()) + '/*.txt'
+            return str(self._get_corpus_file().parent.absolute()) + '/*.txt'
         return self._train_files_val
 
     @_train_files.setter
     def _train_files(self, _train_files: str):
         self._train_files_val = _train_files
+
+    @property
+    def _dev_files(self) -> str:
+        if self._dev_files_val is None:
+            return str(self._get_corpus_file().parent.absolute()) + '/*.txt'
+        return self._dev_files_val
+
+    @_dev_files.setter
+    def _dev_files(self, _dev_files: str):
+        self._dev_files_val = _dev_files
 
     def _populate_training_config(self, config: Dict[str, Any]):
         corpus_file: Path = self.corpus_installer.get_singleton_path()
@@ -378,37 +406,91 @@ class SpringTrainer(Trainer):
             dev_files = str(corpus_file.parent.absolute()) + '/*.txt'
         config['train'] = train_files
         config['dev'] = dev_files
-        # pt_path: Path = self.pretrained_path_or_model
-        # if pt_path is None:
         config['model_dir'] = str(self.temporary_dir.absolute())
-        # else:
-        #     conf['model_dir'] = str(self.pretrained_path_or_model.absolute())
 
-    def _get_train_method(self) -> Callable:
-        config: Dict[str, Any] = self.training_config
-        trainer: Callable = self.trainer_class.trainer_class(config)
+    def _guess_training_config_file(self) -> Path:
         pt_path: Path = self.pretrained_path_or_model
-        cp: str = None
-        if logger.isEnabledFor(logging.INFO):
-            logger.info(f'setup spring config, pretrain path: {pt_path}')
-        if pt_path is None:
-            logger.info('training from scratch')
+        path: Path = pt_path / 'config.json'
+        if path.is_file():
+            return path
+
+    @persisted('_training_config_content')
+    def _get_training_config_content(self) -> Dict[str, Any]:
+        config: Dict[str, Any] = super()._get_training_config_content()
+        pt_path: Union[str, Path] = self.pretrained_path_or_model
+        if isinstance(pt_path, str):
+            if pt_path == 'scratch':
+                logger.info('training from scratch')
+            else:
+                config['model'] = pt_path
+                logger.info(f'training from model: {pt_path}')
             # amrlib expects this
             config['smatch_dev'] = -1
             config['last_epoch'] = -1
-        else:
+        return config
+
+    def _write_config(self, config: Dict[str, any]):
+        src_conf_path: Path = self.temporary_dir / 'config.json'
+        dst_conf_path: Path = self.output_dir / 'config.json'
+        meta: Dict[str, str] = dict(self._get_input_metadata())
+        meta_file: Path = self.output_dir / 'amrlib_meta.json'
+        meta_file.parent.mkdir(parents=True)
+        meta['date'] = date.today().isoformat()
+        with open(meta_file, 'w') as f:
+            json.dump(meta, f, indent=4)
+        logger.info(f'wrote amrlib file {meta_file}')
+        shutil.copy(src_conf_path, dst_conf_path)
+        logger.info(f'copied spring {dst_conf_path}')
+
+    def _compile_model(self):
+        config: Dict[str, Any] = self.training_config
+        self._write_config(config)
+
+    def _get_checkpoint_file(self) -> Path:
+        def map_smatch(p: Path):
+            m: re.Match = self._SMATCH_RE.match(p.name)
+            if m is not None:
+                return (int(m.group(1)), p)
+
+        by_smatch: Tuple[Path, ...] = tuple(map(
+            lambda t: t[1],
+            sorted(
+                filter(
+                    lambda t: t is not None,
+                    map(map_smatch, self.temporary_dir.iterdir())),
+                key=lambda t: t[0])))
+        if len(by_smatch) < 1:
+            raise AmrError(
+                f'Expecting at least one one path in {self.temporary_dir} ' +
+                f'with pattern: {self._SMATCH_RE}')
+        return by_smatch[0]
+
+    def _copy_model_files(self):
+        cp_file: Path = self._get_checkpoint_file()
+        dst: Path = self.output_dir / 'model.pt'
+        shutil.copy(cp_file, dst)
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'copied model weights and state: {dst}')
+
+    def _get_train_method(self) -> Callable:
+        config: Dict[str, Any] = self.training_config
+        pt_path: Union[str, Path] = self.pretrained_path_or_model
+        cp: str = None
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'setup spring config, pretrain path: {pt_path}')
+        if isinstance(pt_path, Path):
             cp = str(self.pretrained_path_or_model.absolute() / 'model.pt')
             if logger.isEnabledFor(logging.INFO):
                 logger.info(f'using check point: {cp}')
+        trainer: Callable = self.trainer_class(config)
         output_dir: Path = Path(config['model_dir'])
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'output dir: {output_dir}')
-        # train() removed this
-        assert not output_dir.is_dir()
         conf_file = output_dir / 'config.json'
-        output_dir.mkdir(parents=True)
+        output_dir.mkdir(parents=True, exist_ok=True)
         if logger.isEnabledFor(logging.INFO):
-            logger.info(f'copy {self.training_config_file} to {conf_file}')
+            logger.info(f'create {self.training_config_file} -> {conf_file}')
+            assert not conf_file.exists()
             with open(conf_file, 'w') as f:
                 json.dump(config, f, indent=4)
         train_fn: Callable = trainer.train
@@ -417,3 +499,5 @@ class SpringTrainer(Trainer):
 
 
 SpringTrainer.train_files = SpringTrainer._train_files
+SpringTrainer.dev_files = SpringTrainer._dev_files
+SpringTrainer.training_config_file = SpringTrainer._training_config_file
