@@ -8,9 +8,9 @@ if (__name__ == '__main__'):
     dnt.normalize_huggingface_logging()
     dnt.turn_off_huggingface_downloads()
     model = {
-        0: 'xfm-base-lp',
-        1: 't5-lp',
-        2: 'spring-lp',
+        0: 'parse-xfm-base-lp',
+        1: 'parse-t5-lp',
+        2: 'parse-spring-lp',
     }[1]
     harness = CliHarness(
         src_dir_name='src/python',
