@@ -24,12 +24,12 @@ class SmatchScoreCalculator(ScoreMethod):
 
     Citation:
 
-      Shu Cai and Kevin Knight. 2013. Smatch: an Evaluation Metric for Semantic
-      Feature Structures. In Proceedings of the 51st Annual Meeting of the
-      Association for Computational Linguistics (Volume 2: Short Papers), pages
-      748–752, Sofia, Bulgaria. Association for Computational Linguistics.
+      `Shu Cai and Kevin Knight 2013`_. Smatch: an Evaluation Metric for
+      Semantic Feature Structures. In Proceedings of the 51st Annual Meeting of
+      the Association for Computational Linguistics (Volume 2: Short Papers),
+      pages 748–752, Sofia, Bulgaria. Association for Computational Linguistics.
 
-    .. _Shu Cai and Kevin Knight. 2013: https://aclanthology.org/P13-2131/
+    .. _Shu Cai and Kevin Knight 2013: https://aclanthology.org/P13-2131/
 
     .. _Smatch package: https://github.com/snowblink14/smatch/
 
