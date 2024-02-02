@@ -402,6 +402,18 @@ class T5Trainer(XfmTrainer):
 
 @dataclass
 class SpringTrainer(Trainer):
+    """SPRING model trainer.
+
+    Citation:
+
+        `Michele Bevilacqua et al. 2021`_. One SPRING to Rule Them Both:
+        Symmetric AMR Semantic Parsing and Generation without a Complex
+        Pipeline. In Proceedings of the AAAI Conference on Artificial
+        Intelligence, volume 35, pages 12564–12573, Virtual, May.
+
+    .. _Michele Bevilacqua et al. 2021: https://ojs.aaai.org/index.php/AAAI/article/view/17489
+
+    """
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
         'train_files', 'dev_files'} | Trainer._DICTABLE_ATTRIBUTES
 
