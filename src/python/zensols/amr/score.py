@@ -22,16 +22,16 @@ logger = logging.getLogger(__name__)
 class SmatchScoreCalculator(ScoreMethod):
     """Computes the smatch scores of AMR sentences using the `Smatch package`_.
 
-    Citation::
-
-    .. code:: none
+    Citation:
 
       Shu Cai and Kevin Knight. 2013. Smatch: an Evaluation Metric for Semantic
       Feature Structures. In Proceedings of the 51st Annual Meeting of the
       Association for Computational Linguistics (Volume 2: Short Papers), pages
       748–752, Sofia, Bulgaria. Association for Computational Linguistics.
 
-    :see: `Smatch package <https://github.com/snowblink14/smatch>`_
+    .. _Shu Cai and Kevin Knight. 2013: https://aclanthology.org/P13-2131/
+
+    .. _Smatch package: https://github.com/snowblink14/smatch/
 
     """
     @classmethod

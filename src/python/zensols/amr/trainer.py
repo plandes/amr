@@ -376,11 +376,25 @@ class HFTrainer(Trainer):
 
 @dataclass
 class XfmTrainer(HFTrainer):
+    """Trainer for XFM and T5 models.
+
+    """
     pass
 
 
 @dataclass
 class T5Trainer(XfmTrainer):
+    """T5 model trainer.
+
+    Citation:
+
+      `Colin Raffel et al. 2020`_. Exploring the limits of transfer learning
+      with a unified text-to-text transformer. The Journal of Machine Learning
+      Research, 21(1):140:5485-140:5551, January.
+
+    .. _Colin Raffel et al. 2020: https://jmlr.org/papers/volume21/20-074/20-074.pdf
+
+    """
     def _get_trainer_class(self, submod: str) -> Type:
         # amrlib 7.1 uses the Xfm parser for the older T5 model
         return super()._get_trainer_class('parse_xfm')
