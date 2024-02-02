@@ -335,6 +335,8 @@ class AmrSentence(PersistableContainer, Writable):
             self._write_block(graph, depth, writer)
 
     def __str__(self) -> str:
+        if self.is_failure:
+            return f"parse failure: {self.metadata['parse_failure']}"
         return self.text
 
     def __repr__(self) -> str:

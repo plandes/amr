@@ -140,8 +140,11 @@ class AmrAlignmentPopulator(object):
             if not isinstance(sent, AmrSentence):
                 spacy_sent = sent
                 sent: AmrSentence = sent._.amr
-            if sent.is_failure:
-                logger.warning(f'skipping alignment for failure: {sent}')
+                try:
+                    fail_str: str = str(sent)
+                except Exception as e:
+                    fail_str: str = f'Could not get string representation: {e}'
+                logger.warning(f'skipping alignment for failure: {fail_str}')
             elif sent.has_alignments:
                 if logger.isEnabledFor(logging.INFO):
                     logger.info(f'AMR already has alignments--skipping: {sent}')
