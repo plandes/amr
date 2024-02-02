@@ -6,7 +6,9 @@ __author__ = 'Paul Landes'
 from typing import List, Tuple
 from dataclasses import dataclass, field
 import logging
+import os
 import json
+import warnings
 from pathlib import Path
 from spacy.language import Language
 from spacy.tokens import Doc, Span, Token
@@ -37,6 +39,14 @@ class ModelContainer(object):
     """
     alternate_path: Path = field(default=None)
     """If set, use this alternate path to find the model files."""
+
+    def __post_init__(self):
+        # minimize warnings (T5)
+        os.environ['TOKENIZERS_PARALLELISM'] = 'false'
+        warnings.filterwarnings(
+            'ignore',
+            message=r'^This tokenizer was incorrectly instantiated with',
+            category=FutureWarning)
 
     @property
     def model_path(self) -> Path:

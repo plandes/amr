@@ -79,7 +79,6 @@ class Application(BaseApplication):
 
         """
         sec: str = self.config_factory.config['amr_default']['doc_parser']
-        print('SEC', sec)
         return self.config_factory(sec)
 
     def count(self, input_file: Path):
