@@ -33,7 +33,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
         'pretrained_path_or_model', 'trainer_class', 'training_config'}
 
     _INFERENCE_MOD_REGEX: ClassVar[re.Pattern] = re.compile(
-        r'.*(parse_[a-z]+).*')
+        r'.*(parse_[a-z\d]+).*')
 
     corpus_installer: Installer = field(repr=False)
     """Points to the AMR corpus file(s)."""
@@ -111,6 +111,10 @@ class Trainer(Dictable, metaclass=ABCMeta):
                 content = json.load(f)
             return content
 
+    def _get_trainer_class(self, submod: str) -> Type:
+        class_name = f'amrlib.models.{submod}.trainer.Trainer'
+        return ClassImporter(class_name, False).get_class()
+
     @property
     @persisted('_training_class')
     def trainer_class(self) -> Type:
@@ -122,9 +126,8 @@ class Trainer(Dictable, metaclass=ABCMeta):
             if m is None:
                 raise AmrError(
                     f'Can not parse amrlib training class module: {inf_mod}')
-            mod = m.group(1)
-            class_name = f'amrlib.models.{mod}.trainer.Trainer'
-            return ClassImporter(class_name, False).get_class()
+            submod: str = m.group(1)
+            return self._get_trainer_class(submod)
 
     def _guess_training_config_file(self) -> Path:
         pt_path: Path = self.pretrained_path_or_model
@@ -188,9 +191,13 @@ class Trainer(Dictable, metaclass=ABCMeta):
             self._populate_training_config(config)
             return config
 
+    def _get_base_model(self) -> str:
+        pass
+
     def _write_metadata(self):
         meta: Dict[str, str] = self._get_input_metadata()
         path = self.output_dir / 'amrlib_meta.json'
+        base_model: str = meta.get('base_model', self._get_base_model())
         content = {
             'model_type': 'stog',
             'version': self.version,
@@ -198,7 +205,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
             'inference_module': meta['inference_module'],
             'inference_class': 'Inference',
             'model_fn': 'pytorch_model.bin',
-            'base_model': meta['base_model'],
+            'base_model': base_model,
             'kwargs': {}}
         if logger.isEnabledFor(logging.DEBUG):
             logger.info(f'writing metadata to {path}')
@@ -240,13 +247,15 @@ class Trainer(Dictable, metaclass=ABCMeta):
         """
         self.write_to_log(logger)
         dir_path: Path
-        for dir_path in (self.temporary_dir, self.output_dir):
+        for dir_path in (
+                #self.temporary_dir,
+                self.output_dir,):
             logger.debug(f'removing directory: {dir_path}')
             if dir_path.is_dir():
                 shutil.rmtree(dir_path)
-        train: Callable = self._get_train_method()
+        #train: Callable = self._get_train_method()
         if not dry_run:
-            train()
+            #train()
             self._compile_model()
             self._copy_model_files()
             self._package()
@@ -257,8 +266,8 @@ Trainer.training_config_file = Trainer._training_config_file
 
 
 @dataclass
-class XfmTrainer(Trainer):
-    """Interface in to the :mod:`amrlib` package's HuggingFace T5 model trainer.
+class HFTrainer(Trainer):
+    """Interface in to the :mod:`amrlib` package's HuggingFace model trainers.
 
     """
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
@@ -296,6 +305,10 @@ class XfmTrainer(Trainer):
         ga['eval_fn'] = corpus_file.name
         hf['output_dir'] = str(self.temporary_dir)
 
+    def _get_base_model(self) -> str:
+        config: Dict[str, Any] = self.training_config
+        return config['gen_args']['model_name_or_path']
+
     def _write_config(self, config: Dict[str, any]):
         meta: Dict[str, str] = self._get_input_metadata()
         base_model: str = meta.get('base_model', config.get('model'))
@@ -327,7 +340,7 @@ class XfmTrainer(Trainer):
 
     def _rewrite_config(self):
         meta: Dict[str, str] = self._get_input_metadata()
-        base_model: str = meta['base_model']
+        base_model: str = meta.get('base_model', self._get_base_model())
         cp_dir: Path = self._get_checkpoint_dir() / 'config.json'
         with open(cp_dir) as f:
             content = json.load(f)
@@ -359,6 +372,18 @@ class XfmTrainer(Trainer):
         self._write_config(config)
         self._write_metadata()
         self._rewrite_config()
+
+
+@dataclass
+class XfmTrainer(HFTrainer):
+    pass
+
+
+@dataclass
+class T5Trainer(XfmTrainer):
+    def _get_trainer_class(self, submod: str) -> Type:
+        # amrlib 7.1 uses the Xfm parser for the older T5 model
+        return super()._get_trainer_class('parse_xfm')
 
 
 @dataclass

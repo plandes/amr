@@ -89,13 +89,17 @@ evallp:
 			$(ABIN) parsefile $(MODEL_FILE) --limit 50
 			$(ABIN) score $(MODEL_FILE)
 
-# evaluate the little prince corpus on the trained little prince corpus (test)
-.PHONY:			evallp
-evallp:
+.PHONY:			evalmodel
+evalmodel:
 			$(ABIN) parsefile $(MODEL_FILE) --limit 50 \
-				--override amr_default.parse_model=lp_spring
+				--override amr_default.parse_model=$(EVL_MODEL)
 			$(ABIN) score $(MODEL_FILE) \
-				--override amr_default.parse_model=lp_spring
+				--override amr_default.parse_model=$(EVL_MODEL)
+
+# evaluate the little prince corpus on the trained little prince corpus (test)
+.PHONY:			evallpspring
+evallpspring:
+			make EVL_MODEL=lp_spring evalmodel
 
 # stop any training
 .PHONY:			stop
