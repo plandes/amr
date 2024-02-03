@@ -25,7 +25,7 @@ from . import (
     AmrError, AmrFailure, AmrDocument, AmrSentence,
     AmrFeatureSentence, AmrFeatureDocument,
 )
-from .amrparser import AmrParser
+from .model import AmrParser
 from .coref import CoreferenceResolver
 from .docparser import AnnotationFeatureDocumentParser
 

@@ -25,7 +25,7 @@ from . import (
 )
 from .coref import CoreferenceResolver
 from .align import AmrAlignmentPopulator
-from .amrparser import AmrParser
+from .model import AmrParser
 from .spacyadapt import SpacyDocAdapter
 
 logger = logging.getLogger(__name__)

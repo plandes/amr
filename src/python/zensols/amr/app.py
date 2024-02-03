@@ -19,7 +19,7 @@ from zensols.cli import LogConfigurator, ApplicationError
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
 from . import AmrError, AmrSentence, AmrDocument, AmrFeatureSentence
 from .annotate import CorpusWriter
-from .amrparser import AmrParser, AmrGenerator
+from .model import AmrParser, AmrGenerator
 from .dumper import Dumper
 
 logger = logging.getLogger(__name__)

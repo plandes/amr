@@ -15,7 +15,7 @@ from amrlib.alignments.faa_aligner import FAA_Aligner
 from amrlib.alignments.rbw_aligner import RBWAligner
 from zensols.persist import persisted
 from . import AmrError, AmrFailure, AmrSentence, AmrDocument
-from .amrparser import AmrParser
+from .model import AmrParser
 
 logger = logging.getLogger(__name__)
 

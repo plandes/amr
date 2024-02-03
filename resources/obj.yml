@@ -6,7 +6,7 @@
 # spaCy pipeline component to parse AMR and add as an attribute to `Doc`s
 amr_parser_component:
   class_name: zensols.nlp.Component
-  modules: 'list: zensols.amr'
+  modules: 'list: zensols.amr.model'
   pipe_name: 'amr_parser'
   pipe_config:
     parser_name: 'amr_parser'
@@ -14,7 +14,7 @@ amr_parser_component:
   initializers: 'instance: tuple: amr_parser'
 
 amr_parser:
-  class_name: zensols.amr.amrparser.AmrParser
+  class_name: zensols.amr.model.AmrParser
   installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
 
 # spaCy pipeline component to add text-to-graph alignments to AMR graphs parsed
@@ -33,7 +33,7 @@ amr_align_populator:
 #
 # generate English from AMR graphs
 amr_generator:
-  class_name: zensols.amr.amrparser.AmrGenerator
+  class_name: zensols.amr.model.AmrGenerator
   installer: 'instance: amr_generate_${amr_default:generator_model}_installer'
 
 split_hyphen_token_mapper:
