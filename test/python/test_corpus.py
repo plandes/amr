@@ -7,8 +7,10 @@ from zensols.cli import CliHarness
 from penman.surface import Alignment
 from penman import constant, Graph
 from zensols.amr import (
-    ApplicationFactory, AnnotatedAmrSentence, AnnotatedAmrDocument,
-    AmrFeatureSentence, AmrFeatureDocument, AnnotatedAmrFeatureDocumentStash,
+    ApplicationFactory, AmrFeatureSentence, AmrFeatureDocument
+)
+from zensols.amr.annotate import (
+    AnnotatedAmrSentence, AnnotatedAmrDocument, AnnotatedAmrFeatureDocumentStash
 )
 
 

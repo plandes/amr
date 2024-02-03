@@ -4,10 +4,8 @@ import shutil
 from pathlib import Path
 from zensols.cli import CliHarness
 from zensols.util import Failure
-from zensols.amr import (
-    AmrDocument, AmrFeatureDocument, AnnotatedAmrDocument,
-    ApplicationFactory
-)
+from zensols.amr import AmrDocument, AmrFeatureDocument, ApplicationFactory
+from zensols.amr.annotate import AnnotatedAmrDocument
 
 
 class TestSlice(unittest.TestCase):

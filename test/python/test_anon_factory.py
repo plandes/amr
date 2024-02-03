@@ -5,11 +5,8 @@ from io import StringIO
 from pathlib import Path
 from zensols.cli import CliHarness
 from transformers import logging as translogging
-from zensols.amr import (
-    AmrFeatureDocument, AnnotatedAmrFeatureDocumentFactory,
-    ApplicationFactory
-)
-
+from zensols.amr import AmrFeatureDocument, ApplicationFactory
+from zensols.amr.annotate import AnnotatedAmrFeatureDocumentFactory
 
 translogging.set_verbosity_error()
 

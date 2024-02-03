@@ -17,9 +17,8 @@ from zensols.config import ConfigFactory, DictionaryConfig
 from zensols.persist import Stash
 from zensols.cli import LogConfigurator, ApplicationError
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
-from . import (
-    AmrError, AmrSentence, AmrDocument, AmrFeatureSentence, CorpusWriter
-)
+from . import AmrError, AmrSentence, AmrDocument, AmrFeatureSentence
+from .annotate import CorpusWriter
 from .amrparser import AmrParser, AmrGenerator
 from .dumper import Dumper
 
