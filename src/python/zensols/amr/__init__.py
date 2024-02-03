@@ -5,7 +5,6 @@ from .doc import *
 from .dumper import *
 from .container import *
 from .amrparser import *
-from .alignpop import *
 from .align import *
 from .coref import *
 from .docparser import *

@@ -5,7 +5,7 @@ from penman.model import Model
 import penman.models.noop
 from amrlib.graph_processing.amr_loading import load_amr_entries
 from amrlib.alignments.faa_aligner import FAA_Aligner
-from zensols.amr import AlignmentPopulator, PathAlignment
+from zensols.amr.alignpop import AlignmentPopulator, PathAlignment
 from util import BaseTestApplication
 
 

@@ -14,10 +14,7 @@ from spacy.language import Language
 from amrlib.alignments.faa_aligner import FAA_Aligner
 from amrlib.alignments.rbw_aligner import RBWAligner
 from zensols.persist import persisted
-from . import (
-    AmrError, AmrFailure,
-    AmrSentence, AmrDocument, AmrParser, AlignmentPopulator
-)
+from . import AmrError, AmrFailure, AmrSentence, AmrDocument, AmrParser
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +81,7 @@ class _FastAligner(object):
         return cls._AVAIL == 'avail'
 
     def __call__(self, amr_sent: AmrSentence):
+        from .alignpop import AlignmentPopulator
         meta: Dict[str, str] = amr_sent.metadata
         graphs = [amr_sent.graph_string]
         inference = FAA_Aligner()
