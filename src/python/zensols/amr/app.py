@@ -220,6 +220,10 @@ class Application(BaseApplication):
         amr_doc: AmrDocument = doc.amr
         print(amr_doc.graph_string)
 
+    def clear(self):
+        """Clear all cached parsed AMR documents and data."""
+        self.anon_doc_stash.clear()
+
 
 @dataclass
 class ScorerApplication(object):
@@ -470,7 +474,22 @@ class TrainerApplication(BaseApplication):
             to_clean.clear()
 
     def proto(self):
+        if 0:
+            parser = self.config_factory('amr_anon_doc_parser')
+            print(parser)
+            parser.clear()
+            return
         if 1:
+            parser = self.config_factory('amr_anon_doc_parser')
+            gen = self.config_factory('amr_generator')
+            doc = parser('Obama was the 44th president. He is cool.')
+            doc.write()
+            print()
+            print()
+            gdoc = gen(doc.amr)
+            gdoc.write()#clipped_inline=0, amr_sent_kwargs=dict(include_metadata=False))
+            return
+        if 0:
             self.trainer.write()
             return
         if 1:

@@ -52,10 +52,15 @@ class Trainer(Dictable, metaclass=ABCMeta):
     version: str = field(default='0.1.0')
     """The version used in the ``amrlib_meta.json`` output metadata file."""
 
-    parser: AmrParser = field(default=None, repr=False)
-    """The parser that contains the :mod:`amrlib` pretrained model, which is
-    loaded and used to continue fine-tuning.  If not set, the training starts
-    from the T5 HuggingFace pretrained model.
+    # parser: AmrParser = field(default=None, repr=False)
+    # """The parser that contains the :mod:`amrlib` pretrained model, which is
+    # loaded and used to continue fine-tuning.  If not set, the training starts
+    # from the T5 HuggingFace pretrained model.
+
+    # """
+    installer: Installer = field(default=None)
+    """The installer for the model used to train the model previously (i.e. by
+    :mod:`amrlib`).
 
     """
     training_config_file: Path = field(default=None)
@@ -77,21 +82,28 @@ class Trainer(Dictable, metaclass=ABCMeta):
     package_dir: Path = field(default=Path('.'))
     """The directory to install the compressed distribution file."""
 
+    is_parser: bool = field(default=True)
+    """Whether the instance trains text parsers or generators."""
+
     def __post_init__(self):
         os.environ['TOKENIZERS_PARALLELISM'] = 'false'
+
+    def _get_pg(self) -> str:
+        return 'parse' if self.is_parser else 'generator'
 
     @property
     @persisted('_output_dir')
     def output_dir(self) -> Path:
-        ver = self.version.replace('.', '_')
-        model_name = f'model_parse_{self.model_name}-v{ver}'
+        ver: str = self.version.replace('.', '_')
+        pg: str = self._get_pg()
+        model_name: str = f'model_{pg}_{self.model_name}-v{ver}'
         return self.output_model_dir / model_name
 
     @property
     def _pretrained_path_or_model(self) -> Union[str, Path]:
         """The path to the pretrained ``pytorch_model.bin`` file."""
         if self._pretrained_path_or_model_val is None:
-            return self.parser.installer.get_singleton_path()
+            return self.installer.get_singleton_path()
         else:
             return self._pretrained_path_or_model_val
 
@@ -101,9 +113,9 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
     @persisted('_input_metadata')
     def _get_input_metadata(self) -> str:
-        model_dir: Path = self.parser.installer.get_singleton_path()
+        model_dir: Path = self.installer.get_singleton_path()
         meta_file: Path = model_dir / 'amrlib_meta.json'
-        self.parser.installer()
+        self.installer()
         if not meta_file.is_file():
             raise AmrError(f'No metadata file: {meta_file}')
         else:
@@ -215,7 +227,8 @@ class Trainer(Dictable, metaclass=ABCMeta):
     def _package(self):
         """Create a compressed file with the model and metadata used by the
         :class:`~zensols.install.installer.Installer` using resource library
-        ``amr_parser:installer``.
+        ``amr_parser:installer``.  This is downloaded and used when this
+        generated model is first use.
 
         """
         out_tar_file: Path = self.package_dir / f'{self.output_dir.stem}.tar.gz'
@@ -247,15 +260,13 @@ class Trainer(Dictable, metaclass=ABCMeta):
         """
         self.write_to_log(logger)
         dir_path: Path
-        for dir_path in (
-                #self.temporary_dir,
-                self.output_dir,):
+        for dir_path in (self.temporary_dir, self.output_dir,):
             logger.debug(f'removing directory: {dir_path}')
             if dir_path.is_dir():
                 shutil.rmtree(dir_path)
-        #train: Callable = self._get_train_method()
+        train: Callable = self._get_train_method()
         if not dry_run:
-            #train()
+            train()
             self._compile_model()
             self._copy_model_files()
             self._package()
@@ -312,7 +323,8 @@ class HFTrainer(Trainer):
     def _write_config(self, config: Dict[str, any]):
         meta: Dict[str, str] = self._get_input_metadata()
         base_model: str = meta.get('base_model', config.get('model'))
-        cfile: Path = self.output_dir / f'model_parse_{self.model_name}.json'
+        pg: str = self._get_pg()
+        cfile: Path = self.output_dir / f'model_{pg}_{self.model_name}.json'
         config = cp.deepcopy(config)
         config['gen_args']['corpus_dir'] = str(self.corpus_file.parent)
         config['gen_args']['model_name_or_path'] = base_model
