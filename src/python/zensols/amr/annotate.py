@@ -24,7 +24,7 @@ from . import (
     FeatureSentence, FeatureDocument, FeatureDocumentParser,
     AmrError, AmrFailure,
     AmrDocument, AmrSentence, AmrFeatureSentence, AmrFeatureDocument,
-    AmrParser, AnnotationFeatureDocumentParser, CoreferenceResolver,
+    AmrParser, AnnotationFeatureDocumentParser
 )
 
 logger = logging.getLogger(__name__)
@@ -530,9 +530,12 @@ class AnnotatedAmrFeatureDocumentStash(PrimeableStash):
     *stitched* together with the :class:`.AmrFeatureDocument` (see class docs).
 
     """
-    coref_resolver: CoreferenceResolver = field(default=None)
-    """Adds coreferences between the sentences of the document."""
+    coref_resolver: 'CoreferenceResolver' = field(default=None)
+    """Adds coreferences between the sentences of the document.
 
+    :see: :class:`.coref.CoreferenceResolver`
+
+    """
     def load(self, doc_id: str) -> AmrFeatureDocument:
         amr_doc: AnnotatedAmrDocument = self.amr_stash.load(doc_id)
         doc: AmrFeatureDocument = self.doc_stash.load(doc_id)

@@ -22,7 +22,7 @@ from zensols.nlp import (
 )
 from . import (
     AmrError, AmrSentence, AmrDocument, AmrFeatureSentence, AmrFeatureDocument,
-    AmrParser, AmrAlignmentPopulator, CoreferenceResolver,
+    AmrParser, AmrAlignmentPopulator
 )
 from .spacyadapt import SpacyDocAdapter
 
@@ -180,7 +180,7 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
     alignment_populator: AmrAlignmentPopulator = field(default=None)
     """Adds the alighment markings."""
 
-    coref_resolver: CoreferenceResolver = field(default=None)
+    coref_resolver: 'CoreferenceResolver' = field(default=None)
     """Adds coreferences between the sentences of the document."""
 
     reparse: bool = field(default=True)
