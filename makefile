@@ -14,7 +14,7 @@ PY_DEP_POST_DEPS +=	modeldeps
 # additional cleanup
 ADD_CLEAN +=		amr-bank-struct-v3.0-scored.csv \
 			corpus/amr-bank-struct-v3.0-parsed.txt
-ADD_CLEAN_ALL +=	dist amr_graph
+ADD_CLEAN_ALL +=	amr_graph models
 CLEAN_DEPS +=		cleanexample
 CLEAN_ALL_DEPS +=	cleanalldep
 
@@ -89,6 +89,7 @@ evallp:
 			$(ABIN) parsefile $(MODEL_FILE) --limit 50
 			$(ABIN) score $(MODEL_FILE)
 
+# evaluation model "EVL_MODEL"
 .PHONY:			evalmodel
 evalmodel:
 			$(ABIN) parsefile $(MODEL_FILE) --limit 50 \
@@ -100,6 +101,12 @@ evalmodel:
 .PHONY:			evallpspring
 evallpspring:
 			make EVL_MODEL=lp_spring evalmodel
+
+# inference a new trained model
+.PHONY:			testmodel
+testmodel:
+			$(ABIN) --config $(MODEL_CONF_DIR)/inference.conf \
+				parse $(TEST_TEXT)
 
 # stop any training
 .PHONY:			stop
