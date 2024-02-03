@@ -14,9 +14,9 @@ if (__name__ == '__main__'):
         2: 'parse-t5-lp',
         3: 'parse-spring-lp',
         4: 'generate-t5wtense-lp',
-    }[4]
+    }[1]
     if model is not None:
-        args = f' -c etc/{model}.conf'
+        args = f' -c example/train/{model}.conf'
     harness = CliHarness(
         src_dir_name='src/python',
         app_factory_class='zensols.amr.ApplicationFactory',

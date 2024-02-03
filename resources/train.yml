@@ -12,7 +12,7 @@ amr_trainer_corpus_installer:
   resources: 'instance: list: amr_trainer_corpus'
 
 amr_parse_xfm_trainer:
-  class_name: zensols.amr.XfmTrainer
+  class_name: zensols.amr.trainer.XfmTrainer
   corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
   installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
   model_name: '${amr_trainer_default:model_name}'
@@ -21,7 +21,7 @@ amr_parse_xfm_trainer:
   package_dir: 'path: ${amr_trainer_default:package_dir}'
 
 amr_parse_t5_trainer:
-  class_name: zensols.amr.T5Trainer
+  class_name: zensols.amr.trainer.T5Trainer
   corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
   installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
   model_name: '${amr_trainer_default:model_name}'
@@ -30,7 +30,7 @@ amr_parse_t5_trainer:
   package_dir: 'path: ${amr_trainer_default:package_dir}'
 
 amr_parse_spring_trainer:
-  class_name: zensols.amr.SpringTrainer
+  class_name: zensols.amr.trainer.SpringTrainer
   corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
   installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
   model_name: '${amr_trainer_default:model_name}'
@@ -39,7 +39,7 @@ amr_parse_spring_trainer:
   package_dir: 'path: ${amr_trainer_default:package_dir}'
 
 amr_generate_t5wtense_trainer:
-  class_name: zensols.amr.T5WithTenseGeneratorTrainer
+  class_name: zensols.amr.trainer.T5WithTenseGeneratorTrainer
   corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
   installer: 'instance: amr_generate_${amr_default:generator_model}_installer'
   model_name: '${amr_trainer_default:model_name}'

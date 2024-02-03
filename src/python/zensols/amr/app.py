@@ -498,7 +498,7 @@ class _ProtoApplication(object):
         gdoc.write()
 
     def _train(self):
-        if 0:
+        if 1:
             self.trainer_app.trainer.write()
             return
         if 1:
@@ -510,7 +510,7 @@ class _ProtoApplication(object):
         doc = parser('Obama was the 44th president last year. He is no longer.')
         doc.write()
 
-    def proto(self, run: int = 0):
+    def proto(self, run: int = 2):
         {0: self._tmp,
          1: self._generate,
          2: self._train,

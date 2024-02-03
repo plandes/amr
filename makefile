@@ -19,7 +19,7 @@ CLEAN_DEPS +=		cleanexample
 CLEAN_ALL_DEPS +=	cleanalldep
 
 # file, models and entry point
-MODEL_CONF_DIR = 	etc
+MODEL_CONF_DIR = 	example/train
 MODEL_NAME = 		lp
 MODEL_FILE =		corpus/amr-bank-struct-v3.0.txt
 ABIN =			./amr
