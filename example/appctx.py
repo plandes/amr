@@ -38,14 +38,15 @@ sections = list: imp_conf
 
 # import the 'zensols.amr' library with the gsii model
 [imp_conf]
-type = importini
+type = import
 config_files = list:
   resource(zensols.util): resources/default.conf,
   resource(zensols.amr): resources/default.conf,
   resource(zensols.nlp): resources/obj.conf,
   resource(zensols.nlp): resources/component.conf,
   resource(zensols.amr): resources/obj.conf,
-  resource(zensols.amr): resources/annotate.conf
+  resource(zensols.amr): resources/annotate.conf,
+  resource(zensols.amr): resources/align.yml
 
 # override the parse to keep only the norm, ent
 [amr_pipline_doc_parser]

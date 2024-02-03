@@ -3,6 +3,6 @@
 /target
 /data
 /*.log
-/amr-graph
+/amr_graph
 /corpus
 /models
