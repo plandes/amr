@@ -21,7 +21,7 @@ amr_parser:
 # by `amr_parser`
 amr_align_component:
   class_name: zensols.nlp.Component
-  modules: 'list: zensols.amr'
+  modules: 'list: zensols.amr.align'
   pipe_name: 'amralign'
 
 amr_align_populator:

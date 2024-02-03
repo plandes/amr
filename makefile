@@ -14,7 +14,7 @@ PY_DEP_POST_DEPS +=	modeldeps
 # additional cleanup
 ADD_CLEAN +=		amr-bank-struct-v3.0-scored.csv \
 			corpus/amr-bank-struct-v3.0-parsed.txt
-ADD_CLEAN_ALL +=	dist
+ADD_CLEAN_ALL +=	dist amr_graph
 CLEAN_DEPS +=		cleanexample
 CLEAN_ALL_DEPS +=	cleanalldep
 
@@ -65,7 +65,7 @@ testplot:
 # run all examples
 .PHONY:			testexample
 testexample:
-			( cd example ; for i in *.py ; do ./$$i ; done )
+			( for i in example/*.py ; do PYTHONPATH=src/python ./$$i ; done )
 
 # unit and integration testing
 .PHONY:			testall

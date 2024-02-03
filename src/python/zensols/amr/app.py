@@ -533,7 +533,7 @@ class _ProtoApplication(object):
         doc = parser('Obama was the 44th president last year. He is no longer.')
         doc.write()
 
-    def proto(self, run: int = 0):
+    def proto(self, run: int = 1):
         {0: self._tmp,
          1: self._generate,
          2: self._train,
