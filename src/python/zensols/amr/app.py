@@ -12,6 +12,7 @@ from pathlib import Path
 import json
 import itertools as it
 import pandas as pd
+from zensols.introspect import ClassImporter
 from zensols.config import ConfigFactory, DictionaryConfig
 from zensols.persist import Stash
 from zensols.cli import LogConfigurator, ApplicationError
@@ -415,7 +416,15 @@ class TrainerApplication(BaseApplication):
         trainer_type: str = self.config_factory.\
             config['amr_trainer_default']['trainer_type']
         sec: str = f'amr_{trainer_type}_trainer'
-        return self.config_factory(sec)
+        trainer: Trainer = self.config_factory(sec)
+        sup_classes: Set[str] = set(map(
+            ClassImporter.full_classname,
+            trainer.__class__.__mro__))
+        # compare by class names for prototyping app config reloads
+        if not ClassImporter.full_classname(Trainer) in sup_classes:
+            raise AmrError(
+                f"Wrong trainer configuration: '{sec}' ({type(trainer)})")
+        return trainer
 
     def _get_text(self, text_or_file: str):
         path = Path(text_or_file)
