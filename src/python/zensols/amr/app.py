@@ -18,9 +18,6 @@ from zensols.persist import Stash
 from zensols.cli import LogConfigurator, ApplicationError
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
 from . import AmrError, AmrSentence, AmrDocument, AmrFeatureSentence
-from .annotate import CorpusWriter
-from .model import AmrParser, AmrGenerator
-from .dumper import Dumper
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +40,13 @@ class BaseApplication(object):
     log_config: LogConfigurator = field()
     """Used to update logging levels based on the ran action."""
 
+    app_dependencies: Dict[str, str] = field()
+    """The name to instance mapping for getters/properties in this app class."""
+
+    def _get_app_dependency(self, name: str) -> Any:
+        sec: str = self.app_dependencies[name]
+        return self.config_factory(sec)
+
     def _set_level(self, level: int, verbose: bool = False):
         self.log_config.level = level
         self.log_config()
@@ -61,18 +65,6 @@ class Application(BaseApplication):
     config_factory: ConfigFactory = field()
     """Application context."""
 
-    amr_parser: AmrParser = field()
-    """Parses natural language in to AMR graphs."""
-
-    anon_doc_stash: Stash = field()
-    """The annotated document stash."""
-
-    generator: AmrGenerator = field()
-    """The generator used to transform AMR graphs to natural language."""
-
-    dumper: Dumper = field()
-    """Plots and writes AMR content in human readable formats."""
-
     @property
     def doc_parser(self) -> FeatureDocumentParser:
         """The feature document parser for the app.  This is not done via the
@@ -81,6 +73,26 @@ class Application(BaseApplication):
         """
         sec: str = self.config_factory.config['amr_default']['doc_parser']
         return self.config_factory(sec)
+
+    @property
+    def amr_parser(self) -> 'AmrParser':
+        """Parses natural language in to AMR graphs."""
+        return self._get_app_dependency('amr_parser')
+
+    @property
+    def generator(self) -> 'AmrGenerator':
+        """The generator used to transform AMR graphs to natural language."""
+        return self._get_app_dependency('generator')
+
+    @property
+    def anon_doc_stash(self) -> Stash:
+        """The annotated document stash."""
+        return self._get_app_dependency('anon_doc_stash')
+
+    @property
+    def dumper(self) -> 'Dumper':
+        """Plots and writes AMR content in human readable formats."""
+        return self._get_app_dependency('dumper')
 
     def count(self, input_file: Path):
         """Provide counts on an AMR corpus file.
@@ -233,8 +245,10 @@ class ScorerApplication(object):
     config_factory: ConfigFactory = field()
     """Application context."""
 
-    anon_doc_stash: Stash = field()
-    """The annotated document stash."""
+    @property
+    def anon_doc_stash(self) -> Stash:
+        """The annotated document stash."""
+        return self._get_app_dependency('anon_doc_stash')
 
     @staticmethod
     def _to_alt_path(path: Path, output_dir: Path, suffix: str) -> Path:
@@ -448,6 +462,7 @@ class TrainerApplication(BaseApplication):
         :param corpus_file: the output file to write the corpus
 
         """
+        from .annotate import CorpusWriter
         writer: CorpusWriter = self.config_factory.new_instance(
             'amr_corpus_writer', path=corpus_file)
         for text in self._get_text(text_or_file).split('\n'):
