@@ -20,12 +20,14 @@ from penman import Graph
 from zensols.persist import persisted, PersistedWork, Stash, PrimeableStash
 from zensols.config import Writable
 from zensols.install import Installer
+from zensols.nlp import FeatureSentence, FeatureDocument, FeatureDocumentParser
 from . import (
-    FeatureSentence, FeatureDocument, FeatureDocumentParser,
     AmrError, AmrFailure,
     AmrDocument, AmrSentence, AmrFeatureSentence, AmrFeatureDocument,
-    AmrParser, AnnotationFeatureDocumentParser
+    AnnotationFeatureDocumentParser
 )
+from .amrparser import AmrParser
+from .coref import CoreferenceResolver
 
 logger = logging.getLogger(__name__)
 
@@ -530,12 +532,9 @@ class AnnotatedAmrFeatureDocumentStash(PrimeableStash):
     *stitched* together with the :class:`.AmrFeatureDocument` (see class docs).
 
     """
-    coref_resolver: 'CoreferenceResolver' = field(default=None)
-    """Adds coreferences between the sentences of the document.
+    coref_resolver: CoreferenceResolver = field(default=None)
+    """Adds coreferences between the sentences of the document."""
 
-    :see: :class:`.coref.CoreferenceResolver`
-
-    """
     def load(self, doc_id: str) -> AmrFeatureDocument:
         amr_doc: AnnotatedAmrDocument = self.amr_stash.load(doc_id)
         doc: AmrFeatureDocument = self.doc_stash.load(doc_id)

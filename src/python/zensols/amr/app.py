@@ -19,8 +19,9 @@ from zensols.cli import LogConfigurator, ApplicationError
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
 from . import (
     AmrError, AmrSentence, AmrDocument, AmrFeatureSentence,
-    AmrParser, AmrGenerator, Dumper, CorpusWriter,
+    Dumper, CorpusWriter,
 )
+from .amrparser import AmrParser, AmrGenerator
 
 logger = logging.getLogger(__name__)
 
