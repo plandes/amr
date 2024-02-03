@@ -20,7 +20,7 @@ from zensols.install import Installer
 from zensols.nlp import FeatureDocumentParser, Component, ComponentInitializer
 from . import (
     AmrError, AmrFailure, AmrSentence, AmrDocument,
-    GeneratedAmrSentence, GeneratedAmrDocument
+    AmrGeneratedSentence, AmrGeneratedDocument
 )
 
 logger = logging.getLogger(__name__)
@@ -267,11 +267,11 @@ class AmrGenerator(ModelContainer):
                 generate_fn = (lambda s: org_fn(s, use_tense=self.use_tense))
         preds: Tuple[List[str], List[bool]] = generate_fn(list(map(
             lambda s: s.graph_string, doc)))
-        sents: List[GeneratedAmrSentence] = []
+        sents: List[AmrGeneratedSentence] = []
         sent: AmrSentence
         for sent, (text, clipped) in zip(doc, zip(*preds)):
-            sents.append(GeneratedAmrSentence(text, clipped, sent))
-        return GeneratedAmrDocument(sents=sents, amr=doc)
+            sents.append(AmrGeneratedSentence(text, clipped, sent))
+        return AmrGeneratedDocument(sents=sents, amr=doc)
 
 
 @Language.factory('amr_parser')
