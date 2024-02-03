@@ -17,7 +17,7 @@ from zensols.nlp import (
     LexicalSpan, TextContainer, TokenContainer,
     FeatureToken, FeatureSentence, FeatureDocument,
 )
-from . import AmrError, AmrSentence, AmrDocument, TreePruner
+from . import AmrError, AmrSentence, AmrDocument
 
 
 @dataclass
@@ -70,6 +70,7 @@ class Reference(ReferenceObject):
         :class:`.AmrFeatureSentence`.
 
         """
+        from .tree import TreePruner
         # only retain the sentence for debugging (write method)
         tp = TreePruner(self.sent.amr.graph, keep_root_meta=False)
         graph: Graph = tp.create_sub(self.triple)

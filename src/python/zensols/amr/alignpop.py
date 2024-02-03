@@ -13,7 +13,7 @@ from io import StringIO
 import penman
 from penman import Graph
 from penman.surface import Alignment, RoleAlignment
-from . import TreeNavigator
+from .tree import TreeNavigator
 
 logger = logging.getLogger(__name__)
 
