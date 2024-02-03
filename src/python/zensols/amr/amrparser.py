@@ -14,14 +14,12 @@ from spacy.language import Language
 from spacy.tokens import Doc, Span, Token
 import amrlib
 from amrlib.models.inference_bases import GTOSInferenceBase, STOGInferenceBase
-from amrlib.models.generate_t5wtense.inference \
-    import Inference as T5TenseInference
 from zensols.util import loglevel
 from zensols.persist import persisted
 from zensols.install import Installer
 from zensols.nlp import FeatureDocumentParser, Component, ComponentInitializer
 from . import (
-    AmrFailure, AmrSentence, AmrDocument,
+    AmrError, AmrFailure, AmrSentence, AmrDocument,
     GeneratedAmrSentence, GeneratedAmrDocument
 )
 
@@ -260,6 +258,9 @@ class AmrGenerator(ModelContainer):
         """
         model: GTOSInferenceBase = self.generation_model
         generate_fn: Callable = model.generate
+        # upgrade to amrlib 0.8.0
+        from amrlib.models.generate_t5wtense.inference \
+            import Inference as T5TenseInference
         if isinstance(model, T5TenseInference):
             org_fn: Callable = generate_fn
             generate_fn = (lambda s: org_fn(s, use_tense=self.use_tense))
@@ -281,5 +282,7 @@ def create_amr_parser(nlp: Language, name: str, parser_name: str) -> AmrParser:
     if logger.isEnabledFor(logging.INFO):
         logger.info(f'creating AMR component {name}: doc parser: {doc_parser}')
     parser: AmrParser = doc_parser.config_factory(parser_name)
-    assert isinstance(parser, AmrParser)
+    if not isinstance(parser, AmrParser):
+        raise AmrError(
+            f"Expecting type '{AmrParser}' but got:  '{type(parser)}'")
     return parser

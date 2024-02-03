@@ -34,7 +34,7 @@ amr_align_populator:
 # generate English from AMR graphs
 amr_generator:
   class_name: zensols.amr.AmrGenerator
-  installer: 'instance: amr_gen_t5wtense_installer'
+  installer: 'instance: amr_generate_t5wtense_trainer'
 
 split_hyphen_token_mapper:
   class_name: zensols.nlp.SplitTokenMapper
@@ -112,7 +112,7 @@ amr_parse_spring_trainer:
 amr_generate_t5wtense_trainer:
   class_name: zensols.amr.T5WithTenseGeneratorTrainer
   corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
-  installer: 'instance: amr_generate_${amr_default:parse_model}_installer'
+  installer: 'instance: amr_generate_${amr_default:generator_model}_installer'
   model_name: '${amr_trainer_default:model_name}'
   temporary_dir: 'path: ${amr_trainer_default:temporary_dir}/${model_name}'
   output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'

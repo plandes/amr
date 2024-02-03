@@ -14,9 +14,10 @@ from zensols.amr import (
     AmrSentence, AmrDocument, AmrFeatureDocument, AmrFeatureSentence,
     ApplicationFactory, Application, AnnotationFeatureDocumentParser,
 )
+from util import BaseTestApplication
 
 
-class TestApplication(unittest.TestCase):
+class TestApplication(BaseTestApplication):
     _DEFAULT_MODEL = 'gsii'
     _DEFAULT_TEST = f'{_DEFAULT_MODEL}-test'
 
@@ -31,14 +32,20 @@ Party, he was the first African-American president of the United States.\
         if targ.is_dir():
             shutil.rmtree(targ)
 
-    def _app(self, model_name: str, config: str = 'test'):
+    # def _app(self, model_name: str, config: str = 'test'):
+    #     self.model_name = model_name
+    #     hrn = CliHarness(app_factory_class=ApplicationFactory)
+    #     cmd = (f'parse _ -c test-resources/{config}.conf --level warn ' +
+    #            f'--override amr_default.parse_model={self._DEFAULT_MODEL}')
+    #     inst = hrn.get_instance(cmd)
+    #     if isinstance(inst, Failure):
+    #         inst.rethrow()
+    #     self.assertFalse(inst is None)
+    #     return inst
+
+    def _get_model_app(self, model_name: str, config: str = 'test'):
         self.model_name = model_name
-        hrn = CliHarness(app_factory_class=ApplicationFactory)
-        cmd = (f'parse _ -c test-resources/{config}.conf --level warn ' +
-               f'--override amr_default.parse_model={self._DEFAULT_MODEL}')
-        inst = hrn.get_instance(cmd)
-        self.assertFalse(inst is None)
-        return inst
+        return self._get_app(config)
 
     def _get_should_sent_path(self, sent_num: int, desc: str = None) -> Path:
         desc = self.model_name if desc is None else desc
@@ -81,7 +88,7 @@ Party, he was the first African-American president of the United States.\
 
     def _test_create_data(self):
         model_test = self._DEFAULT_TEST
-        app: Application = self._app(f'{model_test}')
+        app: Application = self._get_model_app(f'{model_test}')
         spacy_doc = app.doc_parser.parse_spacy_doc(self.sent)
         doc: AmrDocument = spacy_doc._.amr
         sent: AmrSentence
@@ -109,7 +116,7 @@ Party, he was the first African-American president of the United States.\
         self.assertNotEqual(sent, clone)
 
     def test_parse(self):
-        app: Application = self._app(self._DEFAULT_TEST)
+        app: Application = self._get_model_app(self._DEFAULT_TEST)
         self.assertEqual(Application, type(app))
         doc_parser = app.config_factory('amr_pipline_doc_parser')
         spacy_doc = doc_parser.parse_spacy_doc(self.sent)
@@ -121,7 +128,7 @@ Party, he was the first African-American president of the United States.\
         self._test_doc(doc)
 
     def test_pickle(self):
-        app: Application = self._app(self._DEFAULT_TEST)
+        app: Application = self._get_model_app(self._DEFAULT_TEST)
         doc_parser = app.config_factory('amr_pipline_doc_parser')
         spacy_doc = doc_parser.parse_spacy_doc(self.sent)
         doc = spacy_doc._.amr
@@ -135,7 +142,7 @@ Party, he was the first African-American president of the United States.\
             self.assertEqual(sold.graph_string, snew.graph_string)
 
     def test_doc_clone(self):
-        app: Application = self._app(self._DEFAULT_TEST)
+        app: Application = self._get_model_app(self._DEFAULT_TEST)
         doc_parser = app.config_factory('amr_pipline_doc_parser')
         spacy_doc = doc_parser.parse_spacy_doc(self.sent)
         doc: AmrDocument = spacy_doc._.amr
@@ -157,11 +164,11 @@ Party, he was the first African-American president of the United States.\
         self.assertEqual(should, sals)
 
     def test_annotator(self):
-        app: Application = self._app(self._DEFAULT_TEST)
+        app: Application = self._get_model_app(self._DEFAULT_TEST)
         doc_parser = app.config_factory('amr_anon_doc_parser')
         self.assertTrue(isinstance(doc_parser, AnnotationFeatureDocumentParser))
         doc: AmrFeatureDocument = doc_parser(self.sent)
-        self.assertEquals(AmrFeatureDocument, type(doc))
+        self.assertEqual(AmrFeatureDocument, type(doc))
         self.assertEqual(2, len(tuple(doc.sents)))
         self.assertEqual(AmrFeatureSentence, type(next(iter(doc.sents))))
         self.assertEqual(AmrDocument, type(doc.amr))
@@ -171,19 +178,17 @@ Party, he was the first African-American president of the United States.\
         self._test_doc(doc.amr)
 
     def test_filtering_annotator(self):
-        app: Application = self._app('gsii-filter-test', 'test-filter')
-        if isinstance(app, Failure):
-            app.rethrow()
+        app: Application = self._get_model_app('gsii-filter-test', 'test-filter')
         doc_parser = app.config_factory('amr_anon_doc_parser')
         doc: AmrFeatureDocument = doc_parser(self.sent)
-        self.assertEquals(AmrFeatureDocument, type(doc))
+        self.assertEqual(AmrFeatureDocument, type(doc))
         self.assertEqual(2, len(tuple(doc.sents)))
         self.assertEqual(AmrFeatureSentence, type(next(iter(doc.sents))))
         self.assertEqual(AmrDocument, type(doc.amr))
         self._test_doc(doc.amr, 'gsii-filter')
 
     def test_annotator_reload(self):
-        app: Application = self._app(self._DEFAULT_TEST)
+        app: Application = self._get_model_app(self._DEFAULT_TEST)
         doc_parser = app.config_factory('amr_anon_doc_parser')
         doc: AmrFeatureDocument = doc_parser(self.sent)
         doc2: AmrFeatureDocument = doc_parser(self.sent)
