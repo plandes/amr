@@ -22,12 +22,12 @@ from zensols.config import Writable
 from zensols.install import Installer
 from zensols.nlp import FeatureSentence, FeatureDocument, FeatureDocumentParser
 from . import (
-    AmrError, AmrFailure,
-    AmrDocument, AmrSentence, AmrFeatureSentence, AmrFeatureDocument,
-    AnnotationFeatureDocumentParser
+    AmrError, AmrFailure, AmrDocument, AmrSentence,
+    AmrFeatureSentence, AmrFeatureDocument,
 )
 from .amrparser import AmrParser
 from .coref import CoreferenceResolver
+from .docparser import AnnotationFeatureDocumentParser
 
 logger = logging.getLogger(__name__)
 

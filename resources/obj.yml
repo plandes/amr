@@ -25,7 +25,7 @@ amr_align_component:
   pipe_name: 'amralign'
 
 amr_align_populator:
-  class_name: zensols.amr.AmrAlignmentPopulator
+  class_name: zensols.amr.align.AmrAlignmentPopulator
   aligner: best
 
 

@@ -1,5 +1,4 @@
 import sys
-import unittest
 from io import BytesIO
 import shutil
 import pickle
@@ -8,12 +7,11 @@ from pathlib import Path
 from spacy.tokens.doc import Doc
 from spacy.tokens.span import Span
 from penman.graph import Graph
-from zensols.util import Failure
-from zensols.cli import CliHarness
 from zensols.amr import (
     AmrSentence, AmrDocument, AmrFeatureDocument, AmrFeatureSentence,
-    ApplicationFactory, Application, AnnotationFeatureDocumentParser,
+    Application
 )
+from zensols.amr.annotate import AnnotationFeatureDocumentParser
 from util import BaseTestApplication
 
 
@@ -31,17 +29,6 @@ Party, he was the first African-American president of the United States.\
         targ = Path('target')
         if targ.is_dir():
             shutil.rmtree(targ)
-
-    # def _app(self, model_name: str, config: str = 'test'):
-    #     self.model_name = model_name
-    #     hrn = CliHarness(app_factory_class=ApplicationFactory)
-    #     cmd = (f'parse _ -c test-resources/{config}.conf --level warn ' +
-    #            f'--override amr_default.parse_model={self._DEFAULT_MODEL}')
-    #     inst = hrn.get_instance(cmd)
-    #     if isinstance(inst, Failure):
-    #         inst.rethrow()
-    #     self.assertFalse(inst is None)
-    #     return inst
 
     def _get_model_app(self, model_name: str, config: str = 'test'):
         self.model_name = model_name
