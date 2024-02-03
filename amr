@@ -4,9 +4,6 @@ from zensols.cli import CliHarness
 
 
 if (__name__ == '__main__'):
-    import zensols.deepnlp.transformer as dnt
-    dnt.normalize_huggingface_logging()
-    dnt.turn_off_huggingface_downloads()
     args: str = ''
     model = {
         0: None,
@@ -14,7 +11,7 @@ if (__name__ == '__main__'):
         2: 'parse-t5-lp',
         3: 'parse-spring-lp',
         4: 'generate-t5wtense-lp',
-    }[1]
+    }[0]
     if model is not None:
         args = f' -c example/train/{model}.conf'
     harness = CliHarness(

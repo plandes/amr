@@ -47,6 +47,11 @@ class BaseApplication(object):
         sec: str = self.app_dependencies[name]
         return self.config_factory(sec)
 
+    def _norm_tf_logging(self):
+        """Make HF APIs using the logging system rather than to stdout."""
+        import zensols.deepnlp.transformer as dnt
+        dnt.normalize_huggingface_logging()
+
     def _set_level(self, level: int, verbose: bool = False):
         self.log_config.level = level
         self.log_config()
@@ -71,17 +76,20 @@ class Application(BaseApplication):
         application config to allow overriding of the defaults.
 
         """
+        self._norm_tf_logging()
         sec: str = self.config_factory.config['amr_default']['doc_parser']
         return self.config_factory(sec)
 
     @property
     def amr_parser(self) -> 'AmrParser':
         """Parses natural language in to AMR graphs."""
+        self._norm_tf_logging()
         return self._get_app_dependency('amr_parser')
 
     @property
     def generator(self) -> 'AmrGenerator':
         """The generator used to transform AMR graphs to natural language."""
+        self._norm_tf_logging()
         return self._get_app_dependency('generator')
 
     @property
@@ -525,7 +533,7 @@ class _ProtoApplication(object):
         doc = parser('Obama was the 44th president last year. He is no longer.')
         doc.write()
 
-    def proto(self, run: int = 2):
+    def proto(self, run: int = 0):
         {0: self._tmp,
          1: self._generate,
          2: self._train,
