@@ -1,0 +1,16 @@
+# @meta {desc: 'add text-to-graph alignments', date: '2024-02-03'}
+
+
+# spaCy pipeline component to add text-to-graph alignments to AMR graphs parsed
+# by `amr_parser`
+amr_align_component:
+  class_name: zensols.nlp.Component
+  modules: 'list: zensols.amr.align'
+  pipe_name: 'amralign'
+
+amr_align_populator:
+  class_name: zensols.amr.align.AmrAlignmentPopulator
+  aligner: best
+
+amr_anon_doc_parser:
+  alignment_populator: 'instance: amr_align_populator'
