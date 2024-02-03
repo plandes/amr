@@ -484,24 +484,24 @@ class _ProtoApplication(object):
     config_factory: ConfigFactory = field()
     """For prototyping."""
 
-    def proto(self):
-        if 0:
-            parser = self.config_factory('amr_anon_doc_parser')
-            print(parser)
-            parser.clear()
-            return
-        if 1:
-            parser = self.config_factory('amr_anon_doc_parser')
-            gen = self.config_factory('amr_generator')
-            doc = parser('Obama was the 44th president last year. He is cool.')
-            doc.amr.write()
-            print('--')
-            gdoc = gen(doc.amr)
-            gdoc.write()#clipped_inline=0, amr_sent_kwargs=dict(include_metadata=False))
-            return
+    def _generate(self):
+        parser = self.config_factory('amr_anon_doc_parser')
+        gen = self.config_factory('amr_generator')
+        doc = parser('Obama was the 44th president last year. He is cool.')
+        doc.write()
+        print('_' * 80)
+        gdoc = gen(doc.amr)
+        gdoc.write()
+
+    def _train(self):
         if 0:
             self.trainer.write()
             return
         if 1:
             self.trainer.train()
             return
+
+    def proto(self, run: int = 0):
+        {0: self._generate,
+         1: self._train,
+         }[run]()
