@@ -254,7 +254,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
         """
         self.write_to_log(logger)
         dir_path: Path
-        for dir_path in (self.temporary_dir, self.output_dir,):
+        for dir_path in (self.temporary_dir, self.output_dir):
             logger.debug(f'removing directory: {dir_path}')
             if dir_path.is_dir():
                 shutil.rmtree(dir_path)
@@ -316,16 +316,18 @@ class HFTrainer(Trainer):
 
     def _write_config(self, config: Dict[str, any]):
         meta: Dict[str, str] = self._get_input_metadata()
-        base_model: str = meta.get('base_model', config.get('model'))
+        base_model: str = meta.get('base_model', self._get_base_model())
         pg: str = self._get_pg()
         cfile: Path = self.output_dir / f'model_{pg}_{self.model_name}.json'
+        if base_model is None:
+            raise AmrError('Missing base model name')
         config = cp.deepcopy(config)
         config['gen_args']['corpus_dir'] = str(self.corpus_file.parent)
         config['gen_args']['model_name_or_path'] = base_model
         cfile.parent.mkdir(parents=True)
         with open(cfile, 'w') as f:
             json.dump(config, f, indent=4)
-        logger.info(f'wrote: {cfile}')
+        logger.info(f'wrote model config: {cfile}')
 
     def _get_checkpoint_dir(self) -> Path:
         paths: Tuple[Path, ...] = tuple(self.temporary_dir.iterdir())
@@ -348,6 +350,8 @@ class HFTrainer(Trainer):
         meta: Dict[str, str] = self._get_input_metadata()
         base_model: str = meta.get('base_model', self._get_base_model())
         cp_dir: Path = self._get_checkpoint_dir() / 'config.json'
+        if base_model is None:
+            raise AmrError('Missing base model name')
         with open(cp_dir) as f:
             content = json.load(f)
         content['_name_or_path'] = base_model
@@ -358,7 +362,7 @@ class HFTrainer(Trainer):
         with open(new_config, 'w') as f:
             json.dump(content, f, indent=4)
         if logger.isEnabledFor(logging.INFO):
-            logger.info(f'wrote: {new_config}')
+            logger.info(f'wrote updated config: {new_config}')
 
     def _massage_training_config(self, config: Dict[str, Any]):
         overrides: Dict[str, Any] = self.training_config_overrides
