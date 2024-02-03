@@ -3,7 +3,7 @@
 """
 __author__ = 'Paul Landes'
 
-from typing import List, Tuple
+from typing import List, Tuple, Callable
 from dataclasses import dataclass, field
 import logging
 import os
@@ -14,11 +14,16 @@ from spacy.language import Language
 from spacy.tokens import Doc, Span, Token
 import amrlib
 from amrlib.models.inference_bases import GTOSInferenceBase, STOGInferenceBase
+from amrlib.models.generate_t5wtense.inference \
+    import Inference as T5TenseInference
 from zensols.util import loglevel
 from zensols.persist import persisted
 from zensols.install import Installer
 from zensols.nlp import FeatureDocumentParser, Component, ComponentInitializer
-from . import AmrFailure, AmrSentence, AmrDocument
+from . import (
+    AmrFailure, AmrSentence, AmrDocument,
+    GeneratedAmrSentence, GeneratedAmrDocument
+)
 
 logger = logging.getLogger(__name__)
 
@@ -221,6 +226,22 @@ class AmrGenerator(ModelContainer):
     :see: :meth:`__call__`
 
     """
+    use_tense: bool = field(default=True)
+    """Try to add tense information by trying to tag the graph, which requires
+    the sentence or annotations and then goes through an alignment.
+
+    :see: :class:`amrlib.models.generate_t5wtense.inference.Inference`
+
+    """
+    def __post_init__(self):
+        super().__post_init__()
+        warnings.filterwarnings(
+            'ignore',
+            message=r'^`num_beams` is set to 1. However, `early_stopping` is ',
+            category=UserWarning)
+        from zensols.deepnlp import transformer
+        transformer.suppress_warnings()
+
     @property
     @persisted('_generation_model', cache_global=True)
     def generation_model(self) -> GTOSInferenceBase:
@@ -237,8 +258,18 @@ class AmrGenerator(ModelContainer):
         :return: a text sentence for each respective sentence in ``doc``
 
         """
-        model = self.generation_model
-        return tuple(map(lambda s: model.generate(s.graph_string), doc))
+        model: GTOSInferenceBase = self.generation_model
+        generate_fn: Callable = model.generate
+        if isinstance(model, T5TenseInference):
+            org_fn: Callable = generate_fn
+            generate_fn = (lambda s: org_fn(s, use_tense=self.use_tense))
+        preds: Tuple[List[str], List[bool]] = generate_fn(list(map(
+            lambda s: s.graph_string, doc)))
+        sents: List[GeneratedAmrSentence] = []
+        sent: AmrSentence
+        for sent, (text, clipped) in zip(doc, zip(*preds)):
+            sents.append(GeneratedAmrSentence(text, clipped, sent))
+        return GeneratedAmrDocument(sents=sents, amr=doc)
 
 
 @Language.factory('amr_parser')
