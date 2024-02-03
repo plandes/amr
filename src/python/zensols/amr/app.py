@@ -484,6 +484,9 @@ class _ProtoApplication(object):
     config_factory: ConfigFactory = field()
     """For prototyping."""
 
+    trainer_app: TrainerApplication = field()
+    """Trains and evaluates models."""
+
     def _generate(self):
         parser = self.config_factory('amr_anon_doc_parser')
         gen = self.config_factory('amr_generator')
@@ -495,13 +498,13 @@ class _ProtoApplication(object):
 
     def _train(self):
         if 0:
-            self.trainer.write()
+            self.trainer_app.trainer.write()
             return
         if 1:
-            self.trainer.train()
+            self.trainer_app.trainer.train()
             return
 
-    def proto(self, run: int = 0):
+    def proto(self, run: int = 1):
         {0: self._generate,
          1: self._train,
          }[run]()

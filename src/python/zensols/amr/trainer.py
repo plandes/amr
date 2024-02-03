@@ -33,7 +33,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
         'pretrained_path_or_model', 'trainer_class', 'training_config'}
 
     _INFERENCE_MOD_REGEX: ClassVar[re.Pattern] = re.compile(
-        r'.*(parse_[a-z\d]+).*')
+        r'.*((parse|generate)_[a-z\d]+).*')
 
     corpus_installer: Installer = field(repr=False)
     """Points to the AMR corpus file(s)."""
@@ -52,12 +52,6 @@ class Trainer(Dictable, metaclass=ABCMeta):
     version: str = field(default='0.1.0')
     """The version used in the ``amrlib_meta.json`` output metadata file."""
 
-    # parser: AmrParser = field(default=None, repr=False)
-    # """The parser that contains the :mod:`amrlib` pretrained model, which is
-    # loaded and used to continue fine-tuning.  If not set, the training starts
-    # from the T5 HuggingFace pretrained model.
-
-    # """
     installer: Installer = field(default=None)
     """The installer for the model used to train the model previously (i.e. by
     :mod:`amrlib`).
@@ -309,11 +303,11 @@ class HFTrainer(Trainer):
         model_or_path: Union[str, Path] = self.pretrained_path_or_model
         if isinstance(model_or_path, Path):
             model_or_path = str(model_or_path.absolute())
+        ga['model_name_or_path'] = model_or_path
         ga['corpus_dir'] = str(corpus_file.parent.absolute())
         ga['train_fn'] = corpus_file.name
-        ga['tok_name_or_path'] = self.token_model_name
-        ga['model_name_or_path'] = model_or_path
         ga['eval_fn'] = corpus_file.name
+        ga['tok_name_or_path'] = self.token_model_name
         hf['output_dir'] = str(self.temporary_dir)
 
     def _get_base_model(self) -> str:
@@ -410,6 +404,22 @@ class T5Trainer(XfmTrainer):
     def _get_trainer_class(self, submod: str) -> Type:
         # amrlib 7.1 uses the Xfm parser for the older T5 model
         return super()._get_trainer_class('parse_xfm')
+
+
+@dataclass
+class T5WithTenseGeneratorTrainer(XfmTrainer):
+    def _populate_training_config(self, config: Dict[str, Any]):
+        corpus_file: Path = self.corpus_file
+        ga: Dict[str, str] = config['gen_args']
+        hf: Dict[str, str] = config['hf_args']
+        model_or_path: Union[str, Path] = self.pretrained_path_or_model
+        if isinstance(model_or_path, Path):
+            model_or_path = str(model_or_path.absolute())
+        ga['model_name_or_path'] = model_or_path
+        ga['corpus_dir'] = str(corpus_file.parent.absolute())
+        ga['train_fn'] = corpus_file.name
+        ga['valid_fn'] = corpus_file.name
+        hf['output_dir'] = str(self.temporary_dir)
 
 
 @dataclass
