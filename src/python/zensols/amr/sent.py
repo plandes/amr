@@ -369,7 +369,8 @@ class GeneratedAmrSentence(Writable):
                            of :obj:`amr`
         """
         if clipped_inline:
-            self._write_line(f'{self.text} ({self.clipped})', depth, writer)
+            clip_text: str = '...' if self.clipped else ''
+            self._write_line(self.text + clip_text, depth, writer)
         else:
             self._write_line(self.text, depth, writer)
             self._write_line(f'clipped: {self.clipped}', depth + 1, writer)
