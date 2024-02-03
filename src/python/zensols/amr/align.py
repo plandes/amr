@@ -14,7 +14,10 @@ from spacy.language import Language
 from amrlib.alignments.faa_aligner import FAA_Aligner
 from amrlib.alignments.rbw_aligner import RBWAligner
 from zensols.persist import persisted
-from . import AmrError, AmrSentence, AmrDocument, AmrParser, AlignmentPopulator
+from . import (
+    AmrError, AmrFailure,
+    AmrSentence, AmrDocument, AmrParser, AlignmentPopulator
+)
 
 logger = logging.getLogger(__name__)
 
@@ -133,15 +136,16 @@ class AmrAlignmentPopulator(object):
         """Add alignment markers to sentence AMR graphs."""
         self._assert_module_log()
         spacy_sent: Span = None
-        sent: Union[AmrSentence, Span]
+        sent: Union[AmrSentence, AmrFailure, Span]
         for sent in doc.sents:
             if logger.isEnabledFor(logging.DEBUG):
                 logger.debug(f'aligning: {sent}')
             if not isinstance(sent, AmrSentence):
                 spacy_sent = sent
                 sent: AmrSentence = sent._.amr
+            if sent.is_failure:
                 try:
-                    fail_str: str = str(sent)
+                    fail_str: str = f'{sent}: (type={type(sent)})'
                 except Exception as e:
                     fail_str: str = f'Could not get string representation: {e}'
                 logger.warning(f'skipping alignment for failure: {fail_str}')
