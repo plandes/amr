@@ -18,10 +18,10 @@ from zensols.persist import Stash
 from zensols.cli import LogConfigurator, ApplicationError
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
 from . import (
-    AmrError, AmrSentence, AmrDocument, AmrFeatureSentence,
-    Dumper, CorpusWriter,
+    AmrError, AmrSentence, AmrDocument, AmrFeatureSentence, CorpusWriter
 )
 from .amrparser import AmrParser, AmrGenerator
+from .dumper import Dumper
 
 logger = logging.getLogger(__name__)
 

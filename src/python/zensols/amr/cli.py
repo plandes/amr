@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import sys
 from zensols.cli import ApplicationFactory, ActionResult, CliHarness
 from zensols.nlp import FeatureDocumentParser
-from . import Dumper
+from .dumper import Dumper
 
 
 @dataclass

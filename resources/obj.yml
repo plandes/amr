@@ -73,6 +73,6 @@ amr_human_anon_doc_parser:
 ## Plotting and writing
 #
 amr_dumper:
-  class_name: zensols.amr.GraphvizDumper
+  class_name: zensols.amr.dumper.GraphvizDumper
   target_dir: 'path: ${amr_default:report_dir}'
   overwrite_dir: true

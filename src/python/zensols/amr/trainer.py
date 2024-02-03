@@ -19,7 +19,7 @@ from zensols.config import Dictable
 from zensols.persist import persisted
 from zensols.install import Installer
 from zensols.introspect import ClassImporter
-from . import AmrError, AmrParser
+from . import AmrError
 
 logger = logging.getLogger(__name__)
 
