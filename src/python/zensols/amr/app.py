@@ -3,7 +3,7 @@
 """
 from __future__ import annotations
 __author__ = 'Paul Landes'
-from typing import Tuple, Dict, Any, List, Set, Iterable
+from typing import Tuple, Dict, Any, List, Set, Iterable, ClassVar
 from dataclasses import dataclass, field
 from enum import Enum, auto
 import logging
@@ -473,6 +473,17 @@ class TrainerApplication(BaseApplication):
             logger.info(f'cleaning {type(to_clean)}')
             to_clean.clear()
 
+
+@dataclass
+class _ProtoApplication(object):
+    """An application entry point for prototyping.
+
+    """
+    CLI_META: ClassVar[Dict[str, Any]] = {'is_usage_visible': False}
+
+    config_factory: ConfigFactory = field()
+    """For prototyping."""
+
     def proto(self):
         if 0:
             parser = self.config_factory('amr_anon_doc_parser')
@@ -482,10 +493,9 @@ class TrainerApplication(BaseApplication):
         if 1:
             parser = self.config_factory('amr_anon_doc_parser')
             gen = self.config_factory('amr_generator')
-            doc = parser('Obama was the 44th president. He is cool.')
-            doc.write()
-            print()
-            print()
+            doc = parser('Obama was the 44th president last year. He is cool.')
+            doc.amr.write()
+            print('--')
             gdoc = gen(doc.amr)
             gdoc.write()#clipped_inline=0, amr_sent_kwargs=dict(include_metadata=False))
             return

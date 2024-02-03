@@ -16,7 +16,8 @@ if (__name__ == '__main__'):
     harness = CliHarness(
         src_dir_name='src/python',
         app_factory_class='zensols.amr.ApplicationFactory',
-        proto_args=f'proto -c etc/{model}.conf',
+        #proto_args=f'proto -c etc/{model}.conf',
+        proto_args='proto',
         proto_factory_kwargs={'reload_pattern': r'^zensols\.amr\.(?!annotate)'}
     )
     harness.run()
