@@ -19,7 +19,7 @@ from zensols.cli import LogConfigurator, ApplicationError
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
 from . import (
     AmrError, AmrSentence, AmrDocument, AmrFeatureSentence,
-    AmrParser, AmrGenerator, Trainer, Dumper, CorpusWriter,
+    AmrParser, AmrGenerator, Dumper, CorpusWriter,
 )
 
 logger = logging.getLogger(__name__)
@@ -412,11 +412,12 @@ class TrainerApplication(BaseApplication):
     """Application context."""
 
     @property
-    def trainer(self) -> Trainer:
+    def trainer(self) -> 'Trainer':
         """Interface in to the :mod:`amrlib` package's trainer.  This is not
         done via the application config to allow overriding of the defaults.
 
         """
+        from .trainer import Trainer
         trainer_type: str = self.config_factory.\
             config['amr_trainer_default']['trainer_type']
         sec: str = f'amr_{trainer_type}_trainer'
@@ -490,7 +491,7 @@ class _ProtoApplication(object):
     def _generate(self):
         parser = self.config_factory('amr_anon_doc_parser')
         gen = self.config_factory('amr_generator')
-        doc = parser('Obama was the 44th president last year. He is cool.')
+        doc = parser('Obama was the 44th president last year. He is no longer.')
         doc.write()
         print('_' * 80)
         gdoc = gen(doc.amr)
@@ -504,7 +505,13 @@ class _ProtoApplication(object):
             self.trainer_app.trainer.train()
             return
 
-    def proto(self, run: int = 1):
-        {0: self._generate,
-         1: self._train,
+    def _tmp(self):
+        parser = self.config_factory('amr_anon_doc_parser')
+        doc = parser('Obama was the 44th president last year. He is no longer.')
+        doc.write()
+
+    def proto(self, run: int = 0):
+        {0: self._tmp,
+         1: self._generate,
+         2: self._train,
          }[run]()

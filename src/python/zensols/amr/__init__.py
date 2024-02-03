@@ -10,6 +10,5 @@ from .align import *
 from .coref import *
 from .docparser import *
 from .annotate import *
-from .trainer import *
 from .app import *
 from .cli import *
