@@ -236,3 +236,15 @@ class GeneratedAmrDocument(Writable):
                 depth + 1, writer,
                 clipped_inline=clipped_inline,
                 amr_kwargs=amr_sent_kwargs)
+
+    def __eq__(self, other: GeneratedAmrSentence) -> bool:
+        return all(map(lambda s: s[0] == s[1], zip(self.sents, other.sents)))
+
+    def __iter__(self) -> Iterable[AmrSentence]:
+        return iter(self.sents)
+
+    def __getitem__(self, index: int):
+        return self.sents[index]
+
+    def __len__(self) -> int:
+        return len(self.sents)

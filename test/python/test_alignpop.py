@@ -10,8 +10,6 @@ from util import BaseTestApplication
 
 
 class TestAlignmentPopulation(BaseTestApplication):
-    _DEFAULT_MODEL = 'gsii'
-
     def setUp(self):
         self.fac = self._get_app('test-alignpop').config_factory
 

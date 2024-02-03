@@ -3,6 +3,7 @@ import unittest
 import shutil
 from pathlib import Path
 from zensols.cli import CliHarness
+from zensols.util import Failure
 from zensols.amr import (
     AmrDocument, AmrFeatureDocument, AnnotatedAmrDocument,
     ApplicationFactory
@@ -15,8 +16,10 @@ class TestSlice(unittest.TestCase):
         hrn = CliHarness(app_factory_class=ApplicationFactory)
         cmd = 'parse _ -c test-resources/lp.conf --level warn'
         self.inst = hrn.get_instance(cmd)
-        self.astash = self.inst.config_factory('amr_anon_feature_doc_stash')
         self.assertFalse(self.inst is None)
+        if isinstance(self.inst, Failure):
+            self.inst.rethrow()
+        self.astash = self.inst.config_factory('amr_anon_feature_doc_stash')
         targ = Path('target')
         if targ.is_dir():
             shutil.rmtree(targ)
