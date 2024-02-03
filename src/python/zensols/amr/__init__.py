@@ -4,7 +4,7 @@ from .tree import *
 from .doc import *
 from .dumper import *
 from .container import *
-from .align import *
+#from .align import *
 from .docparser import *
 from .annotate import *
 from .app import *
