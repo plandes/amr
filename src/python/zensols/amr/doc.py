@@ -16,6 +16,7 @@ from zensols.config import Writable
 from zensols.install import Installer
 from zensols.persist import PersistableContainer, persisted
 from amrlib.graph_processing.amr_loading import load_amr_entries
+from amrlib.graph_processing.amr_loading_raw import load_raw_amr
 from . import AmrSentence, AmrGeneratedSentence
 
 logger = logging.getLogger(__name__)
@@ -108,20 +109,26 @@ class AmrDocument(PersistableContainer, Writable):
 
     @classmethod
     def from_source(cls, source: Union[Path, Installer],
-                    **kwargs) -> AmrDocument:
+                    load_ascii: bool = False, **kwargs) -> AmrDocument:
         """Return a new document created for ``source``.
 
         :param source: either a double newline list of AMR graphs or an
                        installer that has a singleton path to a like file
+
+        :param load_ascii: whether to replace non-ASCII characters
 
         :param kwargs: additional keyword arguments given to the initializer of
                        the document
 
         """
         source: Path = cls.resolve_source(source)
-        entries: List[str] = tuple(filter(
-            lambda s: not cls.is_comment(s),
-            load_amr_entries(str(source), False)))
+        entries: List[str]
+        if load_ascii:
+            entries = tuple(load_raw_amr(str(source)))
+        else:
+            entries = tuple(filter(
+                lambda s: not cls.is_comment(s),
+                load_amr_entries(str(source), False)))
         return cls(sents=entries, path=source, **kwargs)
 
     def clone(self, **kwargs) -> AmrDocument:
