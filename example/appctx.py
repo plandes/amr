@@ -9,7 +9,6 @@ caches AMR parses and reuses them when reparsing the same text.
 Use ``./appctx.py -h`` for command line help.
 
 """
-
 from dataclasses import dataclass
 import logging
 from io import StringIO

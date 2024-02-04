@@ -5,7 +5,6 @@ application.  See the ``appctx.py`` example to customize/override the
 default configuration and use different parsers.
 
 """
-
 from penman.graph import Graph
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
 from zensols.amr import AmrDocument, AmrSentence, ApplicationFactory
