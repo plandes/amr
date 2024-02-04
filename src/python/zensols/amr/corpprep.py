@@ -9,6 +9,7 @@ from abc import ABCMeta, abstractmethod
 import logging
 import random
 import collections
+import json
 from pathlib import Path
 from io import TextIOBase
 import shutil
@@ -124,6 +125,11 @@ class CorpusPrepperManager(Dictable):
     directory.
 
     """
+    key_splits: Path = field(default=None)
+    """The AMR ``id``s from the sentence metadatas for each split are written to
+    this JSON file if specified.
+
+    """
     @property
     def is_done(self) -> bool:
         """Whether or not the preparation is already complete."""
@@ -164,6 +170,11 @@ class CorpusPrepperManager(Dictable):
         sentences added for each split.
 
         """
+        def map_keys(sent: AmrSentence) -> Tuple[str]:
+            meta: Dict[str, str] = sent.metadata
+            if 'id' in meta:
+                return meta['id']
+
         sents: Dict[str, List[AmrSentence]] = collections.defaultdict(list)
         prepper: CorpusPrepper
         for prepper in self.preppers:
@@ -184,6 +195,16 @@ class CorpusPrepperManager(Dictable):
             with open(out_path, 'w') as f:
                 self._write(f, sent_set)
             logger.info(f'wrote: {out_path}')
+        if self.key_splits is not None:
+            keys: Dict[str, Tuple[str]] = {}
+            for split_name, sent_set in sents.items():
+                keys[split_name] = tuple(filter(
+                    lambda t: t is not None,
+                    map(map_keys, sent_set)))
+            with open(self.key_splits, 'w') as f:
+                json.dump(keys, f, indent=4)
+            if logger.isEnabledFor(logging.INFO):
+                logger.info(f'wrote: {self.key_splits}')
         return {k: len(sents[k]) for k in sents.keys()}
 
     def prepare(self):
