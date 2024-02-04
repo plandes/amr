@@ -1,4 +1,3 @@
-
 # @meta {desc: 'configuration used to train new models', date: '2024-02-03'}
 
 
@@ -47,8 +46,8 @@ amr_prep_manager:
   stage_dir: 'path: ${amr_trainer_default:corpus_stage_dir}'
   preppers: >-
     instance: tuple:
-      amr_prep_lp_corp_prepper
-#      amr_prep_release_3_corp_prepper,
+      amr_prep_lp_corp_prepper,
+      amr_prep_release_3_corp_prepper
 
 
 ### Corpus trainers
