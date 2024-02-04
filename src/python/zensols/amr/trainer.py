@@ -90,26 +90,6 @@ class Trainer(Dictable, metaclass=ABCMeta):
         return 'parse'
 
     @property
-    def _train_files(self) -> str:
-        if self._train_files_val is None:
-            return str(self.corpus_prep_manager.training_dir) + '/*.txt'
-        return self._train_files_val
-
-    @_train_files.setter
-    def _train_files(self, _train_files: str):
-        self._train_files_val = _train_files
-
-    @property
-    def _dev_files(self) -> str:
-        if self._dev_files_val is None:
-            return str(self.corpus_prep_manager.dev_dir) + '/*.txt'
-        return self._dev_files_val
-
-    @_dev_files.setter
-    def _dev_files(self, _dev_files: str):
-        self._dev_files_val = _dev_files
-
-    @property
     @persisted('_output_dir')
     def output_dir(self) -> Path:
         ver: str = self.version.replace('.', '_')
@@ -293,8 +273,6 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
 Trainer.pretrained_path_or_model = Trainer._pretrained_path_or_model
 Trainer.training_config_file = Trainer._training_config_file
-Trainer.train_files = Trainer._train_files
-Trainer.dev_files = Trainer._dev_files
 
 
 @dataclass
@@ -317,16 +295,25 @@ class HFTrainer(Trainer):
             ga: Dict[str, str] = train_conf['gen_args']
             return ga['model_name_or_path']
 
+    def _get_relative_paths(self) -> Tuple[Path, Path, Path]:
+        stage_dir: Path = self.corpus_prep_manager.stage_dir
+        training_file: Path = self.corpus_prep_manager.training_file
+        dev_file: Path = self.corpus_prep_manager.dev_file
+        training_file = training_file.relative_to(stage_dir)
+        dev_file = dev_file.relative_to(stage_dir)
+        return stage_dir, training_file, dev_file
+
     def _populate_training_config(self, config: Dict[str, Any]):
+        paths: Tuple[Path, Path, Path] = self._get_relative_paths()
         ga: Dict[str, str] = config['gen_args']
         hf: Dict[str, str] = config['hf_args']
         model_or_path: Union[str, Path] = self.pretrained_path_or_model
         if isinstance(model_or_path, Path):
             model_or_path = str(model_or_path.absolute())
         ga['model_name_or_path'] = model_or_path
-        ga['corpus_dir'] = str(self.corpus_prep_manager.stage_dir)
-        ga['train_fn'] = str(self.corpus_prep_manager.training_dir)
-        ga['eval_fn'] = str(self.corpus_prep_manager.dev_dir)
+        ga['corpus_dir'] = str(paths[0])
+        ga['train_fn'] = str(paths[1])
+        ga['eval_fn'] = str(paths[2])
         ga['tok_name_or_path'] = self.token_model_name
         hf['output_dir'] = str(self.temporary_dir)
 
@@ -342,7 +329,8 @@ class HFTrainer(Trainer):
         if base_model is None:
             raise AmrError('Missing base model name')
         config = cp.deepcopy(config)
-        config['gen_args']['corpus_dir'] = str(self.corpus_prep_manager.stage_dir)
+        config['gen_args']['corpus_dir'] = \
+            str(self.corpus_prep_manager.stage_dir)
         config['gen_args']['model_name_or_path'] = base_model
         cfile.parent.mkdir(parents=True)
         with open(cfile, 'w') as f:
@@ -483,10 +471,8 @@ class SpringTrainer(Trainer):
     dev_files: str = field(default=None)
 
     def _populate_training_config(self, config: Dict[str, Any]):
-        train_files: str = self.train_files
-        dev_files: str = self.dev_files
-        config['train'] = train_files
-        config['dev'] = dev_files
+        config['train'] = str(self.corpus_prep_manager.training_file)
+        config['dev'] = str(self.corpus_prep_manager.dev_file)
         config['model_dir'] = str(self.temporary_dir.absolute())
 
     def _guess_training_config_file(self) -> Path:
