@@ -534,8 +534,12 @@ class _ProtoApplication(object):
         doc = parser('Obama was the 44th president last year. He is no longer.')
         doc.write()
 
-    def proto(self, run: int = 1):
+    def _prep_corpus(self):
+        self.config_factory('amr_prep_manager').prepare()
+
+    def proto(self, run: int = 3):
         {0: self._tmp,
          1: self._generate,
          2: self._train,
+         3: self._prep_corpus,
          }[run]()
