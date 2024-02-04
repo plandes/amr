@@ -44,10 +44,11 @@ amr_prep_release_3_corp_prepper:
 amr_prep_manager:
   class_name: zensols.amr.corpprep.CorpusPrepperManager
   stage_dir: 'path: ${amr_trainer_default:corpus_stage_dir}'
-  preppers: >-
-    instance: tuple:
-      amr_prep_lp_corp_prepper,
-      amr_prep_release_3_corp_prepper
+  key_splits: 'path: ${amr_trainer_default:corpus_stage_dir}/../corpus-splits.json'
+  preppers: 'instance: tuple: amr_prep_lp_corp_prepper, amr_prep_release_3_corp_prepper'
+  # uncomment if you have the AMR 3.0 corpus (add to root level 'download' directory)
+  #preppers: 'instance: tuple: amr_prep_lp_corp_prepper, amr_prep_release_3_corp_prepper'
+  preppers: 'instance: tuple: amr_prep_lp_corp_prepper'
 
 
 ### Corpus trainers
