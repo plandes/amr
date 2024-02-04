@@ -535,7 +535,7 @@ class _ProtoApplication(object):
             prepper.clear()
         prepper.prepare()
 
-    def proto(self, run: int = 0):
+    def proto(self, run: int = 2):
         {0: self._tmp,
          1: self._generate,
          2: self._train,

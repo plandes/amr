@@ -20,7 +20,6 @@ CLEAN_ALL_DEPS +=	cleanalldep
 
 # file, models and entry point
 MODEL_CONF_DIR = 	train-config
-MODEL_NAME = 		lp
 MODEL_FILE =		corpus/amr-bank-struct-v3.0.txt
 ABIN =			./amr
 
@@ -77,30 +76,10 @@ renderexamples:
 			$(ABIN) plotfile $(MODEL_FILE)
 
 # train on the little prince corpus
-.PHONY:			trainlp
-trainlp:
-			$(eval CF=$(MODEL_CONF_DIR)/spring-$(MODEL_NAME).conf)
-			$(eval OR=amr_default.parse_model=spring)
-			$(ABIN) train -c $(CF) --override '$(OR)'
-
-# evaluate the little prince corpus
-.PHONY:			evallp
-evallp:
-			$(ABIN) parsefile $(MODEL_FILE) --limit 50
-			$(ABIN) score $(MODEL_FILE)
-
-# evaluation model "EVL_MODEL"
-.PHONY:			evalmodel
-evalmodel:
-			$(ABIN) parsefile $(MODEL_FILE) --limit 50 \
-				--override amr_default.parse_model=$(EVL_MODEL)
-			$(ABIN) score $(MODEL_FILE) \
-				--override amr_default.parse_model=$(EVL_MODEL)
-
-# evaluate the little prince corpus on the trained little prince corpus (test)
-.PHONY:			evallpspring
-evallpspring:
-			make EVL_MODEL=lp_spring evalmodel
+.PHONY:			trainmodel
+trainmodel:
+			$(ABIN) --config $(MODEL_CONF_DIR)/parse-spring.conf \
+				train
 
 # inference a new trained model
 .PHONY:			testmodel
@@ -108,10 +87,26 @@ testmodel:
 			$(ABIN) --config $(MODEL_CONF_DIR)/inference.conf \
 				parse $(TEST_TEXT)
 
+# evaluation model "EVL_MODEL"
+.PHONY:			evalmodel
+evalmodel:
+			$(ABIN) parsefile $(MODEL_FILE) --limit 50 \
+				--config $(MODEL_CONF_DIR)/inference.conf \
+				--override amr_default.parse_model=$(EVL_MODEL)
+			$(ABIN) score $(MODEL_FILE) \
+				--config $(MODEL_CONF_DIR)/inference.conf \
+				--override amr_default.parse_model=$(EVL_MODEL)
+
+# evaluate the little prince corpus on the trained little prince corpus (test)
+.PHONY:			evalspring
+evalspring:
+			make EVL_MODEL=zsl_spring evalmodel
+
 # stop any training
 .PHONY:			stop
 stop:
-			ps -eaf | grep python | grep $(ABIN) | awk '{print $2}' | xargs kill
+			ps -eaf | grep python | grep $(ABIN) | \
+				awk '{print $2}' | xargs kill
 
 # additional clean up using the harness/API (data dir)
 .PHONY:			cleanalldep
