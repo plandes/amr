@@ -46,4 +46,3 @@ amr_generate_t5wtense_trainer:
   temporary_dir: 'path: ${amr_trainer_default:temporary_dir}/${model_name}'
   output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'
   package_dir: 'path: ${amr_trainer_default:package_dir}'
-  is_parser: false

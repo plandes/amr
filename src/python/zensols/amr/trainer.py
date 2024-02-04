@@ -76,14 +76,16 @@ class Trainer(Dictable, metaclass=ABCMeta):
     package_dir: Path = field(default=Path('.'))
     """The directory to install the compressed distribution file."""
 
-    is_parser: bool = field(default=True)
-    """Whether the instance trains text parsers or generators."""
-
     def __post_init__(self):
         os.environ['TOKENIZERS_PARALLELISM'] = 'false'
+        # reduce voluminous "Unhandled token X" and "ignoring epigraph data..."
+        for n in ('amrlib.models.parse_xfm.penman_serializer',
+                  'penman.layout'):
+            log: logging.Logger = logging.getLogger(n)
+            log.setLevel(logging.ERROR)
 
     def _get_pg(self) -> str:
-        return 'parse' if self.is_parser else 'generator'
+        return 'parse'
 
     @property
     @persisted('_output_dir')
@@ -412,6 +414,9 @@ class T5Trainer(XfmTrainer):
 
 @dataclass
 class T5WithTenseGeneratorTrainer(XfmTrainer):
+    def _get_pg(self) -> str:
+        return 'generator'
+
     def _populate_training_config(self, config: Dict[str, Any]):
         corpus_file: Path = self.corpus_file
         ga: Dict[str, str] = config['gen_args']
