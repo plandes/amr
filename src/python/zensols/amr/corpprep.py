@@ -27,8 +27,11 @@ class CorpusPrepper(Dictable, metaclass=ABCMeta):
     generation models.  Both the input and outupt are Penman encoded AMR graphs.
 
     """
-    _TRAINING_SUBDIR: ClassVar[str] = 'training'
-    _DEV_SUBDIR: ClassVar[str] = 'dev'
+    TRAINING_SUBDIR: ClassVar[str] = 'training'
+    """The training dataset subdirectory name."""
+
+    DEV_SUBDIR: ClassVar[str] = 'dev'
+    """The development / validation dataset subdirectory name."""
 
     name: str = field()
     """Used for logging and directory naming."""
@@ -123,8 +126,8 @@ class SingletonCorpusPrepper(CorpusPrepper):
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'{self}, file={corp_file.name}: dev={len(dev)}, ' +
                         f'train={len(train)}, total={n_sents}')
-        yield (target / self._TRAINING_SUBDIR / f'{self.name}.txt', train)
-        yield (target / self._DEV_SUBDIR / f'{self.name}.txt', dev)
+        yield (target / self.TRAINING_SUBDIR / f'{self.name}.txt', train)
+        yield (target / self.DEV_SUBDIR / f'{self.name}.txt', dev)
 
 
 @dataclass
@@ -135,11 +138,11 @@ class AmrReleaseCorpusPrepper(CorpusPrepper):
 
     """
     def _read_files(self, target: Path) -> Iterable[Tuple[Path, AmrDocument]]:
-        split_names: Set[str] = {self._TRAINING_SUBDIR, self._DEV_SUBDIR}
+        split_names: Set[str] = {self.TRAINING_SUBDIR, self.DEV_SUBDIR}
         splits_path: Path = self.installer.get_singleton_path()
         for amr_file in splits_path.glob('**/*.txt'):
             split: str = amr_file.parent.name
-            split = self._TRAINING_SUBDIR if split == 'test' else split
+            split = self.TRAINING_SUBDIR if split == 'test' else split
             assert split in split_names
             out_file: Path = target / split / amr_file.name
             doc: AmrDocument = self._load_doc(amr_file)
@@ -161,6 +164,16 @@ class CorpusPrepperManager(Dictable):
     def is_done(self) -> bool:
         """Whether or not the preparation is already complete."""
         return self.stage_dir.is_dir()
+
+    @property
+    def training_dir(self) -> Path:
+        """The training dataset directory."""
+        return self.stage_dir / CorpusPrepper.TRAINING_SUBDIR
+
+    @property
+    def dev_dir(self) -> Path:
+        """The deveopment / validation dataset directory."""
+        return self.stage_dir / CorpusPrepper.DEV_SUBDIR
 
     def prepare(self):
         """Download, install and write the corpus to disk from all

@@ -531,8 +531,10 @@ class _ProtoApplication(object):
 
     def _tmp(self):
         prepper = self.config_factory('amr_prep_manager')
-        prepper.clear()
+        if 0:
+            prepper.clear()
         prepper.prepare()
+        print(prepper.training_dir, prepper.dev_dir)
 
     def proto(self, run: int = 0):
         {0: self._tmp,
