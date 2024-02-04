@@ -52,7 +52,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
     version: str = field(default='0.1.0')
     """The version used in the ``amrlib_meta.json`` output metadata file."""
 
-    installer: Installer = field(default=None)
+    installer: Installer = field(default=None, repr=False)
     """The installer for the model used to train the model previously (i.e. by
     :mod:`amrlib`).
 
@@ -351,16 +351,16 @@ class HFTrainer(Trainer):
     def _rewrite_config(self):
         meta: Dict[str, str] = self._get_input_metadata()
         base_model: str = meta.get('base_model', self._get_base_model())
-        cp_dir: Path = self._get_checkpoint_dir() / 'config.json'
+        config_file: Path = self._get_checkpoint_dir() / 'config.json'
         if base_model is None:
             raise AmrError('Missing base model name')
-        with open(cp_dir) as f:
+        with open(config_file) as f:
             content = json.load(f)
         content['_name_or_path'] = base_model
-        pa = content['task_specific_params']['parse_amr']
+        pa: Dict[str, Any] = content['task_specific_params']['parse_amr']
         pa['corpus_dir'] = str(self.corpus_file.parent)
         pa['model_name_or_path'] = base_model
-        new_config = self.output_dir / 'config.json'
+        new_config: Path = self.output_dir / 'config.json'
         with open(new_config, 'w') as f:
             json.dump(content, f, indent=4)
         if logger.isEnabledFor(logging.INFO):
@@ -414,21 +414,32 @@ class T5Trainer(XfmTrainer):
 
 @dataclass
 class T5WithTenseGeneratorTrainer(XfmTrainer):
-    def _get_pg(self) -> str:
-        return 'generator'
+    nltk_lib_dir: Path = field(default=None)
+    """Where to install the punkt tokenizer used by the trainer."""
 
-    def _populate_training_config(self, config: Dict[str, Any]):
-        corpus_file: Path = self.corpus_file
-        ga: Dict[str, str] = config['gen_args']
-        hf: Dict[str, str] = config['hf_args']
-        model_or_path: Union[str, Path] = self.pretrained_path_or_model
-        if isinstance(model_or_path, Path):
-            model_or_path = str(model_or_path.absolute())
-        ga['model_name_or_path'] = model_or_path
-        ga['corpus_dir'] = str(corpus_file.parent.absolute())
-        ga['train_fn'] = corpus_file.name
-        ga['valid_fn'] = corpus_file.name
-        hf['output_dir'] = str(self.temporary_dir)
+    def _get_pg(self) -> str:
+        return 'generate'
+
+    def _get_trainer_class(self, submod: str) -> Type:
+        from amrlib.models.generate_xfm.trainer import Trainer
+        return Trainer
+
+    def _rewrite_config(self):
+        config_file: Path = self._get_checkpoint_dir() / 'config.json'
+        new_config: Path = self.output_dir / 'config.json'
+        shutil.copy(config_file, new_config)
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'wrote updated config: {new_config}')
+
+    def _install_deps(self):
+        import nltk
+        self.nltk_lib_dir.mkdir(parents=True, exist_ok=True)
+        nltk.download('punkt', download_dir=str(self.nltk_lib_dir.absolute()))
+        nltk.data.path.append(str(self.nltk_lib_dir.absolute()))
+
+    def train(self, dry_run: bool = False):
+        self._install_deps()
+        super().train(dry_run)
 
 
 @dataclass

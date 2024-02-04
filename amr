@@ -7,10 +7,11 @@ if (__name__ == '__main__'):
     args: str = ''
     model = {
         0: None,
-        1: 'parse-xfm-base-lp',
-        2: 'parse-t5-lp',
-        3: 'parse-spring-lp',
-        4: 'generate-t5wtense-lp',
+        1: 'inference',
+        2: 'parse-xfm-base-lp',
+        3: 'parse-t5-lp',
+        4: 'parse-spring-lp',
+        5: 'generate-t5wtense-lp',
     }[0]
     if model is not None:
         args = f' -c example/train/{model}.conf'

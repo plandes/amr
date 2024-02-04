@@ -41,8 +41,9 @@ amr_parse_spring_trainer:
 amr_generate_t5wtense_trainer:
   class_name: zensols.amr.trainer.T5WithTenseGeneratorTrainer
   corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
-  installer: 'instance: amr_generate_${amr_default:generator_model}_installer'
+  installer: 'instance: amr_generate_${amr_default:generate_model}_installer'
   model_name: '${amr_trainer_default:model_name}'
   temporary_dir: 'path: ${amr_trainer_default:temporary_dir}/${model_name}'
   output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'
   package_dir: 'path: ${amr_trainer_default:package_dir}'
+  nltk_lib_dir: 'path: ${default:temporary_dir}/nltk'

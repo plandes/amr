@@ -13,7 +13,7 @@ import json
 import itertools as it
 import pandas as pd
 from zensols.introspect import ClassImporter
-from zensols.config import ConfigFactory, DictionaryConfig
+from zensols.config import Settings, ConfigFactory, DictionaryConfig
 from zensols.persist import Stash
 from zensols.cli import LogConfigurator, ApplicationError
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
@@ -440,9 +440,10 @@ class TrainerApplication(BaseApplication):
 
         """
         from .trainer import Trainer
-        trainer_type: str = self.config_factory.\
-            config['amr_trainer_default']['trainer_type']
-        sec: str = f'amr_{trainer_type}_trainer'
+        tdefs: Settings = self.config_factory.config['amr_trainer_default']
+        trainer_type: str = tdefs['trainer_type']
+        gp: bool = 'generate' if tdefs['trainer_is_generator'] else 'parse'
+        sec: str = f'amr_{gp}_{trainer_type}_trainer'
         trainer: Trainer = self.config_factory(sec)
         sup_classes: Set[str] = set(map(
             ClassImporter.full_classname,
@@ -521,7 +522,7 @@ class _ProtoApplication(object):
         gdoc.write()
 
     def _train(self):
-        if 1:
+        if 0:
             self.trainer_app.trainer.write()
             return
         if 1:

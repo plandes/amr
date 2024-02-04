@@ -23,7 +23,7 @@ amr_parser:
 # generate English from AMR graphs
 amr_generator:
   class_name: zensols.amr.model.AmrGenerator
-  installer: 'instance: amr_generate_${amr_default:generator_model}_installer'
+  installer: 'instance: amr_generate_${amr_default:generate_model}_installer'
 
 split_hyphen_token_mapper:
   class_name: zensols.nlp.SplitTokenMapper
