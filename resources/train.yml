@@ -1,11 +1,5 @@
+
 # @meta {desc: 'configuration used to train new models', date: '2024-02-03'}
-
-
-## Default
-#
-amr_prep_default:
-  corpus_dir: ${default:temporary_dir}/corp/raw
-  stage_dir: ${default:temporary_dir}/corp/stage
 
 
 ## Corpus preparers
@@ -13,13 +7,13 @@ amr_prep_default:
 # little prince
 amr_prep_lp_corp_resource:
   class_name: zensols.install.Resource
-  url: '${amr_trainer_default:isi_down_url}/amr-bank-struct-v3.0.txt'
+  url: '${amr_anon_default:isi_down_url}/amr-bank-struct-v3.0.txt'
   name: null
   clean_up: true
 
 amr_prep_lp_corp_installer:
   class_name: zensols.install.Installer
-  base_directory: 'path: ${amr_prep_default:corpus_dir}'
+  base_directory: 'path: ${amr_trainer_default:corpus_raw_dir}'
   resources: 'instance: list: amr_prep_lp_corp_resource'
 
 amr_prep_lp_corp_prepper:
@@ -40,7 +34,7 @@ amr_prep_release_3_corp_resource:
 
 amr_prep_release_3_corp_installer:
   class_name: zensols.install.Installer
-  base_directory: 'path: ${amr_prep_default:corpus_dir}'
+  base_directory: 'path: ${amr_trainer_default:corpus_raw_dir}'
   resources: 'instance: list: amr_prep_release_3_corp_resource'
 
 amr_prep_release_3_corp_prepper:
@@ -50,29 +44,19 @@ amr_prep_release_3_corp_prepper:
 
 amr_prep_manager:
   class_name: zensols.amr.corpprep.CorpusPrepperManager
-  stage_dir: 'path: ${amr_prep_default:stage_dir}'
+  stage_dir: 'path: ${amr_trainer_default:corpus_stage_dir}'
   preppers: >-
     instance: tuple:
-      amr_prep_lp_corp_prepper,
-      amr_prep_release_3_corp_prepper
+      amr_prep_lp_corp_prepper
+#      amr_prep_release_3_corp_prepper,
 
 
 ### Corpus trainers
 #
-amr_trainer_corpus:
-  class_name: zensols.install.Resource
-  url: '${amr_trainer_default:url}'
-  name: null
-
-amr_trainer_corpus_installer:
-  class_name: zensols.install.Installer
-  base_directory: 'path: ${amr_trainer_default:corpus_dir}'
-  resources: 'instance: list: amr_trainer_corpus'
-
 amr_parse_xfm_trainer:
   class_name: zensols.amr.trainer.XfmTrainer
-  corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
-  installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
+  corpus_prep_manager: 'instance: amr_prep_manager'
+  model_installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
   model_name: '${amr_trainer_default:model_name}'
   temporary_dir: 'path: ${amr_trainer_default:temporary_dir}/${model_name}'
   output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'
@@ -80,8 +64,8 @@ amr_parse_xfm_trainer:
 
 amr_parse_t5_trainer:
   class_name: zensols.amr.trainer.T5Trainer
-  corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
-  installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
+  corpus_prep_manager: 'instance: amr_prep_manager'
+  model_installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
   model_name: '${amr_trainer_default:model_name}'
   temporary_dir: 'path: ${amr_trainer_default:temporary_dir}/${model_name}'
   output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'
@@ -89,8 +73,8 @@ amr_parse_t5_trainer:
 
 amr_parse_spring_trainer:
   class_name: zensols.amr.trainer.SpringTrainer
-  corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
-  installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
+  corpus_prep_manager: 'instance: amr_prep_manager'
+  model_installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
   model_name: '${amr_trainer_default:model_name}'
   temporary_dir: 'path: ${amr_trainer_default:temporary_dir}/${model_name}'
   output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'
@@ -98,8 +82,8 @@ amr_parse_spring_trainer:
 
 amr_generate_t5wtense_trainer:
   class_name: zensols.amr.trainer.T5WithTenseGeneratorTrainer
-  corpus_installer: 'instance: ${amr_trainer_default:corpus_installer}'
-  installer: 'instance: amr_generate_${amr_default:generate_model}_installer'
+  corpus_prep_manager: 'instance: amr_prep_manager'
+  model_installer: 'instance: amr_generate_${amr_default:generate_model}_installer'
   model_name: '${amr_trainer_default:model_name}'
   temporary_dir: 'path: ${amr_trainer_default:temporary_dir}/${model_name}'
   output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'

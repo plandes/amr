@@ -36,7 +36,7 @@ class CorpusPrepper(Dictable, metaclass=ABCMeta):
     name: str = field()
     """Used for logging and directory naming."""
 
-    installer: Installer = field()
+    installer: Installer = field(repr=False)
     """The location and decompression details."""
 
     transform_ascii: bool = field(default=True)

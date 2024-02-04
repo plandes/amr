@@ -12,7 +12,7 @@ if (__name__ == '__main__'):
         3: 'parse-t5-lp',
         4: 'parse-spring-lp',
         5: 'generate-t5wtense-lp',
-    }[0]
+    }[2]
     if model is not None:
         args = f' -c example/train/{model}.conf'
     harness = CliHarness(

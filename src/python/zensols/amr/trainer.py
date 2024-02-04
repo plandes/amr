@@ -1,3 +1,4 @@
+
 """Continues training on an AMR model.
 
 """
@@ -20,6 +21,7 @@ from zensols.persist import persisted
 from zensols.install import Installer
 from zensols.introspect import ClassImporter
 from . import AmrError
+from .corpprep import CorpusPrepperManager
 
 logger = logging.getLogger(__name__)
 
@@ -35,8 +37,8 @@ class Trainer(Dictable, metaclass=ABCMeta):
     _INFERENCE_MOD_REGEX: ClassVar[re.Pattern] = re.compile(
         r'.*((parse|generate)_[a-z\d]+).*')
 
-    corpus_installer: Installer = field(repr=False)
-    """Points to the AMR corpus file(s)."""
+    corpus_prep_manager: CorpusPrepperManager = field()
+    """Aggregates and applies corpus prepare instances."""
 
     model_name: str = field()
     """Some human readable string identifying the model, and ends up in the
@@ -52,7 +54,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
     version: str = field(default='0.1.0')
     """The version used in the ``amrlib_meta.json`` output metadata file."""
 
-    installer: Installer = field(default=None, repr=False)
+    model_installer: Installer = field(default=None, repr=False)
     """The installer for the model used to train the model previously (i.e. by
     :mod:`amrlib`).
 
@@ -88,6 +90,26 @@ class Trainer(Dictable, metaclass=ABCMeta):
         return 'parse'
 
     @property
+    def _train_files(self) -> str:
+        if self._train_files_val is None:
+            return str(self.corpus_prep_manager.training_dir) + '/*.txt'
+        return self._train_files_val
+
+    @_train_files.setter
+    def _train_files(self, _train_files: str):
+        self._train_files_val = _train_files
+
+    @property
+    def _dev_files(self) -> str:
+        if self._dev_files_val is None:
+            return str(self.corpus_prep_manager.dev_dir) + '/*.txt'
+        return self._dev_files_val
+
+    @_dev_files.setter
+    def _dev_files(self, _dev_files: str):
+        self._dev_files_val = _dev_files
+
+    @property
     @persisted('_output_dir')
     def output_dir(self) -> Path:
         ver: str = self.version.replace('.', '_')
@@ -99,7 +121,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
     def _pretrained_path_or_model(self) -> Union[str, Path]:
         """The path to the pretrained ``pytorch_model.bin`` file."""
         if self._pretrained_path_or_model_val is None:
-            return self.installer.get_singleton_path()
+            return self.model_installer.get_singleton_path()
         else:
             return self._pretrained_path_or_model_val
 
@@ -109,9 +131,9 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
     @persisted('_input_metadata')
     def _get_input_metadata(self) -> str:
-        model_dir: Path = self.installer.get_singleton_path()
+        model_dir: Path = self.model_installer.get_singleton_path()
         meta_file: Path = model_dir / 'amrlib_meta.json'
-        self.installer()
+        self.model_installer()
         if not meta_file.is_file():
             raise AmrError(f'No metadata file: {meta_file}')
         else:
@@ -260,6 +282,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
             logger.debug(f'removing directory: {dir_path}')
             if dir_path.is_dir():
                 shutil.rmtree(dir_path)
+        self.corpus_prep_manager.prepare()
         train: Callable = self._get_train_method()
         if not dry_run:
             train()
@@ -270,6 +293,8 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
 Trainer.pretrained_path_or_model = Trainer._pretrained_path_or_model
 Trainer.training_config_file = Trainer._training_config_file
+Trainer.train_files = Trainer._train_files
+Trainer.dev_files = Trainer._dev_files
 
 
 @dataclass
@@ -278,13 +303,7 @@ class HFTrainer(Trainer):
 
     """
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
-        'corpus_file', 'token_model_name'} | Trainer._DICTABLE_ATTRIBUTES
-
-    @property
-    @persisted('_corpus_file')
-    def corpus_file(self) -> Path:
-        self.corpus_installer()
-        return self.corpus_installer.get_singleton_path()
+        'token_model_name'} | Trainer._DICTABLE_ATTRIBUTES
 
     @property
     @persisted('_token_model_name')
@@ -299,16 +318,15 @@ class HFTrainer(Trainer):
             return ga['model_name_or_path']
 
     def _populate_training_config(self, config: Dict[str, Any]):
-        corpus_file: Path = self.corpus_file
         ga: Dict[str, str] = config['gen_args']
         hf: Dict[str, str] = config['hf_args']
         model_or_path: Union[str, Path] = self.pretrained_path_or_model
         if isinstance(model_or_path, Path):
             model_or_path = str(model_or_path.absolute())
         ga['model_name_or_path'] = model_or_path
-        ga['corpus_dir'] = str(corpus_file.parent.absolute())
-        ga['train_fn'] = corpus_file.name
-        ga['eval_fn'] = corpus_file.name
+        ga['corpus_dir'] = str(self.corpus_prep_manager.stage_dir)
+        ga['train_fn'] = str(self.corpus_prep_manager.training_dir)
+        ga['eval_fn'] = str(self.corpus_prep_manager.dev_dir)
         ga['tok_name_or_path'] = self.token_model_name
         hf['output_dir'] = str(self.temporary_dir)
 
@@ -324,7 +342,7 @@ class HFTrainer(Trainer):
         if base_model is None:
             raise AmrError('Missing base model name')
         config = cp.deepcopy(config)
-        config['gen_args']['corpus_dir'] = str(self.corpus_file.parent)
+        config['gen_args']['corpus_dir'] = str(self.corpus_prep_manager.stage_dir)
         config['gen_args']['model_name_or_path'] = base_model
         cfile.parent.mkdir(parents=True)
         with open(cfile, 'w') as f:
@@ -358,7 +376,7 @@ class HFTrainer(Trainer):
             content = json.load(f)
         content['_name_or_path'] = base_model
         pa: Dict[str, Any] = content['task_specific_params']['parse_amr']
-        pa['corpus_dir'] = str(self.corpus_file.parent)
+        pa['corpus_dir'] = str(self.corpus_prep_manager.stage_dir)
         pa['model_name_or_path'] = base_model
         new_config: Path = self.output_dir / 'config.json'
         with open(new_config, 'w') as f:
@@ -464,39 +482,9 @@ class SpringTrainer(Trainer):
     train_files: str = field(default=None)
     dev_files: str = field(default=None)
 
-    @persisted('_corpus_file')
-    def _get_corpus_file(self) -> Path:
-        self.corpus_installer()
-        return self.corpus_installer.get_singleton_path()
-
-    @property
-    def _train_files(self) -> str:
-        if self._train_files_val is None:
-            return str(self._get_corpus_file().parent.absolute()) + '/*.txt'
-        return self._train_files_val
-
-    @_train_files.setter
-    def _train_files(self, _train_files: str):
-        self._train_files_val = _train_files
-
-    @property
-    def _dev_files(self) -> str:
-        if self._dev_files_val is None:
-            return str(self._get_corpus_file().parent.absolute()) + '/*.txt'
-        return self._dev_files_val
-
-    @_dev_files.setter
-    def _dev_files(self, _dev_files: str):
-        self._dev_files_val = _dev_files
-
     def _populate_training_config(self, config: Dict[str, Any]):
-        corpus_file: Path = self.corpus_installer.get_singleton_path()
         train_files: str = self.train_files
         dev_files: str = self.dev_files
-        if train_files is None:
-            train_files = str(corpus_file.parent.absolute()) + '/*.txt'
-        if dev_files is None:
-            dev_files = str(corpus_file.parent.absolute()) + '/*.txt'
         config['train'] = train_files
         config['dev'] = dev_files
         config['model_dir'] = str(self.temporary_dir.absolute())
@@ -591,6 +579,4 @@ class SpringTrainer(Trainer):
         return train
 
 
-SpringTrainer.train_files = SpringTrainer._train_files
-SpringTrainer.dev_files = SpringTrainer._dev_files
 SpringTrainer.training_config_file = SpringTrainer._training_config_file

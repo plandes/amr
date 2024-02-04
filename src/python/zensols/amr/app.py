@@ -536,7 +536,7 @@ class _ProtoApplication(object):
         prepper.prepare()
         print(prepper.training_dir, prepper.dev_dir)
 
-    def proto(self, run: int = 0):
+    def proto(self, run: int = 2):
         {0: self._tmp,
          1: self._generate,
          2: self._train,
