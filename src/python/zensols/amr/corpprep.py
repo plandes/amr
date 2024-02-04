@@ -3,13 +3,14 @@
 """
 __author__ = 'Paul Landes'
 
-from typing import Tuple, Iterable
+from typing import Tuple, Set, Iterable, ClassVar
 from dataclasses import dataclass, field
 from abc import ABCMeta, abstractmethod
 import logging
 import random
 from pathlib import Path
 from io import TextIOBase
+import shutil
 from zensols.util.time import time
 from zensols.config import Dictable
 from zensols.install import Installer
@@ -26,27 +27,29 @@ class CorpusPrepper(Dictable, metaclass=ABCMeta):
     generation models.  Both the input and outupt are Penman encoded AMR graphs.
 
     """
+    _TRAINING_SUBDIR: ClassVar[str] = 'training'
+    _DEV_SUBDIR: ClassVar[str] = 'dev'
+
     name: str = field()
     """Used for logging and directory naming."""
 
     installer: Installer = field()
     """The location and decompression details."""
 
-    stage_dir: Path = field()
-    """The location of where to copy the finished files."""
-
     transform_ascii: bool = field(default=True)
     """Whether to replace non-ASCII characters for models."""
 
     shuffle: bool = field(default=True)
-    """Whether to shuffle the AMR sentences in the files added to
-    :obj:`stage_dir`.
+    """Whether to shuffle the AMR sentences before writing to the target
+    directory.
 
     """
     @abstractmethod
-    def _read_files(self) -> Iterable[Tuple[Path, AmrDocument]]:
+    def _read_files(self, target: Path) -> Iterable[Tuple[Path, AmrDocument]]:
         """Read and return tuples of where to write the output of the sentences
         of the corresponding document.
+
+        :param target: the location of where to copy the finished files
 
         """
         pass
@@ -74,17 +77,20 @@ class CorpusPrepper(Dictable, metaclass=ABCMeta):
                 writer.write('\n\n')
         writer.write('\n')
 
-    def prepare(self):
-        """Download, install and write the corpus to disk in the
-        :obj:`stage_dir` directory.  The data is then ready for AMR parser and
-        generator trainers.
+    def prepare(self, target: Path):
+        """Download, install and write the corpus to disk.  The data is then
+        ready for AMR parser and generator trainers.
+
+        :param target: the location of where to copy the finished files
 
         """
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'preparing {self}')
         self.installer.install()
         with time(f'prepared corpus {self}'):
             path: Path
             doc: AmrDocument
-            for path, doc in self._read_files():
+            for path, doc in self._read_files(target):
                 if logger.isEnabledFor(logging.INFO):
                     logger.info(f'writing: {path}')
                 path.parent.mkdir(parents=True, exist_ok=True)
@@ -105,7 +111,7 @@ class SingletonCorpusPrepper(CorpusPrepper):
     file.
 
     """
-    def _read_files(self) -> Iterable[Tuple[Path, AmrDocument]]:
+    def _read_files(self, target: Path) -> Iterable[Tuple[Path, AmrDocument]]:
         corp_file: Path = self.installer.get_singleton_path()
         doc: AmrDocument = self._load_doc(corp_file)
         sents: Tuple[AmrSentence] = doc.sents
@@ -117,8 +123,8 @@ class SingletonCorpusPrepper(CorpusPrepper):
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'{self}, file={corp_file.name}: dev={len(dev)}, ' +
                         f'train={len(train)}, total={n_sents}')
-        yield (self.stage_dir / 'training' / f'{self.name}.txt', train)
-        yield (self.stage_dir / 'dev' / f'{self.name}.txt', dev)
+        yield (target / self._TRAINING_SUBDIR / f'{self.name}.txt', train)
+        yield (target / self._DEV_SUBDIR / f'{self.name}.txt', dev)
 
 
 @dataclass
@@ -128,12 +134,14 @@ class AmrReleaseCorpusPrepper(CorpusPrepper):
     .. AMR 3 release: https://catalog.ldc.upenn.edu/LDC2020T02
 
     """
-    def _read_files(self) -> Iterable[Tuple[Path, AmrDocument]]:
+    def _read_files(self, target: Path) -> Iterable[Tuple[Path, AmrDocument]]:
+        split_names: Set[str] = {self._TRAINING_SUBDIR, self._DEV_SUBDIR}
         splits_path: Path = self.installer.get_singleton_path()
         for amr_file in splits_path.glob('**/*.txt'):
             split: str = amr_file.parent.name
-            split = 'training' if split == 'test' else split
-            out_file: Path = self.stage_dir / split / amr_file.name
+            split = self._TRAINING_SUBDIR if split == 'test' else split
+            assert split in split_names
+            out_file: Path = target / split / amr_file.name
             doc: AmrDocument = self._load_doc(amr_file)
             yield (out_file, doc)
 
@@ -143,8 +151,16 @@ class CorpusPrepperManager(Dictable):
     """Aggregates and applies corpus prepare instances.
 
     """
+    stage_dir: Path = field()
+    """The location of where to copy the finished files."""
+
     preppers: Tuple[CorpusPrepper] = field()
     """The corpus prepare instances used to create the training files."""
+
+    @property
+    def is_done(self) -> bool:
+        """Whether or not the preparation is already complete."""
+        return self.stage_dir.is_dir()
 
     def prepare(self):
         """Download, install and write the corpus to disk from all
@@ -153,5 +169,18 @@ class CorpusPrepperManager(Dictable):
         then ready for AMR parser and generator trainers.
 
         """
-        for prepper in self.preppers:
-            prepper.prepare()
+        if self.is_done:
+            logger.info('corpus preparation is already complete')
+        else:
+            if logger.isEnabledFor(logging.INFO):
+                logger.info(f'preparing corpus in {self.stage_dir}')
+            for prepper in self.preppers:
+                prepper.prepare(self.stage_dir)
+
+    def clear(self):
+        if self.is_done:
+            if logger.isEnabledFor(logging.INFO):
+                logger.info(f'removing corpus prep staging: {self.stage_dir}')
+            shutil.rmtree(self.stage_dir)
+        else:
+            logger.info('no corpus preparation found')

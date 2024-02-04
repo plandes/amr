@@ -57,7 +57,7 @@ class BaseApplication(object):
         self.log_config()
         if verbose:
             # this doesn't cross over to (multi) sub-processes; for that set
-            # log configuration in app.conf or train-t5.conf
+            # log configuration in app.conf or train configuration
             for n in 'persist multi install'.split():
                 logging.getLogger(f'zensols.{n}').setLevel(logging.INFO)
 
@@ -530,16 +530,12 @@ class _ProtoApplication(object):
             return
 
     def _tmp(self):
-        parser = self.config_factory('amr_anon_doc_parser')
-        doc = parser('Obama was the 44th president last year. He is no longer.')
-        doc.write()
+        prepper = self.config_factory('amr_prep_manager')
+        prepper.clear()
+        prepper.prepare()
 
-    def _prep_corpus(self):
-        self.config_factory('amr_prep_manager').prepare()
-
-    def proto(self, run: int = 3):
+    def proto(self, run: int = 0):
         {0: self._tmp,
          1: self._generate,
          2: self._train,
-         3: self._prep_corpus,
          }[run]()

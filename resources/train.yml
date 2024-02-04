@@ -25,7 +25,6 @@ amr_prep_lp_corp_installer:
 amr_prep_lp_corp_prepper:
   class_name: zensols.amr.corpprep.SingletonCorpusPrepper
   installer: 'instance: amr_prep_lp_corp_installer'
-  stage_dir: 'path: ${amr_prep_default:stage_dir}'
   name: little-prince
   dev_portion: 0.15
 
@@ -48,10 +47,10 @@ amr_prep_release_3_corp_prepper:
   class_name: zensols.amr.corpprep.AmrReleaseCorpusPrepper
   name: amr-release-3
   installer: 'instance: amr_prep_release_3_corp_installer'
-  stage_dir: 'path: ${amr_prep_default:stage_dir}'
 
 amr_prep_manager:
   class_name: zensols.amr.corpprep.CorpusPrepperManager
+  stage_dir: 'path: ${amr_prep_default:stage_dir}'
   preppers: >-
     instance: tuple:
       amr_prep_lp_corp_prepper,
