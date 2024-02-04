@@ -109,13 +109,14 @@ class AmrDocument(PersistableContainer, Writable):
 
     @classmethod
     def from_source(cls, source: Union[Path, Installer],
-                    load_ascii: bool = False, **kwargs) -> AmrDocument:
+                    transform_ascii: bool = False, **kwargs) -> AmrDocument:
         """Return a new document created for ``source``.
 
         :param source: either a double newline list of AMR graphs or an
                        installer that has a singleton path to a like file
 
-        :param load_ascii: whether to replace non-ASCII characters
+        :param transform_ascii: whether to replace non-ASCII characters to their
+                                ASCII equivalents (i.e. removes umlauts)
 
         :param kwargs: additional keyword arguments given to the initializer of
                        the document
@@ -123,7 +124,7 @@ class AmrDocument(PersistableContainer, Writable):
         """
         source: Path = cls.resolve_source(source)
         entries: List[str]
-        if load_ascii:
+        if transform_ascii:
             entries = tuple(load_raw_amr(str(source)))
         else:
             entries = tuple(filter(
