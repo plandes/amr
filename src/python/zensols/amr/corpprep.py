@@ -44,6 +44,11 @@ class CorpusPrepper(Dictable, metaclass=ABCMeta):
     transform_ascii: bool = field(default=True)
     """Whether to replace non-ASCII characters for models."""
 
+    shuffle: bool = field(default=True)
+    """Whether to shuffle the AMR sentences before writing to the target
+    directory.  Use this to randomize across a per-corpus train and dev sets.
+
+    """
     @abstractmethod
     def read_docs(self, target: Path) -> Iterable[Tuple[str, AmrDocument]]:
         """Read and return tuples of where to write the output of the sentences
@@ -58,8 +63,13 @@ class CorpusPrepper(Dictable, metaclass=ABCMeta):
 
     def _load_doc(self, path: Path) -> AmrDocument:
         """Load text from ``path`` and return the sentences as a document."""
-        return AmrDocument.from_source(
+        doc = AmrDocument.from_source(
             path, transform_ascii=self.transform_ascii)
+        if self.shuffle:
+            sents = list(doc.sents)
+            random.shuffle(sents)
+            doc.sents = tuple(sents)
+        return doc
 
     def __str__(self):
         return str(self.name)
@@ -122,7 +132,7 @@ class CorpusPrepperManager(Dictable):
 
     shuffle: bool = field(default=True)
     """Whether to shuffle the AMR sentences before writing to the target
-    directory.
+    directory.  This is used the shuffle across each corpora per split.
 
     """
     key_splits: Path = field(default=None)
