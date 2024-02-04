@@ -178,6 +178,8 @@ class CorpusPrepperManager(Dictable):
         sents: Dict[str, List[AmrSentence]] = collections.defaultdict(list)
         prepper: CorpusPrepper
         for prepper in self.preppers:
+            if logger.isEnabledFor(logging.INFO):
+                logger.info(f'installing and reading: {prepper}')
             prepper.installer.install()
             split_name: str
             doc: AmrDocument
@@ -190,12 +192,15 @@ class CorpusPrepperManager(Dictable):
         split_name: str
         sent_set: List[AmrSentence]
         for split_name, sent_set in sents.items():
+            if logger.isEnabledFor(logging.INFO):
+                logger.info(f'creating split: {split_name}')
             out_path: Path = self._split_to_file(split_name)
             out_path.parent.mkdir(parents=True, exist_ok=True)
             with open(out_path, 'w') as f:
                 self._write(f, sent_set)
             logger.info(f'wrote: {out_path}')
         if self.key_splits is not None:
+            logger.info('creating key splits...')
             keys: Dict[str, Tuple[str]] = {}
             for split_name, sent_set in sents.items():
                 keys[split_name] = tuple(filter(

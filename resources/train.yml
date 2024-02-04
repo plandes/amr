@@ -22,8 +22,28 @@ amr_prep_lp_corp_prepper:
   dev_portion: 0.15
 
 
+# Bio AMR
+amr_prep_bio3_corp_resource:
+  class_name: zensols.install.Resource
+  url: '${amr_anon_default:isi_down_url}/2018-01-25/amr-release-bio-v3.0.txt'
+  name: null
+  clean_up: true
+
+amr_prep_bio3_corp_installer:
+  class_name: zensols.install.Installer
+  base_directory: 'path: ${amr_trainer_default:corpus_raw_dir}'
+  resources: 'instance: list: amr_prep_bio3_corp_resource'
+
+amr_prep_bio3_corp_prepper:
+  class_name: zensols.amr.corpprep.SingletonCorpusPrepper
+  installer: 'instance: amr_prep_bio3_corp_installer'
+  name: bio3
+  dev_portion: 0.15
+
+
+
 # AMR 3.0 release
-amr_prep_release_3_corp_resource:
+amr_prep_rel3_corp_resource:
   class_name: zensols.install.Resource
   url: 'file:download/amr_annotation_3.0_LDC2020T02.tgz'
   name: amr_annotation_3.0
@@ -31,24 +51,24 @@ amr_prep_release_3_corp_resource:
   check_path: amr_annotation_3.0
   clean_up: true
 
-amr_prep_release_3_corp_installer:
+amr_prep_rel3_corp_installer:
   class_name: zensols.install.Installer
   base_directory: 'path: ${amr_trainer_default:corpus_raw_dir}'
-  resources: 'instance: list: amr_prep_release_3_corp_resource'
+  resources: 'instance: list: amr_prep_rel3_corp_resource'
 
-amr_prep_release_3_corp_prepper:
+amr_prep_rel3_corp_prepper:
   class_name: zensols.amr.corpprep.AmrReleaseCorpusPrepper
   name: amr-release-3
-  installer: 'instance: amr_prep_release_3_corp_installer'
+  installer: 'instance: amr_prep_rel3_corp_installer'
 
 amr_prep_manager:
   class_name: zensols.amr.corpprep.CorpusPrepperManager
   stage_dir: 'path: ${amr_trainer_default:corpus_stage_dir}'
   key_splits: 'path: ${amr_trainer_default:corpus_stage_dir}/../corpus-splits.json'
-  preppers: 'instance: tuple: amr_prep_lp_corp_prepper, amr_prep_release_3_corp_prepper'
-  # uncomment if you have the AMR 3.0 corpus (add to root level 'download' directory)
-  #preppers: 'instance: tuple: amr_prep_lp_corp_prepper, amr_prep_release_3_corp_prepper'
+  # by default, only enable the (small) little prince corpus for testing
   preppers: 'instance: tuple: amr_prep_lp_corp_prepper'
+  # uncomment if you have the AMR 3.0 corpus (add to root level 'download' directory)
+  #preppers: 'instance: tuple: amr_prep_lp_corp_prepper, amr_prep_bio3_corp_prepper, amr_prep_rel3_corp_prepper'
 
 
 ### Corpus trainers
