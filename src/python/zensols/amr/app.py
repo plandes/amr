@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 import logging
 import sys
+import re
 from pathlib import Path
 import json
 import itertools as it
@@ -488,6 +489,19 @@ class TrainerApplication(BaseApplication):
         self._set_level(logging.INFO, True)
         self.trainer.train(dry_run)
 
+    def restore_splits(self, output_dir: Path = None, id_pattern: str = None):
+        """Restore corpus splits used for training.
+
+        :param output_dir: the output directory
+
+        :param id_pattern: the AMR metadata ID regular expression to match
+
+        """
+        output_dir = Path('corpus-splits') if output_dir is None else output_dir
+        if id_pattern is not None:
+            id_pattern = re.compile(id_pattern)
+        self.trainer.corpus_prep_manager.restore_splits(output_dir, id_pattern)
+
     def stats(self):
         """Write corpus status and print paths info."""
         self.evaluator.write_stats()
@@ -531,11 +545,15 @@ class _ProtoApplication(object):
 
     def _tmp(self):
         prepper = self.config_factory('amr_prep_manager')
-        if 1:
+        if 0:
             prepper.clear()
-        prepper.prepare()
+            prepper.prepare()
+            return
+        if 1:
+            prepper.restore_splits(Path('tmp'))
+            return
 
-    def proto(self, run: int = 2):
+    def proto(self, run: int = 0):
         {0: self._tmp,
          1: self._generate,
          2: self._train,

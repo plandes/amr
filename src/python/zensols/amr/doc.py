@@ -214,6 +214,9 @@ class AmrDocument(PersistableContainer, Writable):
     def __str__(self):
         return f'sents: {len(self)}, path: {self.path}'
 
+    def __repr(self):
+        return self.__str__()
+
 
 @dataclass
 class AmrGeneratedDocument(Writable):

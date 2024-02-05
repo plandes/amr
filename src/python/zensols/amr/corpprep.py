@@ -3,11 +3,13 @@
 """
 __author__ = 'Paul Landes'
 
-from typing import Tuple, Set, Dict, List, Iterable, ClassVar
+from typing import Tuple, Set, Dict, Any, List, Sequence, Iterable, ClassVar
 from dataclasses import dataclass, field
 from abc import ABCMeta, abstractmethod
 import logging
 import random
+import re
+from itertools import chain
 import collections
 import json
 from pathlib import Path
@@ -16,7 +18,7 @@ import shutil
 from zensols.util.time import time
 from zensols.config import Dictable
 from zensols.install import Installer
-from . import AmrSentence, AmrDocument
+from . import AmrError, AmrSentence, AmrDocument
 
 logger = logging.getLogger(__name__)
 
@@ -124,6 +126,9 @@ class CorpusPrepperManager(Dictable):
     """Aggregates and applies corpus prepare instances.
 
     """
+    name: str = field()
+    """Name of application configuration instance for debugging."""
+
     preppers: Tuple[CorpusPrepper] = field()
     """The corpus prepare instances used to create the training files."""
 
@@ -163,7 +168,7 @@ class CorpusPrepperManager(Dictable):
             CorpusPrepper.DEV_SPLIT_NAME: self.dev_file,
         }[split_name]
 
-    def _write(self, writer: TextIOBase, sents: List[AmrSentence]):
+    def _write_sents(self, writer: TextIOBase, sents: Sequence[AmrSentence]):
         """Write the ``doc`` to data sink ``writer`` with newlines between each
         in a format for AMR parser/generators trainers.
 
@@ -175,16 +180,30 @@ class CorpusPrepperManager(Dictable):
                 writer.write('\n\n')
         writer.write('\n')
 
-    def _prepare(self) -> Dict[str, int]:
-        """Prepare the corpus (see :meth:`prepare`) and return the number of
-        sentences added for each split.
-
-        """
+    def _write_key_splits(self, sents: Dict[str, List[AmrSentence]]):
         def map_keys(sent: AmrSentence) -> Tuple[str]:
             meta: Dict[str, str] = sent.metadata
             if 'id' in meta:
                 return meta['id']
 
+        keys: Dict[str, Tuple[str]] = {}
+        logger.info('creating key splits...')
+        split_name: str
+        sent_set: List[AmrSentence]
+        for split_name, sent_set in sents.items():
+            keys[split_name] = tuple(filter(
+                lambda t: t is not None,
+                map(map_keys, sent_set)))
+        with open(self.key_splits, 'w') as f:
+            json.dump(keys, f, indent=4)
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'wrote: {self.key_splits}')
+
+    def _prepare(self) -> Dict[str, int]:
+        """Prepare the corpus (see :meth:`prepare`) and return the number of
+        sentences added for each split.
+
+        """
         sents: Dict[str, List[AmrSentence]] = collections.defaultdict(list)
         prepper: CorpusPrepper
         for prepper in self.preppers:
@@ -207,19 +226,10 @@ class CorpusPrepperManager(Dictable):
             out_path: Path = self._split_to_file(split_name)
             out_path.parent.mkdir(parents=True, exist_ok=True)
             with open(out_path, 'w') as f:
-                self._write(f, sent_set)
+                self._write_sents(f, sent_set)
             logger.info(f'wrote: {out_path}')
         if self.key_splits is not None:
-            logger.info('creating key splits...')
-            keys: Dict[str, Tuple[str]] = {}
-            for split_name, sent_set in sents.items():
-                keys[split_name] = tuple(filter(
-                    lambda t: t is not None,
-                    map(map_keys, sent_set)))
-            with open(self.key_splits, 'w') as f:
-                json.dump(keys, f, indent=4)
-            if logger.isEnabledFor(logging.INFO):
-                logger.info(f'wrote: {self.key_splits}')
+            self._write_key_splits(sents)
         return {k: len(sents[k]) for k in sents.keys()}
 
     def prepare(self):
@@ -240,6 +250,51 @@ class CorpusPrepperManager(Dictable):
                     lambda t: f'{t[0]}: {t[1]}', stats.items()))
                 total: int = sum(stats.values())
 
+    def _restore_splits(self, keys_path: Path, output_dir: Path,
+                        id_pattern: re.Pattern = None):
+        logger.info(f'restoring splits from {keys_path} to {output_dir}')
+        with open(keys_path) as f:
+            by_split: Dict[str, Any] = json.load(f)
+        by_id: Dict[str, AmrSentence] = {}
+        sents: Iterable[AmrSentence] = chain.from_iterable(
+            map(lambda t: t[1].sents,
+                chain.from_iterable(
+                    map(lambda p: p.read_docs(self.stage_dir),
+                        self.preppers))))
+        sent: AmrSentence
+        for sent in sents:
+            meta: Dict[str, str] = sent.metadata
+            if 'id' in meta:
+                by_id[meta['id']] = sent
+        output_dir.mkdir(parents=True, exist_ok=True)
+        split_name: str
+        ids: List[str]
+        for split_name, ids in by_split.items():
+            split_file: Path = output_dir / f'{split_name}.txt'
+            if id_pattern is not None:
+                ids = filter(
+                    lambda id: re.match(id_pattern, id) is not None, ids)
+            sents: Tuple[AmrSentence] = tuple(map(lambda i: by_id[i], ids))
+            with open(split_file, 'w') as f:
+                self._write_sents(f, sents)
+            logger.info(f'wrote: {split_file}')
+
+    def restore_splits(self, output_dir: Path, id_pattern: re.Pattern):
+        """Restore corpus splits used for training.
+
+        :param output_dir: the output directory
+
+        :param id_pattern: the AMR metadata ID regular expression to match
+
+        """
+        if self.key_splits is None:
+            raise AmrError(f"No splits 'key_splits' file defined for '{self}'")
+        elif not self.key_splits.is_file():
+            raise AmrError(
+                f"Not a file in '{self}.key_splits': {self.key_splits}'")
+        else:
+            self._restore_splits(self.key_splits, output_dir, id_pattern)
+
     def clear(self):
         if self.is_done:
             if logger.isEnabledFor(logging.INFO):
@@ -247,3 +302,6 @@ class CorpusPrepperManager(Dictable):
             shutil.rmtree(self.stage_dir)
         else:
             logger.info('no corpus preparation found')
+
+    def __str__(self) -> str:
+        return self.name
