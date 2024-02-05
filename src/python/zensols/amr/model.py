@@ -50,6 +50,8 @@ class ModelContainer(object):
             'ignore',
             message=r'^This tokenizer was incorrectly instantiated with',
             category=FutureWarning)
+        from zensols.deepnlp import transformer
+        transformer.suppress_warnings()
 
     @property
     def model_path(self) -> Path:
@@ -237,8 +239,6 @@ class AmrGenerator(ModelContainer):
             'ignore',
             message=r'^`num_beams` is set to 1. However, `early_stopping` is ',
             category=UserWarning)
-        from zensols.deepnlp import transformer
-        transformer.suppress_warnings()
 
     @property
     @persisted('_generation_model', cache_global=True)
