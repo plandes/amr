@@ -63,15 +63,6 @@ class BaseApplication(object):
             for n in 'persist multi install'.split():
                 logging.getLogger(f'zensols.{n}').setLevel(logging.INFO)
 
-
-@dataclass
-class Application(BaseApplication):
-    """Parse and plot AMR graphs in Penman notation.
-
-    """
-    config_factory: ConfigFactory = field()
-    """Application context."""
-
     @property
     def doc_parser(self) -> FeatureDocumentParser:
         """The feature document parser for the app.  This is not done via the
@@ -103,6 +94,15 @@ class Application(BaseApplication):
     def dumper(self) -> 'Dumper':
         """Plots and writes AMR content in human readable formats."""
         return self._get_app_dependency('dumper')
+
+
+@dataclass
+class Application(BaseApplication):
+    """Parse and plot AMR graphs in Penman notation.
+
+    """
+    config_factory: ConfigFactory = field()
+    """Application context."""
 
     def count(self, input_file: Path):
         """Provide counts on an AMR corpus file.
@@ -509,9 +509,9 @@ class TrainerApplication(BaseApplication):
 
     def clear(self):
         """Clear all cached data."""
-        for to_clean in (self.doc_parser, self.anon_doc_stash):
-            logger.info(f'cleaning {type(to_clean)}')
-            to_clean.clear()
+        for to_clear in (self.doc_parser, self.anon_doc_stash):
+            logger.info(f'clearing {type(to_clear)}')
+            to_clear.clear()
 
 
 @dataclass
