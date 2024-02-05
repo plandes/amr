@@ -44,9 +44,8 @@ amr_pipline_doc_parser:
   token_normalizer: 'instance: amr_map_filter_token_normalizer'
   doc_class: 'class: zensols.amr.AmrFeatureDocument'
   sent_class: 'class: zensols.amr.AmrFeatureSentence'
-  components: 'instance: list: amr_parser_component, amr_align_component'
+  components: 'instance: list: amr_parser_component'
   reload_components: true
-
 
 # used for parsing human annotated AMR graphs with ``snt`` metadata, which is
 # useful for scoring
@@ -55,7 +54,7 @@ amr_human_anon_doc_parser:
   token_normalizer: 'instance: amr_map_filter_token_normalizer'
   doc_class: 'class: zensols.amr.AmrFeatureDocument'
   sent_class: 'class: zensols.amr.AmrFeatureSentence'
-  components: 'instance: list: remove_sent_boundaries_component, amr_parser_component, amr_align_component'
+  components: 'instance: list: remove_sent_boundaries_component, amr_parser_component'
   reload_components: true
 
 
