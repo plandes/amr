@@ -4,19 +4,22 @@
 [![Python 3.10][python310-badge]][python310-link]
 [![Python 3.11][python311-badge]][python311-link]
 
-
-Provides support for AMR annotations and feature generation.
+Provides support for AMR graph manipulation, annotations and feature
+generation.
 
 Features:
-- Annotation in AMR metadata.  For example, sentence types found in the Proxy
+* Annotation in AMR metadata.  For example, sentence types found in the Proxy
   report AMR corpus.
-- AMR token alignment as [spaCy] components.
-- A scoring API that includes [Smatch] and [WLK], which extends a more general
+* AMR token alignment as [spaCy] components.
+* Integrates natural language parsing and features with Zensols
+  [zensols.nlparse] library.
+* A scoring API that includes [Smatch] and [WLK], which extends a more general
   [NLP scoring module].
-- AMR parsing ([amrlib]) and AMR co-reference ([amr_coref]).
-- Command line and API utilities for AMR graph Penman graphs, debugging and
+* AMR parsing ([amrlib]) and AMR co-reference ([amr_coref]).
+* Command line and API utilities for AMR graph Penman graphs, debugging and
   files.
-- Tools for training and evaluating AMR parse models.
+* Tools for [training and evaluating](training) new AMR parse (text to graph)
+  and generation (graph to text) models.
 
 
 ## Documentation
@@ -129,15 +132,26 @@ $ amr plot -c test-resources/t5.conf 'This is a test of the AMR command line uti
 wrote: amr-graph/this-is-a-test-of-the-amr-comm.pdf
 ```
 
-## Performance (Smatch)
 
-This repo is configured to download and train on the AMR bio-medical corpus.
-The results of the scores using amrlib's default smatch score is:
+## Training
 
-| Corpus | Model           | Precision          | Recall             | F-score             |
-|--------|-----------------|--------------------|--------------------|---------------------|
-| bio    | amrlib t5       | 0.5613647022821542 | 0.4799029769470724 | 0.5174473330001563  |
-| bio    | amrlib t5 + bio | 0.6792187759112143 | 0.6164372669678633 | 0.6463069704295633  |
+This package uses the [amrlib] training, but adds a command line and
+downloadable corpus aggregation / API.  To train:
+
+1. Choose a model (i.e. SPRING, T5).
+1. Optionally edit the [train configuration](train-config) directory of the
+   model you choose.
+1. Optionally edit the `resources/train.yml` to select/add more corpora (see
+   [Adding Corpora](adding-corpora)).
+1. Train the model: `./amr --config train-config/<model>.conf`
+
+
+### Adding Corpora
+
+You can add additional training corpora by adding section(s) to the list of
+`${amr_prep_manager:preppers}` (see `resources/train.yml`).  This file defines
+downloaded corpora for the Little Prince and Bio AMR corpora.  To use the AMR
+3.0 release, add the LDC downloaded file to (a new) `download` directory.
 
 
 

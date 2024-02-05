@@ -12,5 +12,12 @@ freely distributed *Little Prince* and *Bio AMR* corpora [ISI] AMR annotations.
   use in `amr_default`)
 
 
+## Customization
+
+The models are named with a generic `zsl` (short for `zensols`) string followed
+by the model.  This directory can be copied and `zsl` global replaced to your
+own string to customize your own models.
+
+
 <!-- links -->
 ISI: https://amr.isi.edu/download.html
