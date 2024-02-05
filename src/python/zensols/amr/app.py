@@ -48,10 +48,11 @@ class BaseApplication(object):
         sec: str = self.app_dependencies[name]
         return self.config_factory(sec)
 
-    def _norm_tf_logging(self):
+    def _normalize_huggingface_logging(self):
         """Make HF APIs using the logging system rather than to stdout."""
-        import zensols.deepnlp.transformer as dnt
-        dnt.normalize_huggingface_logging()
+        from transformers import logging
+        logging.disable_default_handler()
+        logging.enable_propagation()
 
     def _set_level(self, level: int, verbose: bool = False):
         self.log_config.level = level
@@ -77,20 +78,20 @@ class Application(BaseApplication):
         application config to allow overriding of the defaults.
 
         """
-        self._norm_tf_logging()
+        self._normalize_huggingface_logging()
         sec: str = self.config_factory.config['amr_default']['doc_parser']
         return self.config_factory(sec)
 
     @property
     def amr_parser(self) -> 'AmrParser':
         """Parses natural language in to AMR graphs."""
-        self._norm_tf_logging()
+        self._normalize_huggingface_logging()
         return self._get_app_dependency('amr_parser')
 
     @property
     def generator(self) -> 'AmrGenerator':
         """The generator used to transform AMR graphs to natural language."""
-        self._norm_tf_logging()
+        self._normalize_huggingface_logging()
         return self._get_app_dependency('generator')
 
     @property
@@ -543,7 +544,7 @@ class _ProtoApplication(object):
             self.trainer_app.trainer.train()
             return
 
-    def _tmp(self):
+    def _prep(self):
         prepper = self.config_factory('amr_prep_manager')
         if 0:
             prepper.clear()
@@ -553,8 +554,14 @@ class _ProtoApplication(object):
             prepper.restore_splits(Path('tmp'))
             return
 
+    def _tmp(self):
+        parser = self.config_factory('amr_anon_doc_parser')
+        doc = parser('Obama was the 44th president last year. He is no longer.')
+        doc.write()
+
     def proto(self, run: int = 0):
         {0: self._tmp,
          1: self._generate,
-         2: self._train,
+         2: self._prep,
+         3: self._train,
          }[run]()

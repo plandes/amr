@@ -14,7 +14,7 @@ cached-property~=1.5.2
 networkx~=3.2.1
 
 # model download/paths
-zensols.install~=1.1.0
+zensols.install~=1.1.1
 # langugae parsing/features
 zensols.nlp~=1.9.2
 

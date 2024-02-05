@@ -250,9 +250,16 @@ class Trainer(Dictable, metaclass=ABCMeta):
     def _get_train_method(self) -> Callable:
         pass
 
-    def _init_random(self):
-        from zensols.deeplearn import TorchConfig
-        TorchConfig.set_random_seed(disable_cudnn=False)
+    def _init_random(self, seed: int = 0):
+        import random
+        import numpy as np
+        import torch
+        random.seed(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(seed)
+            torch.cuda.manual_seed_all(0)
 
     def train(self, dry_run: bool = False):
         """Train the model (see class docs).

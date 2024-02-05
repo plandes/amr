@@ -50,8 +50,8 @@ class ModelContainer(object):
             'ignore',
             message=r'^This tokenizer was incorrectly instantiated with',
             category=FutureWarning)
-        from zensols.deepnlp import transformer
-        transformer.suppress_warnings()
+        from transformers import logging
+        logging.set_verbosity_error()
 
     @property
     def model_path(self) -> Path:
