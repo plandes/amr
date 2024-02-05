@@ -97,7 +97,7 @@ evalmodel:
 				--config $(MODEL_CONF_DIR)/inference.conf \
 				--override amr_default.parse_model=$(EVL_MODEL)
 
-# evaluate the little prince corpus on the trained little prince corpus (test)
+# evaluate the corpus on the trained little prince corpus (test)
 .PHONY:			evalspring
 evalspring:
 			make EVL_MODEL=zsl_spring evalmodel

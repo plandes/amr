@@ -66,9 +66,9 @@ amr_prep_manager:
   stage_dir: 'path: ${amr_trainer_default:corpus_stage_dir}'
   key_splits: 'path: ${amr_trainer_default:corpus_stage_dir}/../corpus-splits.json'
   # by default, only enable the (small) little prince corpus for testing
-  preppers: 'instance: tuple: amr_prep_lp_corp_prepper'
+  #preppers: 'instance: tuple: amr_prep_lp_corp_prepper'
   # uncomment if you have the AMR 3.0 corpus (add to root level 'download' directory)
-  #preppers: 'instance: tuple: amr_prep_lp_corp_prepper, amr_prep_bio3_corp_prepper, amr_prep_rel3_corp_prepper'
+  preppers: 'instance: tuple: amr_prep_lp_corp_prepper, amr_prep_bio3_corp_prepper, amr_prep_rel3_corp_prepper'
 
 
 ### Corpus trainers
