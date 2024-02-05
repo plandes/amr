@@ -1,4 +1,4 @@
-# description: scorer objects
+# @meta {desc: 'scorer objects', date: '2024-02-05'}
 
 amr_smatch_score_method:
   class_name: zensols.amr.score.SmatchScoreCalculator
