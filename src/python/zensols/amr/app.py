@@ -246,7 +246,7 @@ class Application(BaseApplication):
 
 
 @dataclass
-class ScorerApplication(object):
+class ScorerApplication(BaseApplication):
     """Creates parsed files for comparing, and scores.
 
     """
