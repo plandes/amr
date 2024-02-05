@@ -46,6 +46,11 @@ class CorpusPrepper(Dictable, metaclass=ABCMeta):
     transform_ascii: bool = field(default=True)
     """Whether to replace non-ASCII characters for models."""
 
+    remove_wiki: bool = field(default=True)
+    """Whether to remove ``:wiki`` relations, which are not predicted by the
+    model and negatively effect validation performance set while training.
+
+    """
     shuffle: bool = field(default=True)
     """Whether to shuffle the AMR sentences before writing to the target
     directory.  Use this to randomize across a per-corpus train and dev sets.
@@ -67,6 +72,8 @@ class CorpusPrepper(Dictable, metaclass=ABCMeta):
         """Load text from ``path`` and return the sentences as a document."""
         doc = AmrDocument.from_source(
             path, transform_ascii=self.transform_ascii)
+        if self.remove_wiki:
+            doc.remove_wiki_attribs()
         if self.shuffle:
             sents = list(doc.sents)
             random.shuffle(sents)
