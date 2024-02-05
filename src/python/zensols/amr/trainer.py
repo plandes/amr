@@ -250,6 +250,10 @@ class Trainer(Dictable, metaclass=ABCMeta):
     def _get_train_method(self) -> Callable:
         pass
 
+    def _init_random(self):
+        from zensols.deeplearn import TorchConfig
+        TorchConfig.set_random_seed(disable_cudnn=False)
+
     def train(self, dry_run: bool = False):
         """Train the model (see class docs).
 
@@ -262,6 +266,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
             logger.debug(f'removing directory: {dir_path}')
             if dir_path.is_dir():
                 shutil.rmtree(dir_path)
+        self._init_random()
         self.corpus_prep_manager.prepare()
         train: Callable = self._get_train_method()
         if not dry_run:
