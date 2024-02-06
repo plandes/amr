@@ -111,7 +111,7 @@ class Application(BaseApplication):
 
         """
         amr_doc: AmrDocument = AmrDocument.from_source(input_file)
-        print(f'sentences: {len(amr_doc)}')
+        print(f'{len(amr_doc)} {input_file}')
 
     def write_metadata(self, input_file: Path, output_dir: Path = None):
         """Write the metadata of each AMR in a corpus file.
