@@ -4,9 +4,10 @@
 # @meta {doc: 'run from root directory'}
 
 
-TARGET_DIR=target/trainall
-MODELS=parse-spring parse-xfm-base parse-t5
 BACKGROUND=0
+TARGET_DIR=target/trainall
+#MODELS="parse-spring parse-xfm-base parse-t5 generate-t5wtense"
+MODELS="parse-spring"
 
 
 init() {
@@ -17,7 +18,7 @@ init() {
 
 write_conf() {
     mkdir -p $(dirname $CONF)
-    cat train-config/{MODEL}.conf > $CONF
+    cat train-config/${MODEL}.conf > $CONF
     cat <<EOF >> ${CONF}
 [amr_prep_manager]
 preppers = instance: tuple:
@@ -29,7 +30,7 @@ EOF
 
 train_model() {
     echo "training model ${MODEL}..."
-    if [ $BG -eq 1 ] ; then
+    if [ $BACKGROUND -eq 1 ] ; then
 	./amr train --config $CONF > $LOG 2>&1 &
     else
 	./amr train --config $CONF
