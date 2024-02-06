@@ -5,18 +5,19 @@
 
 
 TARGET_DIR=target/trainall
+MODELS=parse-spring parse-xfm-base parse-t5
+BACKGROUND=0
 
 
 init() {
     MODEL=$1 ; shift
-    MODEL_TYPE=$1 ; shift
     CONF=${TARGET_DIR}/${MODEL}.conf
     LOG=${TARGET_DIR}/${MODEL}.log
 }
 
 write_conf() {
     mkdir -p $(dirname $CONF)
-    cat train-config/parse-${MODEL}.conf > $CONF
+    cat train-config/{MODEL}.conf > $CONF
     cat <<EOF >> ${CONF}
 [amr_prep_manager]
 preppers = instance: tuple:
@@ -26,16 +27,20 @@ preppers = instance: tuple:
 EOF
 }
 
-train_parse() {
-    echo "training parse model ${MODEL}..."
-    ./amr train --config $CONF > $LOG 2>&1 &
+train_model() {
+    echo "training model ${MODEL}..."
+    if [ $BG -eq 1 ] ; then
+	./amr train --config $CONF > $LOG 2>&1 &
+    else
+	./amr train --config $CONF
+    fi
 }
 
 main() {
-    for model in spring ; do
-	init $model parse
+    for model in $MODELS ; do
+	init $model
 	write_conf
-	train_parse
+	train_model
     done
 }
 
