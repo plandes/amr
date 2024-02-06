@@ -503,9 +503,6 @@ class SpringTrainer(Trainer):
             else:
                 config['model'] = pt_path
                 logger.info(f'training from model: {pt_path}')
-            # amrlib expects this
-            config['smatch_dev'] = -1
-            config['last_epoch'] = -1
         return config
 
     def _write_config(self, config: Dict[str, any]):
