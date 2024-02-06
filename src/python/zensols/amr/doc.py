@@ -125,7 +125,9 @@ class AmrDocument(PersistableContainer, Writable):
         source: Path = cls.resolve_source(source)
         entries: List[str]
         if transform_ascii:
-            entries = tuple(load_raw_amr(str(source)))
+            entries = tuple(filter(
+                lambda s: not cls.is_comment(s),
+                load_raw_amr(str(source))))
         else:
             entries = tuple(filter(
                 lambda s: not cls.is_comment(s),
