@@ -7,6 +7,7 @@ from typing import Union, Callable, Type, Dict, ClassVar
 from dataclasses import dataclass, field
 import logging
 import os
+import textwrap as tw
 from frozendict import frozendict
 from pathlib import Path
 from spacy.tokens import Doc, Span
@@ -160,7 +161,8 @@ class AmrAlignmentPopulator(object):
                     AmrParser.add_metadata(sent, spacy_sent)
                 try:
                     if logger.isEnabledFor(logging.INFO):
-                        logger.info(f'adding alignments to {sent}')
+                        sent_str: str = tw.shorten(str(sent), 60)
+                        logger.info(f'adding alignments to {sent_str}')
                     self.aligner(sent)
                 except Exception as e:
                     logger.error(f'could not load align <{sent}>: {e}')

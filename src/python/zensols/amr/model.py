@@ -7,8 +7,9 @@ from typing import List, Tuple, Callable
 from dataclasses import dataclass, field
 import logging
 import os
-import json
 import warnings
+import json
+import textwrap as tw
 from pathlib import Path
 from spacy.language import Language
 from spacy.tokens import Doc, Span, Token
@@ -197,11 +198,12 @@ class AmrParser(ModelContainer, ComponentInitializer):
             try:
                 graphs = stog_model.parse_spans([sent])
                 graph: str = graphs[0]
-                if logger.isEnabledFor(logging.DEBUG):
-                    logger.debug(f'adding graph for sent {i}: <{graph[:50]}>')
                 if graph is None:
                     err = AmrFailure("Could not parse: empty graph " +
                                      f"(total={len(graphs)})", sent.text)
+                if logger.isEnabledFor(logging.INFO):
+                    graph_str = tw.shorten(str(graph))
+                    logger.info(f'adding graph for sent {i}: <{graph_str}>')
             except Exception as e:
                 err = AmrFailure(e, sent=sent.text)
             if err is not None:
@@ -281,7 +283,10 @@ def create_amr_parser(nlp: Language, name: str, parser_name: str) -> AmrParser:
     """
     doc_parser: FeatureDocumentParser = nlp.doc_parser
     if logger.isEnabledFor(logging.INFO):
-        logger.info(f'creating AMR component {name}: doc parser: {doc_parser}')
+        dp_str: str = str(type(doc_parser))
+        if hasattr(doc_parser, 'name'):
+            dp_str += f' {doc_parser.name} ({dp_str})'
+        logger.info(f"creating AMR component '{name}': doc parser: '{dp_str}'")
     parser: AmrParser = doc_parser.config_factory(parser_name)
     if not isinstance(parser, AmrParser):
         raise AmrError(
