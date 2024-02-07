@@ -21,6 +21,7 @@ CLEAN_ALL_DEPS +=	cleanalldep
 # file, models and entry point
 MODEL_CONF_DIR = 	train-config
 MODEL_FILE =		corpus/amr-bank-struct-v3.0.txt
+EVAL_FILE = 		target/corp/stage/dev/dev.txt
 ABIN =			./amr
 
 
@@ -87,20 +88,21 @@ testmodel:
 			$(ABIN) --config $(MODEL_CONF_DIR)/inference.conf \
 				parse $(TEST_TEXT)
 
-# evaluation model "EVL_MODEL"
+# evaluation model "EVAL_MODEL"
 .PHONY:			evalmodel
 evalmodel:
-			$(ABIN) parsefile $(MODEL_FILE) --limit 50 \
+#			$(ABIN) prep
+#			$(ABIN) parsefile $(EVAL_FILE) \
+#				--config $(MODEL_CONF_DIR)/inference.conf \
+#				--override amr_default.parse_model=$(EVAL_MODEL)
+			$(ABIN) score $(EVAL_FILE) \
 				--config $(MODEL_CONF_DIR)/inference.conf \
-				--override amr_default.parse_model=$(EVL_MODEL)
-			$(ABIN) score $(MODEL_FILE) \
-				--config $(MODEL_CONF_DIR)/inference.conf \
-				--override amr_default.parse_model=$(EVL_MODEL)
+				--override amr_default.parse_model=$(EVAL_MODEL)
 
 # evaluate the corpus on the trained little prince corpus (test)
 .PHONY:			evalspring
 evalspring:
-			make EVL_MODEL=zsl_spring evalmodel
+			make EVAL_MODEL=zsl_spring evalmodel
 
 # stop any training
 .PHONY:			stop
