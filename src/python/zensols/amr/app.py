@@ -463,23 +463,23 @@ class TrainerApplication(BaseApplication):
                 return f.read().strip()
         return text_or_file
 
-    def write_corpus(self, text_or_file: str,
-                     corpus_file: Path = Path('corpus.txt')):
-        """Write a corpus from the text given.
+    def write_corpus(self, text_or_file: str, out_file: Path = None):
+        """Write a corpus from ad hoc text.
 
         :param text_or_file: if the file exists, use the contents of the file,
                              otherwise, the sentence(s) to parse
 
-        :param corpus_file: the output file to write the corpus
+        :param out_file: the output file
 
         """
         from .annotate import CorpusWriter
+        out_file = Path('corpus.txt') if out_file is None else out_file
         writer: CorpusWriter = self.config_factory.new_instance(
-            'amr_corpus_writer', path=corpus_file)
+            'amr_corpus_writer', path=out_file)
         for text in self._get_text(text_or_file).split('\n'):
             writer.add(text)
         writer()
-        logger.info(f'wrote: {corpus_file}')
+        logger.info(f'wrote: {out_file}')
 
     def train(self, dry_run: bool = False):
         """Continue fine tuning on additional corpora.
@@ -489,6 +489,12 @@ class TrainerApplication(BaseApplication):
         """
         self._set_level(logging.INFO, True)
         self.trainer.train(dry_run)
+
+    def prep_corpus(self):
+        """Download and install the training corpus."""
+        from .corpprep import CorpusPrepperManager
+        prepper: CorpusPrepperManager = self.config_factory('amr_prep_manager')
+        prepper.prepare()
 
     def restore_splits(self, output_dir: Path = None, id_pattern: str = None):
         """Restore corpus splits used for training.
@@ -502,10 +508,6 @@ class TrainerApplication(BaseApplication):
         if id_pattern is not None:
             id_pattern = re.compile(id_pattern)
         self.trainer.corpus_prep_manager.restore_splits(output_dir, id_pattern)
-
-    def stats(self):
-        """Write corpus status and print paths info."""
-        self.evaluator.write_stats()
 
     def clear(self):
         """Clear all cached data."""
