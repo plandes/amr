@@ -256,7 +256,7 @@ class CorpusPrepperManager(Dictable):
                 total: int = -1
                 stat: Dict[str, int] = self._prepare()
                 sstr = ', '.join(map(lambda t: f'{t[0]}: {t[1]}', stat.items()))
-                total = sum(stas.values())
+                total = sum(stat.values())
 
     def _restore_splits(self, keys_path: Path, output_dir: Path,
                         id_pattern: re.Pattern = None):
