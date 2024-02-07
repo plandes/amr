@@ -38,7 +38,7 @@ amr_prep_bio3_corp_prepper:
   class_name: zensols.amr.corpprep.SingletonCorpusPrepper
   installer: 'instance: amr_prep_bio3_corp_installer'
   name: bio3
-  dev_portion: 0.15
+  dev_portion: 0.1
 
 
 

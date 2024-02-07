@@ -51,7 +51,7 @@ class CorpusPrepper(Dictable, metaclass=ABCMeta):
     model and negatively effect validation performance set while training.
 
     """
-    shuffle: bool = field(default=True)
+    shuffle: bool = field(default=False)
     """Whether to shuffle the AMR sentences before writing to the target
     directory.  Use this to randomize across a per-corpus train and dev sets.
 
