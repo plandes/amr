@@ -559,16 +559,6 @@ class SpringTrainer(Trainer):
             if logger.isEnabledFor(logging.INFO):
                 logger.info(f'using check point: {cp}')
         trainer: Callable = self.trainer_class(config)
-        output_dir: Path = Path(config['model_dir'])
-        if logger.isEnabledFor(logging.INFO):
-            logger.info(f'output dir: {output_dir}')
-        conf_file = output_dir / 'config.json'
-        output_dir.mkdir(parents=True, exist_ok=True)
-        if logger.isEnabledFor(logging.INFO):
-            logger.info(f'create {self.training_config_file} -> {conf_file}')
-            assert not conf_file.exists()
-            with open(conf_file, 'w') as f:
-                json.dump(config, f, indent=4)
         train_fn: Callable = trainer.train
         train = (lambda: train_fn(checkpoint=cp))
         return train
