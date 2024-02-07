@@ -146,12 +146,36 @@ downloadable corpus aggregation / API.  To train:
 1. Train the model: `./amr --config train-config/<model>.conf`
 
 
+### Pretrained Models
+
+This library was used to train all of the [amrlib] models (using the same
+checkpoints as [amrlib]), except the T5 Base v1 model, with additional
+examples from publicly available human annotated corpora.  The differences of
+these trained models include:
+
+* None of the models were tested against a training set, only the development
+  SMATCH scores are available.  This was intentional to provide more training
+  examples.
+* The AMR Release 3.0 (LDC2020T02) test set was added to the training set.
+* The [Little Prince and Bio AMR](https://amr.isi.edu/download.html) corpora
+  where used to train the models.  The first 85% of the AMR sentences were
+  added to training set and the remaining 15% were added to the development
+  set.
+* The mini-batch size changed for some models due to memory constraints.
+* The number of training epochs were increased to account for the additional
+  number of training examples.
+* Models have the same naming conventions but are prefixed with `zsl`.
+
+These models are available upon request.
+
+
 ### Adding Corpora
 
-You can add additional training corpora by adding section(s) to the list of
-`${amr_prep_manager:preppers}` (see `resources/train.yml`).  This file defines
-downloaded corpora for the Little Prince and Bio AMR corpora.  To use the AMR
-3.0 release, add the LDC downloaded file to (a new) `download` directory.
+You can retrain your own model and add additional training corpora by modifying
+the list of `${amr_prep_manager:preppers}` in `resources/train.yml`.  This file
+defines downloaded corpora for the Little Prince and Bio AMR corpora.  To use
+the AMR 3.0 release, add the LDC downloaded file to (a new) `download`
+directory.
 
 
 
