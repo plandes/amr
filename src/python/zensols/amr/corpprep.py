@@ -252,10 +252,11 @@ class CorpusPrepperManager(Dictable):
             if logger.isEnabledFor(logging.INFO):
                 logger.info(f'preparing corpus in {self.stage_dir}')
             with time('wrote {total} sentences ({sstr})'):
-                stats: Dict[str, int] = self._prepare()
-                sstr: str = ', '.join(map(
-                    lambda t: f'{t[0]}: {t[1]}', stats.items()))
-                total: int = sum(stats.values())
+                sstr: str = None
+                total: int = -1
+                stat: Dict[str, int] = self._prepare()
+                sstr = ', '.join(map(lambda t: f'{t[0]}: {t[1]}', stat.items()))
+                total = sum(stas.values())
 
     def _restore_splits(self, keys_path: Path, output_dir: Path,
                         id_pattern: re.Pattern = None):
