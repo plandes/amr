@@ -101,6 +101,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
     def _pretrained_path_or_model(self) -> Union[str, Path]:
         """The path to the pretrained ``pytorch_model.bin`` file."""
         if self._pretrained_path_or_model_val is None:
+            self.model_installer()
             return self.model_installer.get_singleton_path()
         else:
             return self._pretrained_path_or_model_val
@@ -111,9 +112,9 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
     @persisted('_input_metadata')
     def _get_input_metadata(self) -> str:
+        self.model_installer()
         model_dir: Path = self.model_installer.get_singleton_path()
         meta_file: Path = model_dir / 'amrlib_meta.json'
-        self.model_installer()
         if not meta_file.is_file():
             raise AmrError(f'No metadata file: {meta_file}')
         else:
