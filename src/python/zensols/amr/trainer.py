@@ -34,6 +34,8 @@ class Trainer(Dictable, metaclass=ABCMeta):
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
         'pretrained_path_or_model', 'trainer_class', 'training_config'}
 
+    _DICTABLE_WRITABLE_DESCENDANTS: ClassVar[bool] = True
+
     _INFERENCE_MOD_REGEX: ClassVar[re.Pattern] = re.compile(
         r'.*((parse|generate)_[a-z\d]+).*')
 
@@ -278,6 +280,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
         self.corpus_prep_manager.prepare()
         train: Callable = self._get_train_method()
         if not dry_run:
+            logger.info(f'training model: {self.model_name}')
             train()
             self._compile_model()
             self._copy_model_files()
