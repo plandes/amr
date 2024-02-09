@@ -161,7 +161,7 @@ class AmrAlignmentPopulator(object):
                     AmrParser.add_metadata(sent, spacy_sent)
                 try:
                     if logger.isEnabledFor(logging.INFO):
-                        sent_str: str = tw.shorten(str(sent), 60)
+                        sent_str: str = tw.shorten(str(sent), width=60)
                         logger.info(f'adding alignments to {sent_str}')
                     self.aligner(sent)
                 except Exception as e:

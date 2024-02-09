@@ -202,7 +202,7 @@ class AmrParser(ModelContainer, ComponentInitializer):
                     err = AmrFailure("Could not parse: empty graph " +
                                      f"(total={len(graphs)})", sent.text)
                 if logger.isEnabledFor(logging.INFO):
-                    graph_str = tw.shorten(str(graph))
+                    graph_str = tw.shorten(str(graph), width=60)
                     logger.info(f'adding graph for sent {i}: <{graph_str}>')
             except Exception as e:
                 err = AmrFailure(e, sent=sent.text)
