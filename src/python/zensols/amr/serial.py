@@ -10,7 +10,8 @@ from abc import ABCMeta, abstractmethod
 from enum import Enum, auto
 from collections import OrderedDict
 from zensols.config import Dictable
-from . import AmrError, AmrSentence, AmrDocument, AnnotatedAmrDocument
+from . import AmrError, AmrSentence, AmrDocument
+from .annotate import AnnotatedAmrDocument
 
 
 class Include(Enum):
