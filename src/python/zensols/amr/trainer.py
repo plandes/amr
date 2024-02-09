@@ -34,6 +34,8 @@ class Trainer(Dictable, metaclass=ABCMeta):
     _DICTABLE_ATTRIBUTES: ClassVar[Set[str]] = {
         'pretrained_path_or_model', 'trainer_class', 'training_config'}
 
+    _DICTABLE_WRITABLE_DESCENDANTS: ClassVar[bool] = True
+
     _INFERENCE_MOD_REGEX: ClassVar[re.Pattern] = re.compile(
         r'.*((parse|generate)_[a-z\d]+).*')
 
@@ -101,6 +103,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
     def _pretrained_path_or_model(self) -> Union[str, Path]:
         """The path to the pretrained ``pytorch_model.bin`` file."""
         if self._pretrained_path_or_model_val is None:
+            self.model_installer()
             return self.model_installer.get_singleton_path()
         else:
             return self._pretrained_path_or_model_val
@@ -111,9 +114,9 @@ class Trainer(Dictable, metaclass=ABCMeta):
 
     @persisted('_input_metadata')
     def _get_input_metadata(self) -> str:
+        self.model_installer()
         model_dir: Path = self.model_installer.get_singleton_path()
         meta_file: Path = model_dir / 'amrlib_meta.json'
-        self.model_installer()
         if not meta_file.is_file():
             raise AmrError(f'No metadata file: {meta_file}')
         else:
@@ -277,6 +280,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
         self.corpus_prep_manager.prepare()
         train: Callable = self._get_train_method()
         if not dry_run:
+            logger.info(f'training model: {self.model_name}')
             train()
             self._compile_model()
             self._copy_model_files()

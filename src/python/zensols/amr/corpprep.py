@@ -8,12 +8,13 @@ from dataclasses import dataclass, field
 from abc import ABCMeta, abstractmethod
 import logging
 import random
+import sys
 import re
 from itertools import chain
 import collections
 import json
-from pathlib import Path
 from io import TextIOBase
+from pathlib import Path
 import shutil
 from zensols.util.time import time
 from zensols.config import Dictable
@@ -97,7 +98,7 @@ class SingletonCorpusPrepper(CorpusPrepper):
     def read_docs(self, target: Path) -> Iterable[Tuple[str, AmrDocument]]:
         corp_file: Path = self.installer.get_singleton_path()
         doc: AmrDocument = self._load_doc(corp_file)
-        sents: Tuple[AmrSentence] = doc.sents
+        sents: Tuple[AmrSentence, ...] = doc.sents
         n_sents: int = len(doc)
         n_dev: int = round(self.dev_portion * n_sents)
         dev: AmrDocument = doc.from_sentences(sents[:n_dev])
@@ -136,7 +137,7 @@ class CorpusPrepperManager(Dictable):
     name: str = field()
     """Name of application configuration instance for debugging."""
 
-    preppers: Tuple[CorpusPrepper] = field()
+    preppers: Tuple[CorpusPrepper, ...] = field()
     """The corpus prepare instances used to create the training files."""
 
     stage_dir: Path = field()
@@ -188,12 +189,12 @@ class CorpusPrepperManager(Dictable):
         writer.write('\n')
 
     def _write_key_splits(self, sents: Dict[str, List[AmrSentence]]):
-        def map_keys(sent: AmrSentence) -> Tuple[str]:
+        def map_keys(sent: AmrSentence) -> Tuple[str, ...]:
             meta: Dict[str, str] = sent.metadata
             if 'id' in meta:
                 return meta['id']
 
-        keys: Dict[str, Tuple[str]] = {}
+        keys: Dict[str, Tuple[str, ...]] = {}
         logger.info('creating key splits...')
         split_name: str
         sent_set: List[AmrSentence]
@@ -282,7 +283,7 @@ class CorpusPrepperManager(Dictable):
             if id_pattern is not None:
                 ids = filter(
                     lambda id: re.match(id_pattern, id) is not None, ids)
-            sents: Tuple[AmrSentence] = tuple(map(lambda i: by_id[i], ids))
+            sents: Tuple[AmrSentence, ...] = tuple(map(lambda i: by_id[i], ids))
             with open(split_file, 'w') as f:
                 self._write_sents(f, sents)
             logger.info(f'wrote: {split_file}')
@@ -310,6 +311,17 @@ class CorpusPrepperManager(Dictable):
             shutil.rmtree(self.stage_dir)
         else:
             logger.info('no corpus preparation found')
+
+    def write(self, depth: int = 0, writer: TextIOBase = sys.stdout):
+        dct: Dict[str, Any] = self.asdict()
+        del dct['preppers']
+        self._write_dict(dct, depth, writer)
+        self._write_line('preppers:', depth, writer)
+        prep: CorpusPrepper
+        for prep in self.preppers:
+            pdct: Dict[str, Any] = prep.asdict()
+            self._write_line(f"{pdct.pop('name')}:", depth + 1, writer)
+            self._write_dict(pdct, depth + 2, writer)
 
     def __str__(self) -> str:
         return self.name
