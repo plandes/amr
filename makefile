@@ -91,10 +91,10 @@ testmodel:
 # evaluation model "EVAL_MODEL"
 .PHONY:			evalmodel
 evalmodel:
-#			$(ABIN) prep
-#			$(ABIN) parsefile $(EVAL_FILE) \
-#				--config $(MODEL_CONF_DIR)/inference.conf \
-#				--override amr_default.parse_model=$(EVAL_MODEL)
+			$(ABIN) prep
+			$(ABIN) parsefile $(EVAL_FILE) \
+				--config $(MODEL_CONF_DIR)/inference.conf \
+				--override amr_default.parse_model=$(EVAL_MODEL)
 			$(ABIN) score $(EVAL_FILE) \
 				--config $(MODEL_CONF_DIR)/inference.conf \
 				--override amr_default.parse_model=$(EVAL_MODEL)
