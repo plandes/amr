@@ -14,7 +14,7 @@ MODELS="\
 	parse-xfm-large"
 
 # TODO
-MODELS=generate-t5wtense-base
+MODELS=generate-t5wtense-large
 
 
 init() {

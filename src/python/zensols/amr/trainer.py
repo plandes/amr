@@ -481,7 +481,7 @@ class T5WithTenseGeneratorTrainer(XfmTrainer):
         raw_paths: List[Path, Path] = self._get_relative_paths()[1:]
         stage_dir: Path = self.corpus_prep_manager.stage_dir
         # load the spacy model with the desired model
-        load_spacy('en_core_web_sm')
+        load_spacy('en_core_web_lg')
         # run the pipeline
         path: Path
         for path in raw_paths:
@@ -500,10 +500,11 @@ class T5WithTenseGeneratorTrainer(XfmTrainer):
         """
         from tqdm import tqdm
         from amrlib.graph_processing.amr_loading import load_amr_entries
-        from amrlib.models.generate_xfm.model_input_helper import ModelInputHelper
+        from amrlib.models.generate_xfm.model_input_helper \
+            import ModelInputHelper
         entries = load_amr_entries(str(self._anon_train))
         tagged_entries = []
-        logger.info(f'tagging {len(entries)} entries')
+        logger.info(f'tagging {len(entries)} entries from: {self._anon_train}')
         for entry in tqdm(entries):
             tagged_entry = ModelInputHelper(entry).get_tagged_with_meta()
             tagged_entries.append(tagged_entry)
