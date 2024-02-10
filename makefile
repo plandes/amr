@@ -23,6 +23,7 @@ MODEL_CONF_DIR = 	train-config
 MODEL_FILE =		corpus/amr-bank-struct-v3.0.txt
 EVAL_FILE = 		target/corp/stage/dev/dev.txt
 ABIN =			./amr
+INF_CONF = 		resources/model/inference.conf
 
 
 ## Project data
@@ -85,18 +86,15 @@ trainmodel:
 # inference a new trained model
 .PHONY:			testmodel
 testmodel:
-			$(ABIN) --config $(MODEL_CONF_DIR)/inference.conf \
-				parse $(TEST_TEXT)
+			$(ABIN) --config $(INF_CONF) parse $(TEST_TEXT)
 
 # evaluation model "EVAL_MODEL"
 .PHONY:			evalmodel
 evalmodel:
 			$(ABIN) prep
-			$(ABIN) parsefile $(EVAL_FILE) --limit 30 \
-				--config $(MODEL_CONF_DIR)/inference.conf \
+			$(ABIN) parsefile $(EVAL_FILE) --config $(INF_CONF) \
 				--override amr_default.parse_model=$(EVAL_MODEL)
-			$(ABIN) score $(EVAL_FILE) \
-				--config $(MODEL_CONF_DIR)/inference.conf \
+			$(ABIN) score $(EVAL_FILE) --config $(INF_CONF) \
 				--override amr_default.parse_model=$(EVAL_MODEL)
 
 # evaluate the corpus on the trained little prince corpus (test)
