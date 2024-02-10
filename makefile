@@ -92,7 +92,7 @@ testmodel:
 .PHONY:			evalmodel
 evalmodel:
 			$(ABIN) prep
-			$(ABIN) parsefile $(EVAL_FILE) \
+			$(ABIN) parsefile $(EVAL_FILE) --limit 30 \
 				--config $(MODEL_CONF_DIR)/inference.conf \
 				--override amr_default.parse_model=$(EVAL_MODEL)
 			$(ABIN) score $(EVAL_FILE) \
