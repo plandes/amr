@@ -6,8 +6,15 @@
 
 BACKGROUND=0
 TARGET_DIR=target/trainall
-#MODELS="parse-spring parse-xfm-base parse-t5 generate-t5wtense"
-MODELS="parse-spring"
+MODELS="\
+	parse-spring
+	generate-t5wtense-base \
+	generate-t5wtense-large \
+	parse-xfm-base \
+	parse-xfm-large"
+
+# TODO
+MODELS=generate-t5wtense-base
 
 
 init() {
@@ -27,6 +34,7 @@ preppers = instance: tuple:
   amr_prep_rel3_corp_prepper
 EOF
 }
+
 
 train_model() {
     echo "training model ${MODEL}..."

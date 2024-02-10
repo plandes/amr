@@ -548,6 +548,9 @@ class _ProtoApplication(object):
 
     def _prep(self):
         prepper = self.config_factory('amr_prep_manager')
+        if 1:
+            prepper.write()
+            return
         if 0:
             prepper.clear()
             prepper.prepare()
@@ -561,7 +564,7 @@ class _ProtoApplication(object):
         doc = parser('Obama was the 44th president last year. He is no longer.')
         doc.write()
 
-    def proto(self, run: int = 0):
+    def proto(self, run: int = 3):
         {0: self._tmp,
          1: self._generate,
          2: self._prep,

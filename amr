@@ -11,8 +11,8 @@ if (__name__ == '__main__'):
         2: 'parse-xfm-base',
         3: 'parse-t5',
         4: 'parse-spring',
-        5: 'generate-t5wtense',
-    }[0]
+        5: 'generate-t5wtense-base',
+    }[5]
     if model is not None:
         args = f' -c train-config/{model}.conf'
     harness = CliHarness(

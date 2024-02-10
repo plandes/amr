@@ -17,8 +17,8 @@ amr_prep_lp_corp_installer:
 
 amr_prep_lp_corp_prepper:
   class_name: zensols.amr.corpprep.SingletonCorpusPrepper
-  installer: 'instance: amr_prep_lp_corp_installer'
   name: little-prince
+  installer: 'instance: amr_prep_lp_corp_installer'
   dev_portion: 0.15
 
 
@@ -36,8 +36,8 @@ amr_prep_bio3_corp_installer:
 
 amr_prep_bio3_corp_prepper:
   class_name: zensols.amr.corpprep.SingletonCorpusPrepper
-  installer: 'instance: amr_prep_bio3_corp_installer'
   name: bio3
+  installer: 'instance: amr_prep_bio3_corp_installer'
   dev_portion: 0.15
 
 
@@ -65,10 +65,10 @@ amr_prep_manager:
   class_name: zensols.amr.corpprep.CorpusPrepperManager
   stage_dir: 'path: ${amr_trainer_default:corpus_stage_dir}'
   key_splits: 'path: ${amr_trainer_default:corpus_stage_dir}/../corpus-splits.json'
-  # by default, only enable the (small) little prince corpus for testing
-  #preppers: 'instance: tuple: amr_prep_lp_corp_prepper'
-  # uncomment if you have the AMR 3.0 corpus (add to root level 'download' directory)
+  # all corpora, including the AMR 3.0 corpus (add to root level 'download' directory)
   preppers: 'instance: tuple: amr_prep_lp_corp_prepper, amr_prep_bio3_corp_prepper, amr_prep_rel3_corp_prepper'
+  # for testing: only enable the (small) little prince corpus
+  #preppers: 'instance: tuple: amr_prep_lp_corp_prepper'
 
 
 ### Corpus trainers
@@ -109,3 +109,7 @@ amr_generate_t5wtense_trainer:
   output_model_dir: 'path: ${amr_trainer_default:output_model_dir}'
   package_dir: 'path: ${amr_trainer_default:package_dir}'
   nltk_lib_dir: 'path: ${default:temporary_dir}/nltk'
+  # relative path to the corpus prepared extracted files
+  annotate_dir: >-
+    eval: Path('${default:temporary_dir}/corp/stage/../gen-annotate').resolve().\
+          relative_to(Path('${default:root_dir}').absolute())

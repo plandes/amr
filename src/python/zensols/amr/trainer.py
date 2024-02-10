@@ -4,11 +4,12 @@
 """
 from __future__ import annotations
 __author__ = 'Paul Landes'
-from typing import Dict, Tuple, Set, Any, Type, Union, ClassVar, Callable
+from typing import Dict, List, Tuple, Set, Any, Type, Union, ClassVar, Callable
 from dataclasses import dataclass, field
 from abc import ABCMeta, abstractmethod
 import logging
 import json
+import random
 import re
 import os
 import copy as cp
@@ -264,12 +265,7 @@ class Trainer(Dictable, metaclass=ABCMeta):
             torch.cuda.manual_seed(seed)
             torch.cuda.manual_seed_all(0)
 
-    def train(self, dry_run: bool = False):
-        """Train the model (see class docs).
-
-        :param dry_run: when ``True``, don't do anything, just act like it.
-
-        """
+    def _prepare_train(self):
         self.write_to_log(logger)
         dir_path: Path
         for dir_path in (self.temporary_dir, self.output_dir):
@@ -278,6 +274,14 @@ class Trainer(Dictable, metaclass=ABCMeta):
                 shutil.rmtree(dir_path)
         self._init_random()
         self.corpus_prep_manager.prepare()
+
+    def train(self, dry_run: bool = False):
+        """Train the model (see class docs).
+
+        :param dry_run: when ``True``, don't do anything, just act like it.
+
+        """
+        self._prepare_train()
         train: Callable = self._get_train_method()
         if not dry_run:
             logger.info(f'training model: {self.model_name}')
@@ -439,6 +443,15 @@ class T5WithTenseGeneratorTrainer(XfmTrainer):
     nltk_lib_dir: Path = field(default=None)
     """Where to install the punkt tokenizer used by the trainer."""
 
+    annotate_dir: Path = field(default=None)
+    """"""
+
+    def __post_init__(self):
+        super().__post_init__()
+        self._anon_train: Path = self.annotate_dir / 'training' / 'training.txt'
+        self._anon_eval: Path = self.annotate_dir / 'dev' / 'dev.txt'
+        self._tag_train: Path = self.annotate_dir / 'training' / 'tagged.txt'
+
     def _get_pg(self) -> str:
         return 'generate'
 
@@ -459,9 +472,66 @@ class T5WithTenseGeneratorTrainer(XfmTrainer):
         nltk.download('punkt', download_dir=str(self.nltk_lib_dir.absolute()))
         nltk.data.path.append(str(self.nltk_lib_dir.absolute()))
 
-    def train(self, dry_run: bool = False):
+    def _annotate(self):
+        """Annotate AMR graphs with tokens, POS tags and lemmas as done in
+        :mod:`amrlib` ``10_Annotate_Corpus.py``.
+
+        """
+        from amrlib.graph_processing.annotator import annotate_file, load_spacy
+        raw_paths: List[Path, Path] = self._get_relative_paths()[1:]
+        stage_dir: Path = self.corpus_prep_manager.stage_dir
+        # load the spacy model with the desired model
+        load_spacy('en_core_web_sm')
+        # run the pipeline
+        path: Path
+        for path in raw_paths:
+            raw_path: Path = stage_dir / path
+            anon_path: Path = self.annotate_dir / path
+            anon_path.parent.mkdir(parents=True, exist_ok=True)
+            logger.info(f'annotating {raw_path} -> {anon_path}')
+            annotate_file('.', str(raw_path), '.', str(anon_path))
+
+    def _tag(self):
+        """From :mod:`amrlib` ``14_Create_Training_Data.py``: Take graphs that
+        are annotated (tokens, pos, ...) and align them then tag the graphs.
+        Save files with the tagged and untagged data together in a single
+        training file.
+
+        """
+        from tqdm import tqdm
+        from amrlib.graph_processing.amr_loading import load_amr_entries
+        from amrlib.models.generate_xfm.model_input_helper import ModelInputHelper
+        entries = load_amr_entries(str(self._anon_train))
+        tagged_entries = []
+        logger.info(f'tagging {len(entries)} entries')
+        for entry in tqdm(entries):
+            tagged_entry = ModelInputHelper(entry).get_tagged_with_meta()
+            tagged_entries.append(tagged_entry)
+        # save the tagged and untagged entries into a single file, shuffled
+        # together
+        all_entries = entries + tagged_entries
+        random.shuffle(all_entries)
+        with open(self._tag_train, 'w') as f:
+            for entry in all_entries:
+                f.write(entry + '\n\n')
+        logger.info(f'wrote: {self._tag_train}')
+
+    def _populate_training_config(self, config: Dict[str, Any]):
+        anon_dir: Path = self.annotate_dir
+        super()._populate_training_config(config)
+        config['gen_args']['corpus_dir'] = str(anon_dir)
+        config['gen_args']['train_fn'] = \
+            str(self._tag_train.relative_to(anon_dir))
+        config['gen_args']['eval_fn'] = \
+            str(self._anon_eval.relative_to(anon_dir))
+        return config
+
+    def _prepare_train(self):
+        super()._prepare_train()
         self._install_deps()
-        super().train(dry_run)
+        if not self.annotate_dir.is_dir():
+            self._annotate()
+            self._tag()
 
 
 @dataclass
