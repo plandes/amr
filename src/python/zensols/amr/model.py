@@ -159,7 +159,8 @@ class AmrParser(ModelContainer, ComponentInitializer):
 
     @classmethod
     def add_metadata(cls: Type, amr_sent: AmrSentence,
-                     sent: Union[TokenContainer, Span]):
+                     sent: Union[TokenContainer, Span],
+                     clobber: bool = False):
         """Add missing annotation metadata parsed from spaCy if missing, which
         happens in the case of using the T5 AMR model.
 
@@ -167,39 +168,11 @@ class AmrParser(ModelContainer, ComponentInitializer):
 
         :param sent: the spacCy sentence used as the source
 
+        :param clobber: whether or not to overwrite any existing metadata fields
+
         :see: :meth:`is_missing_metadata`
 
         """
-        if isinstance(sent, TokenContainer):
-            cls._add_metadata_cont(amr_sent, sent)
-        else:
-            cls._add_metadata_spacy(amr_sent, sent)
-
-    @staticmethod
-    def _add_metadata_cont(amr_sent: AmrSentence, sent: TokenContainer):
-        def map_ent(t: Token) -> str:
-            et = t.ent_
-            return 'O' if et == FeatureToken.NONE else et
-
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f'add metadata from token container: {amr_sent}')
-        toks: Tuple[str] = tuple(sent.norm_token_iter())
-        amr_sent.set_metadata('tokens', json.dumps(toks))
-        if hasattr(sent[0], 'lemma_'):
-            lms: Tuple[str] = tuple(map(lambda t: t.lemma_, sent.tokens))
-            amr_sent.set_metadata('lemmas', json.dumps(lms))
-        if hasattr(sent[0], 'ent_'):
-            ents: Tuple[str] = tuple(map(map_ent, sent))
-            amr_sent.set_metadata('ner_tags', json.dumps(ents))
-        if hasattr(sent[0], 'tag_'):
-            pt: Tuple[str] = tuple(map(lambda t: t.tag_, sent))
-            amr_sent.set_metadata('pos_tags', json.dumps(pt))
-        if hasattr(sent[0], 'ent_iob_'):
-            iob: Tuple[str] = tuple(map(lambda t: t.ent_iob_, sent))
-            amr_sent.set_metadata('ner_iob', json.dumps(iob))
-
-    @staticmethod
-    def _add_metadata_spacy(amr_sent: AmrSentence, sent: Span):
         def map_ent(t: Token) -> str:
             et = t.ent_type_
             return 'O' if len(et) == 0 else et
@@ -210,19 +183,25 @@ class AmrParser(ModelContainer, ComponentInitializer):
 
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'add metadata from spacy span: {amr_sent}')
-        toks = tuple(map(lambda t: t.orth_, sent))
-        lms = tuple(map(lambda t: t.lemma_, sent))
-        amr_sent.set_metadata('tokens', json.dumps(toks))
-        amr_sent.set_metadata('lemmas', json.dumps(lms))
-        if hasattr(sent[0], 'ent_type_'):
+
+        meta: Dict[str, str] = amr_sent.metadata
+        tok: Token = sent[0]
+        if clobber or 'tokens' not in meta:
+            toks = tuple(map(lambda t: t.orth_, sent))
+            amr_sent.set_metadata('tokens', json.dumps(toks))
+        if clobber or 'lemmas' not in meta:
+            lms = tuple(map(lambda t: t.lemma_, sent))
+            amr_sent.set_metadata('lemmas', json.dumps(lms))
+        if (clobber or 'ner_tags' not in meta) and hasattr(tok, 'ent_type_'):
             ents = tuple(map(map_ent, sent))
             amr_sent.set_metadata('ner_tags', json.dumps(ents))
-        if hasattr(sent[0], 'tag_'):
+        if (clobber or 'pos_tags' not in meta) and hasattr(tok, 'tag_'):
             pt = tuple(map(lambda t: t.tag_, sent))
             amr_sent.set_metadata('pos_tags', json.dumps(pt))
-        if hasattr(sent[0], 'ent_iob_'):
+        if (clobber or 'ner_iob' not in meta) and hasattr(tok, 'ent_iob_'):
             iob: Tuple[str] = tuple(map(map_ent_iob, sent))
             amr_sent.set_metadata('ner_iob', json.dumps(iob))
+        amr_sent.meta = meta
 
     def __call__(self, doc: Doc) -> Doc:
         if logger.isEnabledFor(logging.DEBUG):
