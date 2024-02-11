@@ -20,12 +20,11 @@ from penman import Graph
 from zensols.persist import persisted, PersistedWork, Stash, PrimeableStash
 from zensols.config import Writable
 from zensols.install import Installer
-from zensols.nlp import FeatureSentence, FeatureDocument, FeatureDocumentParser
+from zensols.nlp import FeatureDocumentParser
 from . import (
-    AmrError, AmrFailure, AmrDocument, AmrSentence,
-    AmrFeatureSentence, AmrFeatureDocument,
+    AmrError, AmrDocument, AmrSentence, AmrFeatureSentence, AmrFeatureDocument
 )
-from .model import AmrParser
+from .model import AmrParser, AmrFeatureDocumentFactory
 from .coref import CoreferenceResolver
 from .docparser import AnnotationFeatureDocumentParser
 
@@ -515,11 +514,9 @@ class AnnotatedAmrFeatureDocumentStash(PrimeableStash):
     are *stitched* together.
 
     """
-    doc_parser: FeatureDocumentParser = field()
-    """The document parser used to create the language
-    :class:`~zensols.nlp.container.FeatureDocument`.  This should not be a
-    parser that generates :class:`.AmrFeatureDocument` instances (see class
-    docs).
+    feature_doc_factory: AmrFeatureDocumentFactory = field()
+    """Creates :class:`.AmrFeatureDocument` from :class:`.AmrDocument`
+    instances.
 
     """
     doc_stash: Stash = field()
@@ -541,7 +538,7 @@ class AnnotatedAmrFeatureDocumentStash(PrimeableStash):
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'loaded: {doc_id}: {doc}')
         if doc is None:
-            doc = self.to_feature_doc(amr_doc)
+            doc = self.feature_doc_factory.to_feature_doc(amr_doc)
             # clear the amr document so it isn't persisted; this is set in
             # :meth:`to_feature_doc` for client use
             doc.amr = None
@@ -556,60 +553,6 @@ class AnnotatedAmrFeatureDocumentStash(PrimeableStash):
         if self.coref_resolver is not None:
             self.coref_resolver(doc)
         return doc
-
-    def to_feature_doc(self, amr_doc: AmrDocument, catch: bool = False) -> \
-            Union[AmrFeatureDocument,
-                  Tuple[AmrFeatureDocument, List[AmrFailure]]]:
-        """Create a :class:`.AmrFeatureDocument` from a class:`.AmrDocument` by
-        parsing the ``snt`` metadata with a
-        :class:`~zensols.nlp.parser.FeatureDocumentParser`.
-
-        :param catch: if ``True``, return caught exceptions creating a
-                      :class:`.AmrFailure` from each and return them
-
-        :return: an AMR feature document if ``catch`` is ``False``; otherwise, a
-                 tuple of a document with sentences that were successfully
-                 parsed and a list any exceptions raised during the parsing
-
-        """
-        sents: List[AmrFeatureSentence] = []
-        fails: List[AmrFailure] = []
-        amr_doc_text: str = None
-        amr_sent: AmrSentence
-        for amr_sent in amr_doc.sents:
-            sent_text: str = None
-            ex: Exception = None
-            try:
-                # force white space tokenization to match the already tokenized
-                # metadata ('tokens' key); examples include numbers followed by
-                # commas such as dates like "April 25 , 2008"
-                sent_text = amr_sent.tokenized_text
-                sent_doc: FeatureDocument = self.doc_parser(sent_text)
-                sent: FeatureSentence = sent_doc.to_sentence(
-                    contiguous_i_sent=True)
-                sent = sent.clone(cls=AmrFeatureSentence, amr=None)
-                sents.append(sent)
-            except Exception as e:
-                fails.append(AmrFailure(e, sent=sent_text))
-                ex = e
-            if ex is not None and not catch:
-                raise ex
-        try:
-            amr_doc_text = amr_doc.text
-        except Exception as e:
-            if not catch:
-                raise e
-            else:
-                amr_doc_text = f'erorr: {e}'
-                logger.error(f'could not parse AMR document text: {e}', e)
-        doc = AmrFeatureDocument(
-            sents=tuple(sents),
-            text=amr_doc_text,
-            amr=amr_doc)
-        if catch:
-            return doc, tuple(fails)
-        else:
-            return doc
 
     def keys(self) -> Iterable[str]:
         return self.amr_stash.keys()

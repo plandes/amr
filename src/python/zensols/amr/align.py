@@ -111,7 +111,7 @@ class AmrAlignmentPopulator(object):
     """The aligner used to annotate sentence AMR graphs."""
 
     add_missing_metadata: bool = field(default=True)
-    """Whether to add missing metadata to sentences when missing."""
+    """Whether to add missing annotation metadata to sentences when missing."""
 
     def __post_init__(self):
         if isinstance(self.aligner, str):
@@ -153,7 +153,8 @@ class AmrAlignmentPopulator(object):
                 if logger.isEnabledFor(logging.INFO):
                     logger.info(f'AMR already has alignments--skipping: {sent}')
             elif not sent.has_alignments:
-                if self.add_missing_metadata and AmrParser.needs_metadata(sent):
+                if self.add_missing_metadata and \
+                   AmrParser.is_missing_metadata(sent):
                     if spacy_sent is None:
                         raise AmrError('No spacy sentence span available')
                     if logger.isEnabledFor(logging.INFO):

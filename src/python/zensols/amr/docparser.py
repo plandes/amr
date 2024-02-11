@@ -166,7 +166,7 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
     configuration and annotated the graph yourself.
 
     The AMR graphs are optionally cached using a
-    :class:`~zensols.persist.Stash` when :obj:`stash` is set.
+    :class:`~zensols.persist.domain.Stash` when :obj:`stash` is set.
 
     **Important:** when using stash caching only the :class:`.AmrDocument` is
     cached and not the entire feature document.  This could lead to the

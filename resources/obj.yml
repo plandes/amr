@@ -29,14 +29,12 @@ split_hyphen_token_mapper:
   class_name: zensols.nlp.SplitTokenMapper
   regex: "r'([-])'"
 
-# split entity tokens for alignment and feature annotation
+# split entity tokens for alignment and feature annotation (see amr_base_doc_parser)
 amr_map_filter_token_normalizer:
   class_name: zensols.nlp.MapTokenNormalizer
   embed_entities: false
   mapper_class_list:
     - filter_token_mapper
-#    - split_space_token_mapper
-#    - split_hyphen_token_mapper
 
 # used to parse and populate AMR graphs
 amr_pipeline_doc_parser:
@@ -56,6 +54,18 @@ amr_human_anon_doc_parser:
   sent_class: 'class: zensols.amr.AmrFeatureSentence'
   components: 'instance: list: remove_sent_boundaries_component, amr_parser_component'
   reload_components: true
+
+# base document parser that splits on entities; this (token normalizer)
+# document parser instance is configured with embedded entities turned off so
+# whitespace delimited tokens match with the alignments
+amr_base_doc_parser:
+  class_name: zensols.amr.model.EntityCopySpacyFeatureDocumentParser
+  token_normalizer: 'instance: amr_map_filter_token_normalizer'
+
+# creates feature docs from amr docs
+amr_feature_doc_factory:
+  class_name: zensols.amr.model.AmrFeatureDocumentFactory
+  doc_parser: 'instance: amr_base_doc_parser'
 
 
 ## Plotting and writing

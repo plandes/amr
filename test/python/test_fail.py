@@ -24,16 +24,16 @@ class TestApplication(unittest.TestCase):
     def test_parse(self):
         app: Application = self._app(self._DEFAULT_TEST)
         self.assertEqual(Application, type(app))
-        astash = app.config_factory('amr_anon_feature_doc_stash')
+        doc_fac = app.config_factory('amr_feature_doc_factory')
         sent = AmrSentence('(h / have-org-role-91 :ARG0 (h2 / he :toki1 "34"))')
         sent.set_metadata('snt', 'Test sentence.')
         doc = AmrDocument([sent])
         sent.graph_string = '(h / have-org-role-91'
         with self.assertRaisesRegex(AmrError, "^Could not parse"):
-            astash.to_feature_doc(doc, catch=False)
+            doc_fac.to_feature_doc(doc, catch=False)
         fdoc: AmrFeatureDocument
         fails: Tuple[AmrFailure]
-        fdoc, fails = astash.to_feature_doc(doc, catch=True)
+        fdoc, fails = doc_fac.to_feature_doc(doc, catch=True)
         self.assertTrue(isinstance(fdoc, AmrFeatureDocument))
         self.assertEqual(tuple, type(fails))
         self.assertEqual(1, len(fails))
