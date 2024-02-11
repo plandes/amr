@@ -2,7 +2,7 @@
 
 """This example shows how to use the AMR API using a custom application context.
 This is useful when you want to customize the parser, such as using limited
-token features as given in the ``amr_pipline_doc_parser`` overridden section,
+token features as given in the ``amr_pipeline_doc_parser`` overridden section,
 which is used in place of the default ``amr_anon_doc_parser``.  The latter
 caches AMR parses and reuses them when reparsing the same text.
 
@@ -48,14 +48,14 @@ config_files = list:
   resource(zensols.amr): resources/align.yml
 
 # override the parse to keep only the norm, ent
-[amr_pipline_doc_parser]
+[amr_pipeline_doc_parser]
 token_feature_ids = eval: set('ent_ tag_'.split())
 
 [app]
 class_name = ${program:name}.Application
 # uncomment the following line and comment the one after to use a caching parser
 #doc_parser = instance: amr_anon_doc_parser
-doc_parser = instance: amr_pipline_doc_parser
+doc_parser = instance: amr_pipeline_doc_parser
 """
 
 

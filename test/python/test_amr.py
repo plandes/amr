@@ -105,7 +105,7 @@ Party, he was the first African-American president of the United States.\
     def test_parse(self):
         app: Application = self._get_model_app(self._DEFAULT_TEST)
         self.assertEqual(Application, type(app))
-        doc_parser = app.config_factory('amr_pipline_doc_parser')
+        doc_parser = app.config_factory('amr_pipeline_doc_parser')
         spacy_doc = doc_parser.parse_spacy_doc(self.sent)
         self.assertEqual(Doc, type(spacy_doc))
         doc = spacy_doc._.amr
@@ -116,7 +116,7 @@ Party, he was the first African-American president of the United States.\
 
     def test_pickle(self):
         app: Application = self._get_model_app(self._DEFAULT_TEST)
-        doc_parser = app.config_factory('amr_pipline_doc_parser')
+        doc_parser = app.config_factory('amr_pipeline_doc_parser')
         spacy_doc = doc_parser.parse_spacy_doc(self.sent)
         doc = spacy_doc._.amr
         self._test_doc(doc)
@@ -130,7 +130,7 @@ Party, he was the first African-American president of the United States.\
 
     def test_doc_clone(self):
         app: Application = self._get_model_app(self._DEFAULT_TEST)
-        doc_parser = app.config_factory('amr_pipline_doc_parser')
+        doc_parser = app.config_factory('amr_pipeline_doc_parser')
         spacy_doc = doc_parser.parse_spacy_doc(self.sent)
         doc: AmrDocument = spacy_doc._.amr
         sent = doc[0]

@@ -39,7 +39,7 @@ amr_map_filter_token_normalizer:
 #    - split_hyphen_token_mapper
 
 # used to parse and populate AMR graphs
-amr_pipline_doc_parser:
+amr_pipeline_doc_parser:
   class_name: zensols.nlp.SpacyFeatureDocumentParser
   token_normalizer: 'instance: amr_map_filter_token_normalizer'
   doc_class: 'class: zensols.amr.AmrFeatureDocument'
