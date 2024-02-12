@@ -235,7 +235,7 @@ class AmrParser(ModelContainer, ComponentInitializer):
                 amr_sent = AmrSentence(graph, model=self.model)
                 if self.add_missing_metadata and \
                    self.is_missing_metadata(amr_sent):
-                    self.add_metadata(amr_sent, sent)
+                    self.add_metadata(amr_sent, sent, clobber=True)
                 sent._.amr = amr_sent
                 sent_graphs.append(amr_sent)
         doc._.amr = AmrDocument(sent_graphs)
