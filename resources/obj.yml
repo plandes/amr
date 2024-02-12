@@ -59,12 +59,12 @@ amr_human_anon_doc_parser:
 # document parser instance is configured with embedded entities turned off so
 # whitespace delimited tokens match with the alignments
 amr_base_doc_parser:
-  class_name: zensols.amr.model.EntityCopySpacyFeatureDocumentParser
+  class_name: zensols.amr.docfac.EntityCopySpacyFeatureDocumentParser
   token_normalizer: 'instance: amr_map_filter_token_normalizer'
 
 # creates feature docs from amr docs
 amr_feature_doc_factory:
-  class_name: zensols.amr.model.AmrFeatureDocumentFactory
+  class_name: zensols.amr.docfac.AmrFeatureDocumentFactory
   doc_parser: 'instance: amr_base_doc_parser'
 
 

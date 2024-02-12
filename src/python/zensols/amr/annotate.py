@@ -24,9 +24,10 @@ from zensols.nlp import FeatureDocumentParser
 from . import (
     AmrError, AmrDocument, AmrSentence, AmrFeatureSentence, AmrFeatureDocument
 )
-from .model import AmrParser, AmrFeatureDocumentFactory
+from .model import AmrParser
 from .coref import CoreferenceResolver
 from .docparser import AnnotationFeatureDocumentParser
+from .docfac import AmrFeatureDocumentFactory
 
 logger = logging.getLogger(__name__)
 
