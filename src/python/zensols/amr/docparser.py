@@ -269,7 +269,7 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
             logger.debug(f'generated spacy doc: {sdoc}')
         self.amr_parser(sdoc)
         if self.alignment_populator is not None:
-            self.alignment_populator(sdoc)
+            self.alignment_populator.align(sdoc)
         return sdoc._.amr
 
     def annotate(self, doc: FeatureDocument) -> AmrFeatureDocument:

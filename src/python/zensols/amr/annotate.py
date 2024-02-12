@@ -458,7 +458,7 @@ class AnnotatedAmrDocumentStash(Stash):
             if self.doc_parser is not None:
                 self._add_metadata(doc)
             if self.doc_annotator.alignment_populator is not None:
-                self.doc_annotator.alignment_populator(doc)
+                self.doc_annotator.alignment_populator.align(doc)
         return doc
 
     def keys(self) -> Iterable[str]:
