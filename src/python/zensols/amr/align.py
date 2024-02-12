@@ -131,9 +131,10 @@ class AmrAlignmentPopulator(object):
             logger.info(f'aligning using: {self.aligner.NAME}')
         return True
 
-    def __call__(self, doc: Union[Doc, AmrDocument]) -> \
-            Union[Doc, AmrDocument]:
-        """Add alignment markers to sentence AMR graphs."""
+    def align(self, doc: Union[Doc, AmrDocument]):
+        """Add alignment markers to sentence AMR graphs.
+
+        """
         self._assert_module_log()
         spacy_sent: Span = None
         sent: Union[AmrSentence, AmrFailure, Span]
@@ -162,12 +163,20 @@ class AmrAlignmentPopulator(object):
                     AmrParser.add_metadata(sent, spacy_sent)
                 try:
                     if logger.isEnabledFor(logging.INFO):
-                        sent_str: str = tw.shorten(str(sent), width=60)
-                        logger.info(f'adding alignments to {sent_str}')
+                        sent_str: str = tw.shorten(str(sent), width=40)
+                        logger.info(f"adding alignments to '{sent_str}'")
                     self.aligner(sent)
                 except Exception as e:
                     logger.error(f'could not load align <{sent}>: {e}')
                     raise e
+
+
+@dataclass
+class _AmrAlignmentComponent(object):
+    populator: AmrAlignmentPopulator = field()
+
+    def __call__(self, doc: Union[Doc, AmrDocument]):
+        self.populator.align(doc)
         return doc
 
 
@@ -176,4 +185,4 @@ def create_amr_align_component(nlp: Language, name: str, aligner: str):
     """Create an instance of :class:`.AmrAlignmentPopulator`.
 
     """
-    return AmrAlignmentPopulator(aligner)
+    return _AmrAlignmentComponent(AmrAlignmentPopulator(aligner))
