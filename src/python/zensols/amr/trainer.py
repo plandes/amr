@@ -444,7 +444,10 @@ class T5WithTenseGeneratorTrainer(XfmTrainer):
     """Where to install the punkt tokenizer used by the trainer."""
 
     annotate_dir: Path = field(default=None)
-    """"""
+    """The directory to add the annotated graphs."""
+
+    annotate_model: str = field(default='en_core_web_sm')
+    """The spaCy model used to annotate graphs as features to the model."""
 
     def __post_init__(self):
         super().__post_init__()
@@ -477,14 +480,16 @@ class T5WithTenseGeneratorTrainer(XfmTrainer):
         :mod:`amrlib` ``10_Annotate_Corpus.py``.
 
         """
+        from tqdm import tqdm
         from amrlib.graph_processing.annotator import annotate_file, load_spacy
         raw_paths: List[Path, Path] = self._get_relative_paths()[1:]
         stage_dir: Path = self.corpus_prep_manager.stage_dir
         # load the spacy model with the desired model
-        load_spacy('en_core_web_lg')
+        logger.info(f'annotating graphs with model: {self.annotate_model}')
+        load_spacy(self.annotate_model)
         # run the pipeline
         path: Path
-        for path in raw_paths:
+        for path in tqdm(raw_paths):
             raw_path: Path = stage_dir / path
             anon_path: Path = self.annotate_dir / path
             anon_path.parent.mkdir(parents=True, exist_ok=True)
