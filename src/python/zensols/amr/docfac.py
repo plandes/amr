@@ -16,6 +16,7 @@ from . import (
     AmrFeatureSentence, AmrFeatureDocument,
 )
 from .model import AmrParser
+from .align import AmrAlignmentPopulator
 
 logger = logging.getLogger(__name__)
 
@@ -46,21 +47,31 @@ class AmrFeatureDocumentFactory(object):
     instances.
 
     """
+    name: str = field()
+    """The name of this factory in the application config."""
+
     doc_parser: FeatureDocumentParser = field()
     """The document parser used to creates :class:`.AmrFeatureDocument`
     instances.
 
     """
+    alignment_populator: AmrAlignmentPopulator = field(default=None)
+    """Adds the alighment markings."""
+
     def to_feature_doc(self, amr_doc: AmrDocument, catch: bool = False,
-                       add_metadata: bool = False) -> \
+                       add_metadata: Union[str, bool] = False,
+                       add_alignment: bool = False) -> \
             Union[AmrFeatureDocument,
                   Tuple[AmrFeatureDocument, List[AmrFailure]]]:
         """Create a :class:`.AmrFeatureDocument` from a class:`.AmrDocument` by
         parsing the ``snt`` metadata with a
         :class:`~zensols.nlp.parser.FeatureDocumentParser`.
 
-        :param add_metadata: add missing annotation metadata parsed from spaCy
-                             if missing (see :meth:`.AmrParser.add_metadata`)
+        :param add_metadata: add missing annotation metadata to ``amr_doc``
+                             parsed from spaCy if missing (see
+                             :meth:`.AmrParser.add_metadata`) if ``True`` and
+                             replace any previous metadata if this value is the
+                             string ``clobber``
 
         :param catch: if ``True``, return caught exceptions creating a
                       :class:`.AmrFailure` from each and return them
@@ -86,8 +97,15 @@ class AmrFeatureDocumentFactory(object):
                 sent: FeatureSentence = sent_doc.to_sentence(
                     contiguous_i_sent=True)
                 sent = sent.clone(cls=AmrFeatureSentence, amr=None)
-                if add_metadata:
-                    AmrParser.add_metadata(amr_sent, sent_doc.spacy_doc)
+                if add_metadata is not False:
+                    AmrParser.add_metadata(amr_sent, sent_doc.spacy_doc,
+                                           clobber=(add_metadata == 'clobber'))
+                if add_alignment:
+                    if self.alignment_populator is None:
+                        logger.warning(
+                            f'request alignment but no populator set in {self}')
+                    else:
+                        self.alignment_populator.align(amr_doc)
                 sents.append(sent)
             except Exception as e:
                 fails.append(AmrFailure(e, sent=sent_text))
@@ -110,3 +128,6 @@ class AmrFeatureDocumentFactory(object):
             return doc, tuple(fails)
         else:
             return doc
+
+    def __str__(self) -> str:
+        return self.name

@@ -20,3 +20,6 @@ amr_pipeline_doc_parser:
 
 amr_human_anon_doc_parser:
   components: 'instance: list: remove_sent_boundaries_component, amr_parser_component, amr_align_component'
+
+amr_feature_doc_factory:
+  alignment_populator: 'instance: amr_align_populator'
