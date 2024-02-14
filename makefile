@@ -93,6 +93,7 @@ testmodel:
 evalmodel:
 			$(ABIN) prep
 			$(ABIN) parsefile $(EVAL_FILE) --config $(INF_CONF) \
+				--limit 50 \
 				--override amr_default.parse_model=$(EVAL_MODEL)
 			$(ABIN) score $(EVAL_FILE) --config $(INF_CONF) \
 				--override amr_default.parse_model=$(EVAL_MODEL)
