@@ -8,9 +8,9 @@ from dataclasses import dataclass, field
 import logging
 from spacy.tokens import Span, Token
 from zensols.nlp import (
-    FeatureToken, FeatureSentence, FeatureDocument,
-    FeatureDocumentParser, SpacyFeatureDocumentParser,
+    FeatureToken, FeatureSentence, FeatureDocument, FeatureDocumentParser
 )
+from zensols.nlp.sparser import SpacyFeatureDocumentParser
 from . import (
     AmrFailure, AmrSentence, AmrDocument,
     AmrFeatureSentence, AmrFeatureDocument,

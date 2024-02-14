@@ -38,7 +38,7 @@ amr_map_filter_token_normalizer:
 
 # used to parse and populate AMR graphs
 amr_pipeline_doc_parser:
-  class_name: zensols.nlp.SpacyFeatureDocumentParser
+  class_name: zensols.nlp.sparser.SpacyFeatureDocumentParser
   token_normalizer: 'instance: amr_map_filter_token_normalizer'
   doc_class: 'class: zensols.amr.AmrFeatureDocument'
   sent_class: 'class: zensols.amr.AmrFeatureSentence'
@@ -48,7 +48,7 @@ amr_pipeline_doc_parser:
 # used for parsing human annotated AMR graphs with ``snt`` metadata, which is
 # useful for scoring
 amr_human_anon_doc_parser:
-  class_name: zensols.nlp.SpacyFeatureDocumentParser
+  class_name: zensols.nlp.sparser.SpacyFeatureDocumentParser
   token_normalizer: 'instance: amr_map_filter_token_normalizer'
   doc_class: 'class: zensols.amr.AmrFeatureDocument'
   sent_class: 'class: zensols.amr.AmrFeatureSentence'
