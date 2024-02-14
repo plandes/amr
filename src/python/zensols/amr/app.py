@@ -38,15 +38,11 @@ class Format(Enum):
 
 @dataclass
 class BaseApplication(object):
+    """Base class for applications.
+
+    """
     log_config: LogConfigurator = field()
     """Used to update logging levels based on the ran action."""
-
-    app_dependencies: Dict[str, str] = field()
-    """The name to instance mapping for getters/properties in this app class."""
-
-    def _get_app_dependency(self, name: str) -> Any:
-        sec: str = self.app_dependencies[name]
-        return self.config_factory(sec)
 
     def _normalize_huggingface_logging(self):
         """Make HF APIs using the logging system rather than to stdout."""
@@ -63,38 +59,6 @@ class BaseApplication(object):
             for n in 'persist multi install'.split():
                 logging.getLogger(f'zensols.{n}').setLevel(logging.INFO)
 
-    @property
-    def doc_parser(self) -> FeatureDocumentParser:
-        """The feature document parser for the app.  This is not done via the
-        application config to allow overriding of the defaults.
-
-        """
-        self._normalize_huggingface_logging()
-        sec: str = self.config_factory.config['amr_default']['doc_parser']
-        return self.config_factory(sec)
-
-    @property
-    def amr_parser(self) -> 'AmrParser':
-        """Parses natural language in to AMR graphs."""
-        self._normalize_huggingface_logging()
-        return self._get_app_dependency('amr_parser')
-
-    @property
-    def generator(self) -> 'AmrGenerator':
-        """The generator used to transform AMR graphs to natural language."""
-        self._normalize_huggingface_logging()
-        return self._get_app_dependency('generator')
-
-    @property
-    def anon_doc_stash(self) -> Stash:
-        """The annotated document stash."""
-        return self._get_app_dependency('anon_doc_stash')
-
-    @property
-    def dumper(self) -> 'Dumper':
-        """Plots and writes AMR content in human readable formats."""
-        return self._get_app_dependency('dumper')
-
 
 @dataclass
 class Application(BaseApplication):
@@ -102,7 +66,18 @@ class Application(BaseApplication):
 
     """
     config_factory: ConfigFactory = field()
-    """Application context."""
+    """Application context used by programmatic clients of this class."""
+
+    doc_parser: FeatureDocumentParser = field()
+    """The feature document parser for the app.  This is not done via the
+    application config to allow overriding of the defaults.
+
+    """
+    anon_doc_stash: Stash = field()
+    """The annotated document stash."""
+
+    dumper: 'Dumper' = field()
+    """Plots and writes AMR content in human readable formats."""
 
     def count(self, input_file: Path):
         """Provide counts on an AMR corpus file.
@@ -255,11 +230,11 @@ class ScorerApplication(BaseApplication):
     config_factory: ConfigFactory = field()
     """Application context."""
 
-    @property
-    def anon_doc_stash(self) -> Stash:
-        """The annotated document stash."""
-        return self._get_app_dependency('anon_doc_stash')
+    doc_factory: 'AmrFeatureDocumentFactory' = field()
+    """Creates :class:`.AmrFeatureDocument` from :class:`.AmrDocument`
+    instances.
 
+    """
     @staticmethod
     def _to_alt_path(path: Path, output_dir: Path, suffix: str) -> Path:
         output_file: str = f'{path.stem}{suffix}{path.suffix}'
@@ -363,7 +338,7 @@ class ScorerApplication(BaseApplication):
             Iterable[AmrSentence]:
         def map_sent(s: AmrSentence) -> AmrFeatureSentence:
             doc = AmrDocument.to_document([s])
-            return self.anon_doc_stash.to_feature_doc(doc).sents[0]
+            return self.doc_factory.to_feature_doc(doc).sents[0]
 
         return map(map_sent, sents)
 
@@ -417,6 +392,7 @@ class ScorerApplication(BaseApplication):
             methods=None if methods is None else set(methods.split(',')),
             correlation_ids=tuple(it.islice(ikeys, limit)))
         sset: ScoreSet = scorer.score(sctx)
+        output_file.parent.mkdir(parents=True, exist_ok=True)
         with open(output_file, 'w') as f:
             {
                 Format.txt: lambda: sset.write(writer=f),
@@ -509,12 +485,6 @@ class TrainerApplication(BaseApplication):
             id_pattern = re.compile(id_pattern)
         self.trainer.corpus_prep_manager.restore_splits(output_dir, id_pattern)
 
-    def clear(self):
-        """Clear all cached data."""
-        for to_clear in (self.doc_parser, self.anon_doc_stash):
-            logger.info(f'clearing {type(to_clear)}')
-            to_clear.clear()
-
 
 @dataclass
 class _ProtoApplication(object):
@@ -533,18 +503,10 @@ class _ProtoApplication(object):
         parser = self.config_factory('amr_anon_doc_parser')
         gen = self.config_factory('amr_generator')
         doc = parser('Obama was the 44th president last year. He is no longer.')
-        doc.write()
+        doc.amr.write()
         print('_' * 80)
         gdoc = gen(doc.amr)
         gdoc.write()
-
-    def _train(self):
-        if 0:
-            self.trainer_app.trainer.write()
-            return
-        if 1:
-            self.trainer_app.trainer.train()
-            return
 
     def _prep(self):
         prepper = self.config_factory('amr_prep_manager')
@@ -559,14 +521,63 @@ class _ProtoApplication(object):
             prepper.restore_splits(Path('tmp'))
             return
 
-    def _tmp(self):
-        parser = self.config_factory('amr_anon_doc_parser')
-        doc = parser('Obama was the 44th president last year. He is no longer.')
-        doc.write()
+    def _train(self):
+        if 0:
+            self.trainer_app.trainer.write()
+            return
+        if 1:
+            self.trainer_app.trainer.train()
+            return
 
-    def proto(self, run: int = 3):
+    def _parse(self):
+        parser = self.config_factory('amr_anon_doc_parser')
+        doc = parser('Barak Obama was the 44th president last year. He is no longer.')
+        doc[0].amr.write()
+
+    def _tmp(self):
+        if 0:
+            doc = self.config_factory('amr_base_doc_parser').parse('Barak Obama was the 44th president last year.')
+            ss = doc.sents[0].spacy_span
+            for t in ss:
+                print(t, t.ent_type_)
+            return
+        if 0:
+            doc = self.config_factory('amr_anon_doc_parser').parse('Barak Obama was the 44th president last year.')
+            doc[0].amr.write()
+            for t in doc[0]:
+                print(t, t.ent_)
+            return
+        if 1:
+            g = """\
+# ::snt Barak Obama was the 44th president last year.
+(p0 / person
+    :ord (o0 / ordinal-entity
+             :value 14)
+    :time (y0 / year
+              :mod (l0 / last))
+    :ARG0-of (h0 / have-org-role-91
+                 :ARG2 (p1 / president))
+    :name (n0 / name
+              :op2 "Obama"
+              :op1 "Barak"))"""
+            doc_fac = self.config_factory('amr_feature_doc_factory')
+            sent = AmrSentence(g)
+            fdoc = doc_fac.to_feature_doc(
+                amr_doc=AmrDocument((sent,)),
+                add_metadata=True,
+                add_alignment=True)
+            print(fdoc.entities)
+            for t in fdoc[0]:
+                print(t, t.ent_)
+                #t.write()
+            #fdoc.tokens[0].write()
+            #print(doc_fac)
+            fdoc.amr.write()
+
+    def proto(self, run: int = 1):
         {0: self._tmp,
          1: self._generate,
          2: self._prep,
          3: self._train,
+         4: self._parse,
          }[run]()
