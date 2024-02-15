@@ -99,9 +99,10 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
                 gtok: str = graph_tokens[tix]
                 # alignment (AMR and feature normalization) sanity check
                 if td.norm != gtok:
-                    s = (f'misalignment index {tix}: <{td.norm}> != ' +
-                         f'<{gtok}> in {sent} vs. {graph_tokens}')
-                    logger.warning(s)
+                    if logger.isEnabledFor(logging.WARNING):
+                        logger.warning(
+                            f'misalignment index {tix}: <{td.norm}> != ' +
+                            f'<{gtok}> in {sent} vs. {graph_tokens}')
                 if logger.isEnabledFor(logging.DEBUG):
                     logger.debug(f'token: {tix} -> {td}')
                 self._annotate_token(td, source, feat_trips, graph)
@@ -186,9 +187,9 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
     """Adds coreferences between the sentences of the document."""
 
     reparse: bool = field(default=True)
-    """Reparse the normalized :class:`~zensols.nlp.FeatureSentence` text for
-    each AMR sentence, which is necessary when tokens are remove (i.e. stop
-    words).  See the class docs.
+    """Reparse the normalized :class:`~zensols.nlp.container.FeatureSentence`
+    text for each AMR sentence, which is necessary when tokens are remove
+    (i.e. stop words).  See the class docs.
 
     """
     amr_doc_class: Type[AmrFeatureDocument] = field(default=AmrFeatureDocument)
@@ -253,12 +254,15 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
         correctly.
 
         """
+        sdoc: Doc
         fdoc.update_indexes()
         if fdoc.spacy_doc is None:
-            raise AmrParseError('Expecting spaCy doc present')
-        # add spacy_token back to tokens
-        fdoc.set_spacy_doc(fdoc.spacy_doc)
-        sdoc: Doc = SpacyDocAdapter(fdoc)
+            logger.info('No spaCy doc in feature document, using adapted')
+            sdoc = SpacyDocAdapter(fdoc)
+        else:
+            # add spacy_token back to tokens
+            fdoc.set_spacy_doc(fdoc.spacy_doc)
+            sdoc = SpacyDocAdapter(fdoc)
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'creating AMR doc from {fdoc}')
         ssent: FeatureSentence

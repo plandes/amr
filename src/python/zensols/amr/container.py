@@ -390,11 +390,12 @@ class AmrFeatureDocument(FeatureDocument):
         sents = tuple(map(lambda a: a2d[id(a)], amr_sents))
         return self.from_sentences(sents)
 
-    def get_overlapping_document(self, span: LexicalSpan) -> FeatureDocument:
-        doc = super().get_overlapping_document(span)
+    def get_overlapping_span(self, span: LexicalSpan,
+                             inclusive: bool = True) -> TokenContainer:
+        doc = super().get_overlapping_document(span, inclusive)
         sent: FeatureSentence
         for sent in doc:
-            os = tuple(self.get_overlapping_sentences(sent.lexspan))
+            os = tuple(self.get_overlapping_sentences(sent.lexspan, inclusive))
             if len(os) > 0:
                 sent.amr = os[0].amr
         doc.amr = self.amr
