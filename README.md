@@ -156,7 +156,7 @@ these trained models include:
 * None of the models were tested against a training set, only the development
   SMATCH scores are available.  This was intentional to provide more training
   examples.
-* The AMR Release 3.0 (LDC2020T02) test set was added to the training set.
+* The AMR Release 3.0 ([LDC2020T02]) test set was added to the training set.
 * The [Little Prince and Bio AMR](https://amr.isi.edu/download.html) corpora
   where used to train the models.  The first 85% of the AMR sentences were
   added to training set and the remaining 15% were added to the development
@@ -268,6 +268,7 @@ Copyright (c) 2021 - 2024 Paul Landes
 [zensols.nlparse]: https://github.com/plandes/nlparse
 [zensols.util configuration framework]: https://plandes.github.io/util/doc/config.html
 [NLP scoring module]: https://plandes.github.io/nlparse/api/zensols.nlp.html#zensols-nlp-score
+[LDC2020T02]: https://catalog.ldc.upenn.edu/LDC2020T02
 
 [facebook/bart-large]: https://huggingface.co/facebook/bart-large
 [facebook/bart-base]: https://huggingface.co/facebook/bart-base
