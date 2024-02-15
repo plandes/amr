@@ -1,20 +1,17 @@
 #!/bin/bash
 
-# @meta {desc: 'trains all models', date: '2024-02-05'}
-# @meta {doc: 'run from root directory'}
+#@meta {desc: 'trains all models', date: '2024-02-05'}
+#@meta {doc: 'train all models; run from root directory'}
 
 
 BACKGROUND=0
 TARGET_DIR=target/trainall
 MODELS="\
 	parse-spring
-	generate-t5wtense-base \
-	generate-t5wtense-large \
 	parse-xfm-base \
-	parse-xfm-large"
-
-# TODO
-MODELS=generate-t5wtense-large
+	parse-xfm-large \
+	generate-t5wtense-base \
+	generate-t5wtense-large"
 
 
 init() {

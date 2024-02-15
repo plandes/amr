@@ -161,10 +161,23 @@ these trained models include:
   where used to train the models.  The first 85% of the AMR sentences were
   added to training set and the remaining 15% were added to the development
   set.
-* The mini-batch size changed for some models due to memory constraints.
+* The mini-batch size changed for `generate-t5wtense-base` due to memory
+  constraints.
 * The number of training epochs were increased to account for the additional
   number of training examples.
 * Models have the same naming conventions but are prefixed with `zsl`.
+* Generative models were trained on graphs metadata annotated by the Sci spaCy
+  `en_core_sci_md` model.
+
+The performance of these models:
+
+| Model Name           | Model Type | Checkpoint             | Performance   |
+|----------------------|------------|------------------------|---------------|
+| `zsl_spring`         | parse      | [facebook/bart-large]  | SMATCH: 81.26 |
+| `zsl_xfm_bart_base`  | parse      | [facebook/bart-base]   | SMATCH: 80.5  |
+| `zsl_xfm_bart_large` | parse      | [facebook/bart-large]  | SMATCH: 82.7  |
+| `zsl_t5wtense_base`  | generative | [t5-base]              | BLEU: 42.20   |
+| `zsl_t5wtense_large` | generative | [google/flan-t5-large] | BLEU: 44.01   |
 
 These models are available upon request.
 
@@ -176,7 +189,6 @@ the list of `${amr_prep_manager:preppers}` in `resources/train.yml`.  This file
 defines downloaded corpora for the Little Prince and Bio AMR corpora.  To use
 the AMR 3.0 release, add the LDC downloaded file to (a new) `download`
 directory.
-
 
 
 ## Attribution
@@ -232,7 +244,7 @@ Contributions as pull requests, feedback and any input is welcome.
 
 [MIT License](LICENSE.md)
 
-Copyright (c) 2021 - 2023 Paul Landes
+Copyright (c) 2021 - 2024 Paul Landes
 
 
 <!-- links -->
@@ -256,3 +268,8 @@ Copyright (c) 2021 - 2023 Paul Landes
 [zensols.nlparse]: https://github.com/plandes/nlparse
 [zensols.util configuration framework]: https://plandes.github.io/util/doc/config.html
 [NLP scoring module]: https://plandes.github.io/nlparse/api/zensols.nlp.html#zensols-nlp-score
+
+[facebook/bart-large]: https://huggingface.co/facebook/bart-large
+[facebook/bart-base]: https://huggingface.co/facebook/bart-base
+[t5-base]: https://huggingface.co/google-t5/t5-base
+[google/flan-t5-large]: https://huggingface.co/google/flan-t5-large
