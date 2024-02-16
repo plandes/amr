@@ -3,7 +3,7 @@
 """
 __author__ = 'Paul Landes'
 
-from typing import List, Tuple, Dict, Type, Union, Callable
+from typing import List, Tuple, Dict, Type, Callable
 from dataclasses import dataclass, field
 import logging
 import os
@@ -18,9 +18,7 @@ from amrlib.models.inference_bases import GTOSInferenceBase, STOGInferenceBase
 from zensols.util import loglevel
 from zensols.persist import persisted
 from zensols.install import Installer
-from zensols.nlp import (
-    TokenContainer, FeatureDocumentParser, Component, ComponentInitializer,
-)
+from zensols.nlp import FeatureDocumentParser, Component, ComponentInitializer
 from . import (
     AmrError, AmrFailure, AmrSentence, AmrDocument,
     AmrGeneratedSentence, AmrGeneratedDocument,
@@ -156,8 +154,7 @@ class AmrParser(ModelContainer, ComponentInitializer):
 
     @classmethod
     def add_metadata(cls: Type, amr_sent: AmrSentence,
-                     sent: Union[TokenContainer, Span],
-                     clobber: bool = False):
+                     sent: Span, clobber: bool = False):
         """Add missing annotation metadata parsed from spaCy if missing, which
         happens in the case of using the T5 AMR model.
 
