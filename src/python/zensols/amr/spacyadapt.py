@@ -67,7 +67,10 @@ class _SpacySpanAdapter(object):
         return {ta._ftok.i_sent: ta for ta in self}
 
     def __getitem__(self, i):
-        ta: _SpacyTokenAdapter = self._i_sent_to_tok()[i]
+        i2tok: Dict[int, _SpacyTokenAdapter] = self._i_sent_to_tok()
+        ta: _SpacyTokenAdapter = i2tok.get(i)
+        if ta is None:
+            raise ValueError(f'No index {i} in {self._cont}, map={i2tok}')
         return ta
 
     def __iter__(self):
