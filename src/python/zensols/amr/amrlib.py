@@ -3,7 +3,7 @@
 """
 __author__ = 'Paul Landes'
 
-from typing import List, Tuple, Callable
+from typing import List, Tuple, Iterable, Callable
 from dataclasses import dataclass, field
 import logging
 import os
@@ -132,19 +132,31 @@ class AmrlibParser(_AmrlibModelContainer, AmrParser):
             amrlib.stog_model = model
         return model
 
-    def _parse_sent(self, six: int, sent: str) -> Tuple[str, AmrFailure]:
+    def _parse_sents(self, sents: Iterable[Span]) -> Iterable[AmrSentence]:
         # force load the model in to the global amrlib module space
         stog_model: STOGInferenceBase = self._get_parse_model()
-        graphs: List[str] = stog_model.parse_spans([sent])
-        graph: str = graphs[0]
-        err: AmrFailure = None
-        if graph is None:
-            err = AmrFailure("Could not parse: empty graph " +
-                             f"(total={len(graphs)})", sent.text)
-        if logger.isEnabledFor(logging.INFO):
-            graph_str = tw.shorten(str(graph), width=60)
-            logger.info(f'adding graph for sent {six}: <{graph_str}>')
-        return graph, err
+        sent: Span
+        for six, sent in enumerate(sents):
+            graph: str = None
+            err: AmrFailure = None
+            try:
+                graphs: List[str] = stog_model.parse_spans([sent])
+                graph: str = graphs[0]
+                err: AmrFailure = None
+                if graph is None:
+                    err = AmrFailure("Could not parse: empty graph " +
+                                     f"(total={len(graphs)})", sent.text)
+                if logger.isEnabledFor(logging.INFO):
+                    graph_str = tw.shorten(str(graph), width=60)
+                    logger.info(f'adding graph for sent {six}: <{graph_str}>')
+            except Exception as e:
+                err = AmrFailure(e, sent=sent.text)
+            if err is None:
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(f'creating sentence with model: {self.model}')
+                yield AmrSentence(graph, model=self.model)
+            else:
+                yield AmrSentence(err)
 
 
 @dataclass
