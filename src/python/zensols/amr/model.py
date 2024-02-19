@@ -10,18 +10,22 @@ import logging
 import json
 from spacy.language import Language
 from spacy.tokens import Doc, Span, Token
-from zensols.nlp import FeatureDocumentParser
+from zensols.nlp import FeatureDocumentParser, Component, ComponentInitializer
 from . import AmrError, AmrSentence, AmrDocument
 
 logger = logging.getLogger(__name__)
 
 
 @dataclass
-class AmrParser(object, metaclass=ABCMeta):
+class AmrParser(ComponentInitializer, metaclass=ABCMeta):
     """Parses natural language into AMR graphs.  It has the ability to change
     out different installed models in the same Python session.
 
     """
+    def init_nlp_model(self, model: Language, component: Component):
+        """Initialize the parser with spaCy API components."""
+        pass
+
     @staticmethod
     def is_missing_metadata(amr_sent: AmrSentence) -> bool:
         """Return whether ``amr_sent`` is missing annotated metadata.  T5 model

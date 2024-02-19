@@ -78,7 +78,7 @@ class _AmrlibModelContainer(object):
 
 
 @dataclass
-class AmrlibParser(_AmrlibModelContainer, ComponentInitializer, AmrParser):
+class AmrlibParser(_AmrlibModelContainer, AmrParser):
     add_missing_metadata: bool = field(default=True)
     """Whether to add missing metadata to sentences when missing.
 
