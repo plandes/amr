@@ -11,7 +11,7 @@ import warnings
 import textwrap as tw
 from pathlib import Path
 from spacy.language import Language
-from spacy.tokens import Doc, Span
+from spacy.tokens import Span
 import amrlib
 from amrlib.models.inference_bases import GTOSInferenceBase, STOGInferenceBase
 from zensols.util import loglevel
@@ -79,13 +79,6 @@ class _AmrlibModelContainer(object):
 
 @dataclass
 class AmrlibParser(_AmrlibModelContainer, AmrParser):
-    model: str = field(default='noop')
-    """The :mod:`penman` AMR model to use when creating :class:`.AmrSentence`
-    instances, which is one of ``noop`` or ``amr``.  The first does not modify
-    the graph but the latter normalizes out inverse relationships such as
-    ``ARG*-of``.
-
-    """
     def init_nlp_model(self, model: Language, component: Component):
         """Reset the installer to all reloads in a Python REPL with different
         installers.

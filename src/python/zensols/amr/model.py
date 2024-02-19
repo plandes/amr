@@ -22,6 +22,13 @@ class AmrParser(ComponentInitializer, metaclass=ABCMeta):
     out different installed models in the same Python session.
 
     """
+    model: str = field(default='noop')
+    """The :mod:`penman` AMR model to use when creating :class:`.AmrSentence`
+    instances, which is one of ``noop`` or ``amr``.  The first does not modify
+    the graph but the latter normalizes out inverse relationships such as
+    ``ARG*-of``.
+
+    """
     add_missing_metadata: bool = field(default=True)
     """Whether to add missing metadata to sentences when missing.
 
