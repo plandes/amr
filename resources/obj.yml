@@ -15,7 +15,7 @@ amr_parser_component:
 
 # amrlib models
 amr_parser_amrlib:
-  class_name: zensols.amr.model.AmrParser
+  class_name: zensols.amr.amrlib.AmrlibParser
   installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
 
 
@@ -23,7 +23,7 @@ amr_parser_amrlib:
 #
 # generate English from AMR graphs
 amr_generator_amrlib:
-  class_name: zensols.amr.model.AmrGenerator
+  class_name: zensols.amr.amrlib.AmrlibGenerator
   installer: 'instance: amr_generate_${amr_default:generate_model}_installer'
 
 split_hyphen_token_mapper:
