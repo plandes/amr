@@ -9,11 +9,12 @@ amr_parser_component:
   modules: 'list: zensols.amr.model'
   pipe_name: 'amr_parser'
   pipe_config:
-    parser_name: 'amr_parser'
+    parser_name: '${amr_default:amr_parser}'
   # set the doc parser (via passed spaCy language model) to AmrParser
-  initializers: 'instance: tuple: amr_parser'
+  initializers: 'instance: tuple: ${amr_default:amr_parser}'
 
-amr_parser:
+# amrlib models
+amr_parser_amrlib:
   class_name: zensols.amr.model.AmrParser
   installer: 'instance: amr_parse_${amr_default:parse_model}_installer'
 
@@ -21,7 +22,7 @@ amr_parser:
 ## Client usable objects
 #
 # generate English from AMR graphs
-amr_generator:
+amr_generator_amrlib:
   class_name: zensols.amr.model.AmrGenerator
   installer: 'instance: amr_generate_${amr_default:generate_model}_installer'
 

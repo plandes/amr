@@ -53,6 +53,9 @@ class ModelContainer(object):
             category=FutureWarning)
         from transformers import logging
         logging.set_verbosity_error()
+        # save the section name since AmrParser has its ``name`` attribute
+        # replaced by the spaCy API
+        self._init_name = self.name
 
     @property
     def model_path(self) -> Path:
@@ -101,7 +104,7 @@ class AmrParser(ModelContainer, ComponentInitializer):
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'initializing ({id(model)}): {self.name}')
         doc_parser: FeatureDocumentParser = model.doc_parser
-        new_parser: AmrParser = doc_parser.config_factory(self.name)
+        new_parser: AmrParser = doc_parser.config_factory(self._init_name)
         self.installer = new_parser.installer
 
     # if the model doesn't change after its app configuration does for the life

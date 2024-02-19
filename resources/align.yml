@@ -2,7 +2,7 @@
 
 
 # spaCy pipeline component to add text-to-graph alignments to AMR graphs parsed
-# by `amr_parser`
+# by `amr_default:amr_parser`
 amr_align_component:
   class_name: zensols.nlp.Component
   modules: 'list: zensols.amr.align'
