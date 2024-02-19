@@ -3,16 +3,15 @@
 """
 __author__ = 'Paul Landes'
 
-from typing import List, Tuple, Dict, Type, Callable
+from typing import List, Tuple, Callable
 from dataclasses import dataclass, field
 import logging
 import os
 import warnings
-import json
 import textwrap as tw
 from pathlib import Path
 from spacy.language import Language
-from spacy.tokens import Doc, Span, Token
+from spacy.tokens import Doc, Span
 import amrlib
 from amrlib.models.inference_bases import GTOSInferenceBase, STOGInferenceBase
 from zensols.util import loglevel
