@@ -33,7 +33,7 @@ class _AmrlibModelContainer(object):
     used by the API to parse AMR graphs or generate language from AMR graphs.
 
     """
-    name: str = field()
+    name: str = field(default=None)
     """The section name."""
 
     installer: Installer = field(default=None)
@@ -79,12 +79,6 @@ class _AmrlibModelContainer(object):
 
 @dataclass
 class AmrlibParser(_AmrlibModelContainer, AmrParser):
-    add_missing_metadata: bool = field(default=True)
-    """Whether to add missing metadata to sentences when missing.
-
-    :see: :meth:`add_metadata`
-
-    """
     model: str = field(default='noop')
     """The :mod:`penman` AMR model to use when creating :class:`.AmrSentence`
     instances, which is one of ``noop`` or ``amr``.  The first does not modify
@@ -138,45 +132,19 @@ class AmrlibParser(_AmrlibModelContainer, AmrParser):
             amrlib.stog_model = model
         return model
 
-    def annotate_amr(self, doc: Doc):
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f'parsing from {doc}')
+    def _parse_sent(self, six: int, sent: str) -> Tuple[str, AmrFailure]:
         # force load the model in to the global amrlib module space
         stog_model: STOGInferenceBase = self._get_parse_model()
-        # add spacy underscore data holders for the amr data structures
-        if not Doc.has_extension('amr'):
-            Doc.set_extension('amr', default=[])
-        if not Span.has_extension('amr'):
-            Span.set_extension('amr', default=[])
-        sent_graphs: List[AmrSentence] = []
-        sent: Span
-        for i, sent in enumerate(doc.sents):
-            err: AmrFailure = None
-            graphs: List[str] = None
-            try:
-                graphs = stog_model.parse_spans([sent])
-                graph: str = graphs[0]
-                if graph is None:
-                    err = AmrFailure("Could not parse: empty graph " +
-                                     f"(total={len(graphs)})", sent.text)
-                if logger.isEnabledFor(logging.INFO):
-                    graph_str = tw.shorten(str(graph), width=60)
-                    logger.info(f'adding graph for sent {i}: <{graph_str}>')
-            except Exception as e:
-                err = AmrFailure(e, sent=sent.text)
-            if err is not None:
-                sent._.amr = AmrSentence(err)
-                sent_graphs.append(sent._.amr)
-            else:
-                if logger.isEnabledFor(logging.DEBUG):
-                    logger.debug(f'creating sentence with model: {self.model}')
-                amr_sent = AmrSentence(graph, model=self.model)
-                if self.add_missing_metadata and \
-                   self.is_missing_metadata(amr_sent):
-                    self.add_metadata(amr_sent, sent, clobber=True)
-                sent._.amr = amr_sent
-                sent_graphs.append(amr_sent)
-        doc._.amr = AmrDocument(sent_graphs)
+        graphs: List[str] = stog_model.parse_spans([sent])
+        graph: str = graphs[0]
+        err: AmrFailure = None
+        if graph is None:
+            err = AmrFailure("Could not parse: empty graph " +
+                             f"(total={len(graphs)})", sent.text)
+        if logger.isEnabledFor(logging.INFO):
+            graph_str = tw.shorten(str(graph), width=60)
+            logger.info(f'adding graph for sent {six}: <{graph_str}>')
+        return graph, err
 
 
 @dataclass

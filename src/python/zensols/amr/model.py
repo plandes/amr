@@ -3,15 +3,15 @@
 """
 __author__ = 'Paul Landes'
 
-from typing import Tuple, Dict, Type
-from dataclasses import dataclass
+from typing import Tuple, List, Dict, Type
+from dataclasses import dataclass, field
 from abc import ABCMeta, abstractmethod
 import logging
 import json
 from spacy.language import Language
 from spacy.tokens import Doc, Span, Token
 from zensols.nlp import FeatureDocumentParser, Component, ComponentInitializer
-from . import AmrError, AmrSentence, AmrDocument
+from . import AmrError, AmrFailure, AmrSentence, AmrDocument
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +20,12 @@ logger = logging.getLogger(__name__)
 class AmrParser(ComponentInitializer, metaclass=ABCMeta):
     """Parses natural language into AMR graphs.  It has the ability to change
     out different installed models in the same Python session.
+
+    """
+    add_missing_metadata: bool = field(default=True)
+    """Whether to add missing metadata to sentences when missing.
+
+    :see: :meth:`add_metadata`
 
     """
     def init_nlp_model(self, model: Language, component: Component):
@@ -84,13 +90,54 @@ class AmrParser(ComponentInitializer, metaclass=ABCMeta):
         amr_sent.meta = meta
 
     @abstractmethod
+    def _parse_sent(self, six: int, sent: str) -> Tuple[str, AmrFailure]:
+        """Parse a sentence into an AMR.
+
+        :param six: the sentence index
+
+        :param sent: the sentence to parse
+
+        :return: a tuple of the the string graph (or ``None`` if failed) and the
+                 parse failure (or ``None`` if successful)
+
+        """
+        pass
+
     def annotate_amr(self, doc: Doc):
         """Add an ``amr`` attribute to the spaCy document.
 
         :param doc: the document to annotate
 
         """
-        pass
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(f'parsing from {doc}')
+        # add spacy underscore data holders for the amr data structures
+        if not Doc.has_extension('amr'):
+            Doc.set_extension('amr', default=[])
+        if not Span.has_extension('amr'):
+            Span.set_extension('amr', default=[])
+        sent_graphs: List[AmrSentence] = []
+        sent: Span
+        for six, sent in enumerate(doc.sents):
+            graph: str = None
+            err: AmrFailure = None
+            try:
+                graph, err = self._parse_sent(six, sent)
+            except Exception as e:
+                err = AmrFailure(e, sent=sent.text)
+            if err is not None:
+                sent._.amr = AmrSentence(err)
+                sent_graphs.append(sent._.amr)
+            else:
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(f'creating sentence with model: {self.model}')
+                amr_sent = AmrSentence(graph, model=self.model)
+                if self.add_missing_metadata and \
+                   self.is_missing_metadata(amr_sent):
+                    self.add_metadata(amr_sent, sent, clobber=True)
+                sent._.amr = amr_sent
+                sent_graphs.append(amr_sent)
+        doc._.amr = AmrDocument(sent_graphs)
 
     def __call__(self, doc: Doc) -> Doc:
         """See :meth:`annotate_amr`.
