@@ -80,10 +80,6 @@ class _AmrlibModelContainer(object):
 
 @dataclass
 class AmrlibParser(_AmrlibModelContainer, ComponentInitializer, AmrParser):
-    """Parses natural language into AMR graphs.  It has the ability to change
-    out different installed models in the same Python session.
-
-    """
     add_missing_metadata: bool = field(default=True)
     """Whether to add missing metadata to sentences when missing.
 
@@ -111,7 +107,7 @@ class AmrlibParser(_AmrlibModelContainer, ComponentInitializer, AmrParser):
     # if the model doesn't change after its app configuration does for the life
     # of the interpreter, turn off caching in config amr_anon_feature_doc_stash
     @persisted('_parse_model', cache_global=True)
-    def _get_parse_model(self) -> STOGInferenceBase:
+    def _create_parse_model(self) -> STOGInferenceBase:
         """The model that parses text in to AMR graphs.  This model is cached
         globally, as it is cached in the :mod:`amrlib` module as well.
 
@@ -132,80 +128,22 @@ class AmrlibParser(_AmrlibModelContainer, ComponentInitializer, AmrParser):
         self._parse_model.clear()
         amrlib.stog_model = None
 
-    @property
-    def parse_model(self) -> STOGInferenceBase:
-        model, prev_path = self._get_parse_model()
+    def _get_parse_model(self) -> STOGInferenceBase:
+        model, prev_path = self._create_parse_model()
         cur_path = self.model_path
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'current path: {cur_path}, prev path: {prev_path}')
         if cur_path != prev_path:
             self._clear_model()
-            model = self._get_parse_model()[0]
+            model = self._create_parse_model()[0]
             amrlib.stog_model = model
         return model
-
-    @staticmethod
-    def is_missing_metadata(amr_sent: AmrSentence) -> bool:
-        """Return whether ``amr_sent`` is missing annotated metadata.  T5 model
-        sentences only have the ``snt`` metadata entry.
-
-        :param amr_sent: the sentence to populate
-
-        :see: :meth:`add_metadata`
-
-        """
-        return 'tokens' not in amr_sent.metadata
-
-    @classmethod
-    def add_metadata(cls: Type, amr_sent: AmrSentence,
-                     sent: Span, clobber: bool = False):
-        """Add missing annotation metadata parsed from spaCy if missing, which
-        happens in the case of using the T5 AMR model.
-
-        :param amr_sent: the sentence to populate
-
-        :param sent: the spacCy sentence used as the source
-
-        :param clobber: whether or not to overwrite any existing metadata fields
-
-        :see: :meth:`is_missing_metadata`
-
-        """
-        def map_ent(t: Token) -> str:
-            et = t.ent_type_
-            return 'O' if len(et) == 0 else et
-
-        def map_ent_iob(t: Token) -> str:
-            et = t.ent_iob_
-            return 'O' if len(et) == 0 else et
-
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f'add metadata from spacy span: {amr_sent}')
-
-        meta: Dict[str, str] = amr_sent.metadata
-        tok: Token = sent[0]
-        if clobber or 'tokens' not in meta:
-            toks = tuple(map(lambda t: t.orth_, sent))
-            amr_sent.set_metadata('tokens', json.dumps(toks))
-        if clobber or 'lemmas' not in meta:
-            lms = tuple(map(lambda t: t.lemma_, sent))
-            amr_sent.set_metadata('lemmas', json.dumps(lms))
-        if (clobber or 'ner_tags' not in meta) and hasattr(tok, 'ent_type_'):
-            ents = tuple(map(map_ent, sent))
-            amr_sent.set_metadata('ner_tags', json.dumps(ents))
-        if (clobber or 'pos_tags' not in meta) and hasattr(tok, 'tag_'):
-            pt = tuple(map(lambda t: t.tag_, sent))
-            amr_sent.set_metadata('pos_tags', json.dumps(pt))
-        if (clobber or 'ner_iob' not in meta) and hasattr(tok, 'ent_iob_'):
-            iob: Tuple[str] = tuple(map(map_ent_iob, sent))
-            amr_sent.set_metadata('ner_iob', json.dumps(iob))
-        amr_sent.meta = meta
 
     def annotate_amr(self, doc: Doc):
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'parsing from {doc}')
         # force load the model in to the global amrlib module space
-        stog_model: STOGInferenceBase = self.parse_model
+        stog_model: STOGInferenceBase = self._get_parse_model()
         # add spacy underscore data holders for the amr data structures
         if not Doc.has_extension('amr'):
             Doc.set_extension('amr', default=[])
@@ -244,11 +182,6 @@ class AmrlibParser(_AmrlibModelContainer, ComponentInitializer, AmrParser):
 
 @dataclass
 class AmrlibGenerator(_AmrlibModelContainer, AmrGenerator):
-    """A callable that generates natural language text from an AMR graph.
-
-    :see: :meth:`__call__`
-
-    """
     use_tense: bool = field(default=True)
     """Try to add tense information by trying to tag the graph, which requires
     the sentence or annotations and then goes through an alignment.
