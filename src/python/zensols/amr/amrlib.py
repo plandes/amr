@@ -17,6 +17,7 @@ from amrlib.models.inference_bases import GTOSInferenceBase, STOGInferenceBase
 from zensols.util import loglevel
 from zensols.persist import persisted
 from zensols.install import Installer
+from zensols.nlp import FeatureDocumentParser, Component
 from . import (
     AmrFailure, AmrSentence, AmrDocument,
     AmrGeneratedSentence, AmrGeneratedDocument,
