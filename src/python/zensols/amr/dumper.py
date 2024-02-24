@@ -169,11 +169,12 @@ class Dumper(Dictable, metaclass=ABCMeta):
             self.overwrite_dir = prev_overwrite_dir
         return gen_paths
 
-    def dump_sent(self, sent: AmrSentence) -> List[Path]:
+    def dump_sent(self, sent: AmrSentence,
+                  target_name: str = None) -> List[Path]:
         """Dump the contents of the sentence."""
-        return self.plot_sent(sent)
+        return self.plot_sent(sent, target_name)
 
-    def dump_doc(self, doc: AmrDocument) -> List[Path]:
+    def dump_doc(self, doc: AmrDocument, target_name: str = None) -> List[Path]:
         """Dump the contents of the document to a directory.  This includes the
         plots and graph strings of all sentence.  This also includes a
         ``doc.txt`` file that has the graph strings and their sentence index.
@@ -186,15 +187,21 @@ class Dumper(Dictable, metaclass=ABCMeta):
         paths: List[Path] = self.plot_doc(doc)
         gen_paths: List[Path] = []
         if len(paths) > 0:
-            first: Path = paths[0]
             doc_path: Path
             if self.add_doc_dir:
-                doc_path = Path(first.parent / first.stem)
-                doc_path.mkdir(parents=True, exist_ok=True)
+                first: Path = paths[0]
+                if target_name is None:
+                    doc_path = Path(first.parent) / first.stem
+                else:
+                    doc_path = Path(first.parent) / target_name
             else:
-                doc_path = Path('.')
+                if target_name is None:
+                    doc_path = Path('.')
+                else:
+                    doc_path = Path(target_name)
+            doc_path.mkdir(parents=True, exist_ok=True)
             for path in paths:
-                dst = doc_path / path.name
+                dst: Path = doc_path / path.name
                 shutil.move(path, dst)
                 gen_paths.append(path)
             if self.write_text:
@@ -221,7 +228,7 @@ class Dumper(Dictable, metaclass=ABCMeta):
         if isinstance(cont, AmrSentence):
             return self.dump_sent(cont)
         elif isinstance(cont, AmrDocument):
-            return self.dump_doc(cont)
+            return self.dump_doc(cont, target_name)
         else:
             raise AmrError(f'Unknown AMR type: {type(cont)}')
 
