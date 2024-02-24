@@ -185,13 +185,6 @@ class AmrlibGenerator(_AmrlibModelContainer, AmrGenerator):
         """
         model: GTOSInferenceBase = self._get_generation_model()
         generate_fn: Callable = model.generate
-        # upgrade to amrlib 0.8.0
-        if 0:
-            from amrlib.models.generate_t5wtense.inference \
-                import Inference as T5TenseInference
-            if isinstance(model, T5TenseInference):
-                org_fn: Callable = generate_fn
-                generate_fn = (lambda s: org_fn(s, use_tense=self.use_tense))
         preds: Tuple[List[str], List[bool]] = generate_fn(list(map(
             lambda s: s.graph_string, doc)))
         sents: List[AmrGeneratedSentence] = []
