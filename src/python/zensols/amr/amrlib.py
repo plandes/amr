@@ -175,7 +175,7 @@ class AmrlibGenerator(_AmrlibModelContainer, AmrGenerator):
         self._load_model()
         return amrlib.load_gtos_model()
 
-    def generate(self, doc: AmrDocument) -> Tuple[str]:
+    def generate(self, doc: AmrDocument) -> AmrGeneratedDocument:
         """Generate a sentence from a spaCy document.
 
         :param doc: the spaCy document used to generate the sentence

@@ -11,7 +11,7 @@ import json
 from spacy.language import Language
 from spacy.tokens import Doc, Span, Token
 from zensols.nlp import FeatureDocumentParser, Component, ComponentInitializer
-from . import AmrError, AmrSentence, AmrDocument
+from . import AmrError, AmrSentence, AmrDocument, AmrGeneratedDocument
 
 logger = logging.getLogger(__name__)
 
@@ -155,17 +155,17 @@ class AmrGenerator(object):
 
     """
     @abstractmethod
-    def generate(self, doc: AmrDocument) -> Tuple[str]:
+    def generate(self, doc: AmrDocument) -> AmrGeneratedDocument:
         """Generate a sentence from the AMR graph ``doc``.
 
         :param doc: the spaCy document used to generate the sentence
 
-        :return: a text sentence for each respective sentence in ``doc``
+        :return: a document with the generated sentences
 
         """
         pass
 
-    def __call__(self, doc: AmrDocument) -> Tuple[str]:
+    def __call__(self, doc: AmrDocument) -> AmrGeneratedDocument:
         """See :meth:`generate`."""
         return self.generate(doc)
 
