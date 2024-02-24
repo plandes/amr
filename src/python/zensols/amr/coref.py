@@ -66,6 +66,10 @@ class CoreferenceResolver(object):
             logger.info(f'resolving coreferences for {doc}')
         model: Inference = self.model
         graph_strs = tuple(map(lambda s: s.amr.graph_string, doc.sents))
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug('resolving coreferences graph:')
+            for gs in graph_strs:
+                logger.debug(f'  {gs}')
         with time(f'resolved {len(doc)} sentence coreferences'):
             return model.coreference(graph_strs)
 
