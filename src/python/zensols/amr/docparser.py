@@ -10,6 +10,7 @@ import re
 import json
 import collections
 from itertools import chain
+import textwrap as tw
 from spacy.tokens import Doc, Token, Span
 from penman import constant, surface
 from penman.graph import Graph
@@ -58,6 +59,14 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
     :obj:`zensols.nlp.FeatureToken.NONE`.
 
     """
+    use_sent_index: bool = field(default=True)
+    """Whether to map alignments to by (iterated) index position, or by using
+    the per sentence index :obj:`~zensols.nlp.tok.FeatureToken` attribute
+    ``i_sent``.  Set this to ``False`` if the the
+    :class:`~zensols.nlp.parser.FeatureDocumentParser` was configured with a
+    token normalizer configured with embedding named entities turned off.
+
+    """
     def decorate(self, doc: FeatureDocument):
         if not isinstance(doc, AmrFeatureDocument):
             raise AmrParseError(
@@ -92,16 +101,21 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
                     tokens_by_i_sent: Dict[int, FeatureToken],
                     feat_trips: List[Tuple[str, str, str]],
                     graph_tokens: List[str], source: str, align: Alignment):
+        use_sent_index: bool = self.use_sent_index
         tix: int
         for tix in align.indices:
-            td: FeatureToken = sent[tix]
+            td: FeatureToken
+            if use_sent_index:
+                td = sent[tix]
+            else:
+                td = tokens_by_i_sent.get(tix)
             if td is not None:
                 gtok: str = graph_tokens[tix]
                 # alignment (AMR and feature normalization) sanity check
                 if td.norm != gtok:
                     if logger.isEnabledFor(logging.WARNING):
                         logger.warning(
-                            f'misalignment index {tix}: <{td.norm}> != ' +
+                            f'misalignment token index {tix}: <{td.norm}> != ' +
                             f'<{gtok}> in {sent} vs. {graph_tokens}')
                 if logger.isEnabledFor(logging.DEBUG):
                     logger.debug(f'token: {tix} -> {td}')
@@ -288,8 +302,8 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
 
         """
         amr_doc: AmrDocument = None
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f'annotating {doc}')
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'annotating {tw.shorten(str(doc), 60)}')
         if self.reparse:
             amr_doc = self._create_amr_doc(doc)
         else:
