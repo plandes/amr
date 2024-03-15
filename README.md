@@ -116,13 +116,13 @@ $ amr parse -c test-resources/t5.conf 'This is a test of the AMR command line ut
 # ::snt This is a test of the AMR command line utility.
 (t / test-01
    :ARG1 (u / utility
-			:mod (c / command-line)
-			:name (n / name
-					 :op1 "AMR"
-					 :toki1 "6")
-			:toki1 "9")
+            :mod (c / command-line)
+            :name (n / name
+                     :op1 "AMR"
+                     :toki1 "6")
+            :toki1 "9")
    :domain (t2 / this
-			   :toki1 "0")
+               :toki1 "0")
    :toki1 "3")
 ```
 
