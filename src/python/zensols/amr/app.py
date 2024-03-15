@@ -190,7 +190,7 @@ class Application(BaseApplication):
     def plot_file(self, input_file: Path, output_dir: Path = None):
         """Render a Penman files or a JSON formatted sentence list.
 
-        :param input_file: either a directory or a file
+        :param input_file: a file with newline separated AMR Penman graphs
 
         :param output_dir: the output directory
 
@@ -251,16 +251,15 @@ class ScorerApplication(BaseApplication):
         return output_path
 
     def parse_penman(self, input_file: Path, output_dir: Path = None,
-                     keep_keys: str = 'id,snt',
+                     meta_keys: str = 'id,snt',
                      limit: int = None) -> List[Path]:
-        """Parse Penman sentences from a file and dump to a file or directory.
+        """Parse Penman sentence(s) by ``id`` and write a parsed AMR.
 
-        :param input_file: either a directory or a file
+        :param input_file: a file with newline separated AMR Penman graphs
 
         :param output_dir: the output directory
 
-        :param keep: a comma-no-space separated list of metadata keys to copy
-                     from the source sentence, if any
+        :param meta_keys: a comma separated list of metadata keys
 
         :param limit: the max of items to process
 
@@ -268,8 +267,8 @@ class ScorerApplication(BaseApplication):
         from zensols.amr.score import AmrScoreParser
         score_parser: AmrScoreParser = \
             self.config_factory('amr_score_parser')
-        if keep_keys is not None:
-            score_parser.keep_keys = keep_keys.split(',')
+        if meta_keys is not None:
+            score_parser.keep_keys = meta_keys.split(',')
         output_paths: List[Path] = []
         path: Path
         for path in Application._to_paths(input_file):
@@ -293,7 +292,7 @@ class ScorerApplication(BaseApplication):
     def remove_wiki(self, input_file: Path, output_dir: Path = None):
         """Remove wiki attributes necessary for scoring.
 
-        :param input_file: either a directory or a file
+        :param input_file: a file with newline separated AMR Penman graphs
 
         :param output_dir: the output directory
 
