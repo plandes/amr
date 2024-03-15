@@ -111,7 +111,7 @@ line utility `amr` is also available to demonstrate its usage and to generate
 ARM graphs on the command line.
 
 To parse:
-```bash
+```lisp
 $ amr parse -c test-resources/t5.conf 'This is a test of the AMR command line utility.'
 # ::snt This is a test of the AMR command line utility.
 (t / test-01
