@@ -7,9 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- AMR parsing and generation model trainers and workflow.
+- A framework parser that uses the [zensols.amrspring] (a Docker original
+  SPRING parser client/server) as a client.
+
+### Removed
+- Pipeline (non-client) classes modules from default imports.
 
 ### Changed
-- upgrade model checkpoint training to library [amrlib] 0.7.1.
+- Upgrade model checkpoint training to library [amrlib] 0.7.1.
+- Upgrade API to [amrlib] 0.8.0.
+- Abstract [amrlib] parsers.
 
 
 ## [0.1.0] - 2023-12-05
@@ -34,3 +43,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [0.0.1]: https://github.com/Paul Landes/amr/compare/v0.0.0...v0.0.1
 
 [amrlib]: https://github.com/bjascob/amrlib
+[zensols.amrspring]: https://github.com/plandes/amrspring
