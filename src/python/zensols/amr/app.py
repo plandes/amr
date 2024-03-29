@@ -59,6 +59,9 @@ class BaseApplication(object):
             for n in 'persist multi install'.split():
                 logging.getLogger(f'zensols.{n}').setLevel(logging.INFO)
 
+    def _key_split(self, keys: str) -> List[str]:
+        return re.split(r'\s*,\s*', keys)
+
 
 @dataclass
 class Application(BaseApplication):
@@ -268,7 +271,7 @@ class ScorerApplication(BaseApplication):
         score_parser: AmrScoreParser = \
             self.config_factory('amr_score_parser')
         if meta_keys is not None:
-            score_parser.keep_keys = meta_keys.split(',')
+            score_parser.keep_keys = self._key_split(meta_keys)
         output_paths: List[Path] = []
         path: Path
         for path in Application._to_paths(input_file):
@@ -388,7 +391,7 @@ class ScorerApplication(BaseApplication):
         logger.info(f'scoring <{input_gold}>:<{input_parsed}> -> {output_file}')
         sctx = ScoreContext(
             pairs=tuple(it.islice(zip(gold_sents, parsed_sents), limit)),
-            methods=None if methods is None else set(methods.split(',')),
+            methods=None if methods is None else set(self._key_split(methods)),
             correlation_ids=tuple(it.islice(ikeys, limit)))
         sset: ScoreSet = scorer.score(sctx)
         output_file.parent.mkdir(parents=True, exist_ok=True)
