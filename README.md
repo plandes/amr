@@ -24,7 +24,7 @@ Features:
 
 ## Documentation
 
-* [full documentation](https://plandes.github.io/amr/index.html).
+* [Full documentation](https://plandes.github.io/amr/index.html).
 * [API reference](https://plandes.github.io/amr/api.html)
 
 
@@ -195,11 +195,11 @@ directory.
 
 This project, or reference model code, uses:
 
-* Python 3
-* [spaCy] for natural language parsing.
-* [zensols.nlparse] for natural language features.
+* Python 3.11
 * [amrlib] for AMR parsing.
 * [amr_coref] for AMR co-reference
+* [spaCy] for natural language parsing.
+* [zensols.nlparse] for natural language features.
 * [Smatch] (Cai and Knight. 2013) and [WLK] (Opitz et. al. 2021) for scoring.
 
 
