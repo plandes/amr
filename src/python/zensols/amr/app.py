@@ -3,7 +3,7 @@
 """
 from __future__ import annotations
 __author__ = 'Paul Landes'
-from typing import Tuple, Dict, Any, List, Set, Iterable, ClassVar
+from typing import Tuple, Dict, Any, List, Set, Iterable
 from dataclasses import dataclass, field
 from enum import Enum, auto
 import logging
