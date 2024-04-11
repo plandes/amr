@@ -1,6 +1,5 @@
 import sys
 from io import BytesIO
-import shutil
 import pickle
 import json
 from pathlib import Path
@@ -26,9 +25,7 @@ Barack Hussein Obama II is an American politician who served as the 44th \
 president of the United States from 2009 to 2017. A member of the Democratic \
 Party, he was the first African-American president of the United States.\
 """)
-        targ = Path('target')
-        if targ.is_dir():
-            shutil.rmtree(targ)
+        self._clean_targ()
 
     def _get_model_app(self, model_name: str, config: str = 'test'):
         self.model_name = model_name

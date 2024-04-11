@@ -13,7 +13,7 @@ from itertools import chain
 import textwrap as tw
 from spacy.tokens import Doc, Token, Span
 from penman import constant, surface
-from penman.graph import Graph
+from penman.graph import Graph, Triple, Attribute
 from penman.surface import Alignment
 from zensols.persist import persisted
 from zensols.nlp import (
@@ -22,7 +22,8 @@ from zensols.nlp import (
     CachingFeatureDocumentParser, FeatureDocumentDecorator,
 )
 from . import (
-    AmrError, AmrSentence, AmrDocument, AmrFeatureSentence, AmrFeatureDocument
+    AmrError, Feature, AmrSentence, AmrDocument,
+    AmrFeatureSentence, AmrFeatureDocument
 )
 from .coref import CoreferenceResolver
 from .align import AmrAlignmentPopulator
@@ -42,8 +43,10 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
     :class:`.AmrAlignmentPopulator`.
 
     """
-    role: str = field()
-    """The triple role used to label the edge between the token and the feature.
+    name: str = field()
+    """The triple role (if :obj:`add_to_epi` is ``False``) used to label the
+    edge between the token and the feature.  Otherwise, this string is used in
+    the epidata of the graph.
 
     """
     feature_id: str = field()
@@ -67,6 +70,24 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
     token normalizer configured with embedding named entities turned off.
 
     """
+    method: str = field(default='attribute')
+    """Where to add the data, which may be one of:
+
+      * ``attribute``: add as a new attribute node using ``name`` as the role
+        and the value as the attribute constant
+
+      * ``epi``: as epigraph data; however, the current Penman implementation
+        assume only alignments and the graph string will no longer be parsable
+
+    Otherwise, it uses the string to format a replacement node text using
+    ``target`` as the previous/original node text and ``value`` as the feature
+    value text.
+
+    """
+    def __post_init__(self):
+        if self.method == 'attribute':
+            self._role = ':' + self.name
+
     def decorate(self, doc: FeatureDocument):
         if not isinstance(doc, AmrFeatureDocument):
             raise AmrParseError(
@@ -84,23 +105,38 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
     def _is_none(self, feat_val: Any, tok: FeatureToken) -> bool:
         return feat_val is None or feat_val == FeatureToken.NONE
 
-    def _annotate_token(self, tok: FeatureToken, source: str,
-                        feature_triples: Set[Tuple[str, str, str]],
-                        graph: Graph):
+    def _annotate_token(self, tok: FeatureToken, source: Triple,
+                        feature_triples: List[Attribute], graph: Graph):
         # create the triple from token data
         feat_val: Any = self._format_feature_value(tok)
         if self.add_none or not self._is_none(feat_val, tok):
-            val: str = constant.quote(feat_val)
-            triple: List = [source, self.role, val]
-            if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(f'adding: {triple}')
-            # add the feature as a triple to graph
-            feature_triples.append(triple)
+            if self.method == 'attribute':
+                val: str = constant.quote(feat_val)
+                triple = Attribute(source[0], self._role, val)
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(f'adding: {triple}')
+                # add the feature as a triple to graph
+                feature_triples.append(triple)
+            elif self.method == 'epi':
+                epis: Dict[Attribute, List] = graph.epidata
+                epi_node: List[Any] = epis[source]
+                epi_node.append(Feature(self.name, feat_val))
+            else:
+                epis: Dict[Attribute, List] = graph.epidata
+                epi_node: List[Any] = epis[source]
+                val: str = self.method.format(
+                    target=source.target,
+                    value=feat_val)
+                triple = Attribute(source.source, source.role, val)
+                graph.triples.remove(source)
+                graph.triples.append(triple)
+                epis[triple] = epi_node
 
     def _align_idxs(self, graph: Graph, sent: AmrFeatureSentence,
                     tokens_by_i_sent: Dict[int, FeatureToken],
-                    feat_trips: List[Tuple[str, str, str]],
-                    graph_tokens: List[str], source: str, align: Alignment):
+                    feat_trips: List[Attribute],
+                    graph_tokens: List[str], source: Triple,
+                    align: Alignment):
         use_sent_index: bool = self.use_sent_index
         tix: int
         for tix in align.indices:
@@ -123,30 +159,31 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
 
     def _annotate_sentence(self, sent: AmrFeatureSentence,
                            doc: AmrFeatureDocument):
+        def map_attr(a: Attribute) -> Attribute:
+            role: str = f'{a.role}{srcs[a.source]}'
+            srcs[a.source] += 1
+            return Attribute(a.source, role, a.target)
+
         tokens_by_i_sent: Dict[int, FeatureToken] = sent.tokens_by_i_sent
         graph: Graph = sent.amr.graph
         graph_tokens: List[str] = json.loads(graph.metadata['tokens'])
         aligns: Dict[Tuple, Alignment] = surface.alignments(graph)
-        feat_trips: List[Tuple[str, str, str]] = []
-        trips: Tuple[str, str, Any] = tuple(chain.from_iterable(
+        feat_trips: List[Attribute] = []
+        trips: Triple = tuple(chain.from_iterable(
             (graph.instances(), graph.attributes())))
         # find triples that identify token index positions
         tix: int
         src_trip: Tuple[str, str, Any]
         for tix, src_trip in enumerate(trips):
-            source, rel, target = src_trip
             align: Alignment = aligns.get(src_trip)
             if align is not None:
                 if logger.isEnabledFor(logging.DEBUG):
                     logger.debug(f'triple: {src_trip}, align: {align}')
                 self._align_idxs(graph, sent, tokens_by_i_sent, feat_trips,
-                                 graph_tokens, source, align)
+                                 graph_tokens, src_trip, align)
         if self.indexed:
             srcs = collections.defaultdict(lambda: 1)
-            for trip in feat_trips:
-                trip[1] = trip[1] + str(srcs[trip[0]])
-                srcs[trip[0]] += 1
-            feat_trips = map(tuple, feat_trips)
+            feat_trips = map(map_attr, feat_trips)
         else:
             feat_trips = set(map(tuple, feat_trips))
         graph.triples.extend(feat_trips)
@@ -284,7 +321,8 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
             assert isinstance(fsent, FeatureSentence)
             self._split_toks(fsent, ssent)
         if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f'generated spacy doc: {sdoc}')
+            sp = '|'.join(map(lambda t: t.orth_, sdoc))
+            logger.debug(f'generated spacy doc: {sdoc} ({sp})')
         self.amr_parser(sdoc)
         if self.alignment_populator is not None:
             self.alignment_populator.align(sdoc)

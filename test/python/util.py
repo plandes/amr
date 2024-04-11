@@ -1,5 +1,7 @@
 from typing import Union
 import unittest
+from pathlib import Path
+import shutil
 from zensols.util import Failure
 from zensols.cli import CliHarness
 from zensols.amr import Application, ApplicationFactory
@@ -18,3 +20,8 @@ class BaseTestApplication(unittest.TestCase):
         if isinstance(inst, Failure):
             inst.rethrow()
         return inst
+
+    def _clean_targ(self):
+        targ = Path('target')
+        if targ.is_dir():
+            shutil.rmtree(targ)
