@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Feature to robustly handle co-reference errors by stashing `AmrFailure`s
   instead of the co-reference when errors are raised.
+- Token annotator (`TokenAnnotationFeatureDocumentDecorator`) can add to the
+  graph epidata or to the node text in addition to adding new attributes.
 
 
 ## [0.1.1] - 2024-03-29
