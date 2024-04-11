@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+### Added
+- Feature to robustly handle co-reference errors by stashing `AmrFailure`s
+  instead of the co-reference when errors are raised.
+
+
 ## [0.1.1] - 2024-03-29
 ### Added
 - AMR parsing and generation model trainers and workflow.

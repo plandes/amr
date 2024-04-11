@@ -3,7 +3,7 @@
 """
 __author__ = 'Paul Landes'
 
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 from dataclasses import dataclass, field
 import logging
 from pathlib import Path
@@ -13,7 +13,7 @@ from zensols.util import time, Hasher
 from zensols.persist import persisted, Stash, DictionaryStash
 from zensols.install import Installer
 from amr_coref.coref.inference import Inference
-from . import AmrFeatureDocument
+from . import AmrFailure, AmrFeatureDocument
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +35,12 @@ class CoreferenceResolver(object):
     """By default, multithreading is enabled for Linux systems.  However, an
     error is raised when invoked from a child thread.  Set to ``False`` to off
     multithreading for coreference resolution.
+
+    """
+    robust: bool = field(default=True)
+    """Whether to robustly deal with exceptions in the coreference model.  If
+    ``True``, instances of :class:`.AmrFailure` are stored in the stash and
+    empty coreferences used for caught errors.
 
     """
     def _use_multithreading(self) -> bool:
@@ -100,8 +106,17 @@ class CoreferenceResolver(object):
         """
         ref: Dict[str, List[Tuple[int, str]]]
         key: str = self._create_key(doc)
-        ref: Dict[str, List[Tuple[int, str]]] = self.stash.load(key)
+        ref: Union[AmrFailure, Dict[str, List[Tuple[int, str]]]] = \
+            self.stash.load(key)
         if ref is None:
-            ref = self._resolve(doc)
+            try:
+                ref = self._resolve(doc)
+            except Exception as e:
+                ref = AmrFailure(
+                    exception=e,
+                    message=f'could not co-reference <{doc.text}>',
+                    sent=doc.text)
+                logger.warning(str(ref))
             self.stash.dump(key, ref)
-        doc.coreference_relations = tuple(map(tuple, ref.values()))
+        if not isinstance(ref, AmrFailure):
+            doc.coreference_relations = tuple(map(tuple, ref.values()))

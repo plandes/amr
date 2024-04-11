@@ -117,7 +117,8 @@ class AmrParser(ComponentInitializer, metaclass=ABCMeta):
 
         """
         if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f'parsing from {doc}')
+            sp = '|'.join(map(lambda t: t.orth_, doc))
+            logger.debug(f'parsing from {doc} ({sp})')
         # add spacy underscore data holders for the amr data structures
         if not Doc.has_extension('amr'):
             Doc.set_extension('amr', default=[])
