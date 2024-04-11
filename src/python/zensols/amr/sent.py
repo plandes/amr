@@ -302,6 +302,7 @@ class AmrSentence(PersistableContainer, Writable):
         metadata = self.metadata
         del metadata['alignments']
         self.metadata = metadata
+        self.invalidate_graph_string()
 
     @property
     def instances(self) -> Dict[str, Tuple[str, str, str]]:
