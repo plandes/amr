@@ -358,6 +358,7 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
         return amr_fdoc
 
     def parse(self, text: str, *args, **kwargs) -> FeatureDocument:
+        self._log_parse(text, logger)
         doc, key, loaded = self._load_or_parse(text, False, *args, **kwargs)
         if not loaded:
             doc = self.annotate(doc)
