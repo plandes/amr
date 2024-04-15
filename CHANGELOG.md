@@ -8,11 +8,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.1.2] - 2024-04-15
 ### Added
 - Feature to robustly handle co-reference errors by stashing `AmrFailure`s
   instead of the co-reference when errors are raised.
 - Token annotator (`TokenAnnotationFeatureDocumentDecorator`) can add to the
   graph epidata or to the node text in addition to adding new attributes.
+
+### Changed
+- Invalidate and update graph string after alignment removal.
 
 
 ## [0.1.1] - 2024-03-29
@@ -47,7 +51,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 <!-- links -->
-[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/Paul Landes/amr/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/Paul Landes/amr/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Paul Landes/amr/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/Paul Landes/amr/compare/v0.0.0...v0.0.1
