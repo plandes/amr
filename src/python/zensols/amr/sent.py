@@ -54,7 +54,7 @@ class AmrSentence(PersistableContainer, Writable):
     latter normalizes out inverse relationships such as ``ARG*-of``.
 
     """
-    def __init__(self, data: Union[str, Graph], model: str = None):
+    def __init__(self, data: Union[str, Graph, AmrFailure], model: str = None):
         """Initialize based on the kind of data given.
 
         :param data: either a Penman formatted string graph, an already parsed
