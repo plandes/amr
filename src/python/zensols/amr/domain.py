@@ -30,6 +30,14 @@ class AmrError(APIError):
             msg = f'{msg}: {sent}'
         super().__init__(msg)
         self.sent = sent
+        self.message = msg
+
+    def to_failure(self) -> AmrFailure:
+        """Create an :class:`.AmrFailure` from this error."""
+        return AmrFailure(
+            exception=self,
+            message=self.message,
+            sent=self.sent)
 
 
 class FeatureMarker(Epidatum):
