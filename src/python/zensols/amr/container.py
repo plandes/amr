@@ -380,7 +380,7 @@ class AmrFeatureDocument(FeatureDocument):
     def from_amr_sentences(self, amr_sents: Iterable[AmrSentence]) -> \
             AmrFeatureDocument:
         """Like :meth:`from_sentences` from return those a new document with
-        :class:`~zensols.nlp.FeatureDocument` sentences sync'd with
+        :class:`~zensols.nlp.container.FeatureDocument` sentences sync'd with
         :class:`.AmrSentence`.
 
         :see: :meth:`add_coreferences`
