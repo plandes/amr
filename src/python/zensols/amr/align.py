@@ -106,13 +106,22 @@ class AmrAlignmentPopulator(object):
     """
     _ALIGNERS: ClassVar[Dict[str, Type]] = frozendict(
         {c.NAME: c for c in (_RuleAligner, _FastAligner)})
+    """The available aligners with their names a keys and their class as
+    values.
 
+    """
     aligner: Union[str, Callable] = field()
     """The aligner used to annotate sentence AMR graphs."""
 
     add_missing_metadata: bool = field(default=True)
     """Whether to add missing annotation metadata to sentences when missing."""
 
+    raise_exception: bool = field(default=True)
+    """Whether to raise exceptions when adding alignments on a per sentence
+    basis.  If set to ``False``, alignments will be missing for any sentence
+    producing and errors.
+
+    """
     def __post_init__(self):
         if isinstance(self.aligner, str):
             aligner = self.aligner
@@ -167,8 +176,16 @@ class AmrAlignmentPopulator(object):
                         logger.info(f"adding alignments to '{sent_str}'")
                     self.aligner(sent)
                 except Exception as e:
-                    logger.error(f'could not load align <{sent}>: {e}')
-                    raise e
+                    sent_str: str = f'<error: {(type(sent))}>'
+                    try:
+                        sent_str = sent.graph_string
+                    except Exception:
+                        pass
+                    msg: str = f'Could not load align: {e}'
+                    if self.raise_exception:
+                        raise AmrError(msg, sent_str) from e
+                    else:
+                        logger.warning(f'{msg} in <{sent_str}>')
 
 
 @dataclass

@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+### Changed
+- A new feature, when enabled, robustly deals with alignment errors.
+
+
 ## [0.1.2] - 2024-04-15
 ### Added
 - Feature to robustly handle co-reference errors by stashing `AmrFailure`s

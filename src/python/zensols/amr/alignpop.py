@@ -14,6 +14,7 @@ import penman
 from penman import Graph
 from penman.surface import Alignment, RoleAlignment
 from .tree import TreeNavigator
+from . import AmrError
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +137,10 @@ class AlignmentPopulator(object):
             type_targ_trip = self._get_node(tree.nodes()[0], path[1:], None)
             role_align, targ_trip = type_targ_trip[0], type_targ_trip[1:]
             align_cls = RoleAlignment if role_align else Alignment
-            align_inst = align_cls.from_string(f'e.{ixs}')
+            try:
+                align_inst = align_cls.from_string(f'e.{ixs}')
+            except Exception as e:
+                raise AmrError(f"Could parse alignment: '{ixs}'") from e
             pa = PathAlignment(paix, path, align, align_inst, targ_trip)
             path_aligns.append(pa)
         if self._nav.strip_alignments:

@@ -27,7 +27,7 @@ class AmrError(APIError):
     """
     def __init__(self, msg: str, sent: str = None):
         if sent is not None:
-            msg = f'{msg}: {sent}'
+            msg = f'{msg}: <{sent}>'
         super().__init__(msg)
         self.sent = sent
         self.message = msg
