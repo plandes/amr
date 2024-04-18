@@ -443,8 +443,6 @@ class AmrFeatureDocument(FeatureDocument):
         s: AmrFeatureSentence
         for s in self.sents:
             s.write(depth + 1, writer, n_tokens=n_tokens,
-                    include_original=include_original,
-                    include_normalized=include_normalized,
                     **sent_kwargs)
         if include_relation_set:
             relset: RelationSet = self.relation_set
