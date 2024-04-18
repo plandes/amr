@@ -33,6 +33,7 @@ class EntityCopySpacyFeatureDocumentParser(SpacyFeatureDocumentParser):
 
     """
     def _decorate_doc(self, spacy_doc: Span, feature_doc: FeatureDocument):
+        super()._decorate_doc(spacy_doc, feature_doc)
         ix2tok: Dict[int, Token] = {t.i: t for t in spacy_doc}
         ftok: FeatureToken
         for ftok in feature_doc.token_iter():
