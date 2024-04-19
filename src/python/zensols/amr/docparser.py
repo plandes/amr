@@ -95,7 +95,10 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
         updates: List[AmrSentence] = []
         sent: AmrSentence
         for sent in doc.sents:
-            updates.append(self._annotate_sentence(sent, doc))
+            if sent.is_failure:
+                updates.append(sent.amr)
+            else:
+                updates.append(self._annotate_sentence(sent, doc))
         doc.amr.sents = updates
         doc.sync_amr_sents()
 
@@ -158,12 +161,14 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
                 self._annotate_token(td, source, feat_trips, graph)
 
     def _annotate_sentence(self, sent: AmrFeatureSentence,
-                           doc: AmrFeatureDocument):
+                           doc: AmrFeatureDocument) -> AmrSentence:
         def map_attr(a: Attribute) -> Attribute:
             role: str = f'{a.role}{srcs[a.source]}'
             srcs[a.source] += 1
             return Attribute(a.source, role, a.target)
 
+        if 'tokens' not in sent.amr.graph.metadata:
+            raise AmrError(f'No tokens metadata in <{sent.amr.graph_string}>')
         tokens_by_i_sent: Dict[int, FeatureToken] = sent.tokens_by_i_sent
         graph: Graph = sent.amr.graph
         graph_tokens: List[str] = json.loads(graph.metadata['tokens'])
@@ -308,7 +313,8 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
         sdoc: Doc
         fdoc.update_indexes()
         if fdoc.spacy_doc is None:
-            logger.info('No spaCy doc in feature document, using adapted')
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug('No spaCy doc in feature document, using adapted')
             sdoc = SpacyDocAdapter(fdoc)
         else:
             # add spacy_token back to tokens
