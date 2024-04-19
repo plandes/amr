@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - A new feature, when enabled, robustly deals with alignment errors.
+- Standardized resource library paths.
 
 
 ## [0.1.2] - 2024-04-15
