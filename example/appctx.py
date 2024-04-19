@@ -92,7 +92,8 @@ He was born On February 22, 1732.
         print('tuples:')
         # show the Penman graph representation
         pgraph: Graph = amr_sent.graph
-        print(f'variables: {", ".join(pgraph.variables())}')
+        # sort for integration test compare
+        print(f'variables: {", ".join(sorted(pgraph.variables()))}')
         for t in pgraph.triples:
             print(' ', t)
         print('edges:')

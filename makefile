@@ -56,17 +56,32 @@ scoredeps:
 # test parsing text
 .PHONY:			testparse
 testparse:
-			$(ABIN) parse $(TEST_TEXT)
+			@echo "testing parse..."
+			@$(ABIN) parse $(TEST_TEXT) | \
+			diff - test-resources/inttest-should/parse.txt || \
+			  exit 1
 
 # test plotting text
 .PHONY:			testplot
 testplot:
-			$(ABIN) plot $(TEST_TEXT)
+			@echo "testing plots..."
+			@$(ABIN) plot $(TEST_TEXT)
+			@if [ ! `ls -l amr_graph/barack*/*.pdf | wc -l` -eq 2 ] ; then \
+				echo "error: missing plot PDF files" ; \
+			fi
+			@if [ ! `ls -l amr_graph/barack*/*.txt | wc -l` -eq 3 ] ; then \
+				echo "error: missing AMR text output files" ; \
+			fi
 
 # run all examples
 .PHONY:			testexample
 testexample:
-			( for i in example/*.py ; do PYTHONPATH=src/python ./$$i ; done )
+			@echo "testing examples..."
+			@( for i in example/*.py ; \
+			  do PYTHONPATH=src/python ./$$i ; \
+			  done ) | \
+			diff - test-resources/inttest-should/examples.txt || \
+			  exit 1
 
 # unit and integration testing
 .PHONY:			testall
