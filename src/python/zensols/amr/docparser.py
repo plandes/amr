@@ -188,9 +188,13 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
                                  graph_tokens, src_trip, align)
         if self.indexed:
             srcs = collections.defaultdict(lambda: 1)
-            feat_trips = map(map_attr, feat_trips)
+            feat_trips = tuple(map(map_attr, feat_trips))
         else:
             feat_trips = set(map(tuple, feat_trips))
+        epis: Dict[Attribute, List] = graph.epidata
+        for trip in feat_trips:
+            if trip not in epis:
+                epis[trip] = []
         graph.triples.extend(feat_trips)
         return AmrSentence(graph)
 
