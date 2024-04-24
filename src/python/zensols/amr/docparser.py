@@ -127,9 +127,16 @@ class TokenAnnotationFeatureDocumentDecorator(FeatureDocumentDecorator):
             else:
                 epis: Dict[Attribute, List] = graph.epidata
                 epi_node: List[Any] = epis[source]
+                targ: str = source.target
+                # keep literal (re)formatted text in the quotes
+                quoted: bool = isinstance(targ, str) and targ.startswith('"')
+                if quoted:
+                    targ = constant.evaluate(targ)
                 val: str = self.method.format(
-                    target=source.target,
+                    target=targ,
                     value=feat_val)
+                if quoted:
+                    val = constant.quote(val)
                 triple = Attribute(source.source, source.role, val)
                 graph.triples.remove(source)
                 graph.triples.append(triple)

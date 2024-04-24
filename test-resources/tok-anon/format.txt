@@ -8,9 +8,9 @@
 (p0 / politician~e.7
     :domain (p1 / person
                 :name (n1 / name
-                          :op3 "II"~PERSON~e.3
-                          :op2 "Hussein"~PERSON~e.1
-                          :op1 "Barack"~PERSON~e.0))
+                          :op3 "II~PERSON"~e.3
+                          :op2 "Hussein~PERSON"~e.1
+                          :op1 "Barack~PERSON"~e.0))
     :ARG0-of (s0 / serve-01~e.9
                  :time (d0 / date-interval
                            :op2 (d2 / date-entity)
@@ -21,4 +21,4 @@
                                     :value 14)))
     :mod (c0 / country
              :name (n0 / name
-                       :op1 "America"~NORP~e.6)))
+                       :op1 "America~NORP"~e.6)))
