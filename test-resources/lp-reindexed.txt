@@ -1,0 +1,60 @@
+# ::id lpp_1943.1 ::date 2012-06-07T17:06:07 ::annotator ISI-AMR-05 ::preferred
+# ::snt Chapter 1 .
+# ::save-date Thu Jun 7, 2012 ::file lpp_1943_1.txt
+(c / chapter
+  :mod 1)
+
+# ::preferred
+# ::annotator ISI-AMR-05
+# ::date 2012-06-07T17:06:20
+# ::id lpp_1943.2
+# ::snt Once when I was six years old I saw a magnificent picture in a book , called True Stories from Nature , about the primeval forest .
+# ::file lpp_1943_2.txt
+# ::save-date Mon May 13, 2013
+(s / see-01
+   :ARG0 (i / i)
+   :ARG1 (p / picture
+            :mod (m / magnificent)
+            :location (b / book
+                         :wiki -
+                         :name (n / name
+                                  :op1 "True"
+                                  :op2 "Stories"
+                                  :op3 "from"
+                                  :op4 "Nature")
+                         :topic (f / forest
+                                   :mod (p2 / primeval))))
+   :mod (o / once)
+   :time (a / age-01
+            :ARG1 i
+            :ARG2 (t / temporal-quantity
+                     :quant 6
+                     :unit (y / year))))
+
+# ::preferred
+# ::annotator ISI-AMR-05
+# ::date 2012-06-07T17:06:23
+# ::id lpp_1943.3
+# ::snt It was a picture of a boa constrictor in the act of swallowing an animal .
+# ::file lpp_1943_3.txt
+# ::save-date Mon Apr 15, 2013
+(p3 / picture
+    :domain (i2 / it)
+    :topic (b2 / boa
+               :mod (c2 / constrictor)
+               :ARG0-of (s2 / swallow-01
+                            :ARG1 (a2 / animal))))
+
+# ::preferred
+# ::annotator ISI-AMR-05
+# ::date 2012-06-07T17:06:28
+# ::id lpp_1943.4
+# ::snt Here is a copy of the drawing .
+# ::file lpp_1943_4.txt
+# ::save-date Thu Oct 29, 2015
+(b3 / be-located-at-91
+    :ARG1 (t2 / thing
+              :ARG2-of (c3 / copy-01
+                           :ARG1 (p4 / picture
+                                     :ARG1-of (d / draw-01))))
+    :ARG2 (h / here))

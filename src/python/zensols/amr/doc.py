@@ -3,9 +3,8 @@
 """
 from __future__ import annotations
 __author__ = 'Paul Landes'
-from typing import Union, List, Tuple, Dict, Any, Iterable, Optional, Type
+from typing import Union, List, Tuple, Dict, Iterable, Any, Optional, Type
 from dataclasses import dataclass, field
-import logging
 import sys
 import re
 import itertools as it
@@ -18,8 +17,7 @@ from zensols.persist import PersistableContainer, persisted
 from amrlib.graph_processing.amr_loading import load_amr_entries
 from amrlib.graph_processing.amr_loading_raw import load_raw_amr
 from . import AmrSentence, AmrGeneratedSentence
-
-logger = logging.getLogger(__name__)
+from .varidx import VariableIndexer
 
 
 @dataclass(init=False)
@@ -89,6 +87,10 @@ class AmrDocument(PersistableContainer, Writable):
         sent: AmrSentence
         for sent in self.sents:
             sent.normalize()
+
+    def reindex_variables(self):
+        vi = VariableIndexer()
+        vi.reindex(self.sents)
 
     @staticmethod
     def resolve_source(source: Union[Path, Installer]) -> Path:

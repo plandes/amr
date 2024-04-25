@@ -20,6 +20,8 @@ Features:
   files.
 * Tools for [training and evaluating](training) new AMR parse (text to graph)
   and generation (graph to text) models.
+* A method for re-indexing and updating AMR graph variables so that all in a
+  document collection are unique.
 
 
 ## Documentation

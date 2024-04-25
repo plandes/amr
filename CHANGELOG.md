@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+### Added
+- "A utility class to reindex variables in an `AmrDocument`.
+
 ### Changed
 - A new feature, when enabled, robustly deals with alignment errors.
 - Standardized resource library paths.
