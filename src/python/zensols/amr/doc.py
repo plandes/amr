@@ -89,6 +89,10 @@ class AmrDocument(PersistableContainer, Writable):
             sent.normalize()
 
     def reindex_variables(self):
+        """Reindexes all variables for sentences of a :class:`.AmrDocument` so
+        all node variables are unique in the document.
+
+        """
         vi = VariableIndexer()
         vi.reindex(self.sents)
 

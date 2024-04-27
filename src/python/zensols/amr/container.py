@@ -17,6 +17,7 @@ from zensols.nlp import (
     LexicalSpan, TextContainer, TokenContainer,
     FeatureToken, FeatureSentence, FeatureDocument,
 )
+from zensols.nlp.decorate import FeatureDocumentDecorator
 from . import AmrError, AmrSentence, AmrDocument
 
 
@@ -464,3 +465,17 @@ class AmrFeatureDocument(FeatureDocument):
 AmrFeatureDocument.amr = AmrFeatureDocument._amr
 AmrFeatureDocument.coreference_relations = \
     AmrFeatureDocument._coreference_relations
+
+
+@dataclass
+class ReindexVariableFeatureDocumentDecorator(FeatureDocumentDecorator):
+    """Reindex AMR concept variables to be unique across all sentences.
+
+    :see: :meth:`.AmrDocument.reindex_variables`.
+
+    """
+    def decorate(self, doc: FeatureDocument):
+        if not isinstance(doc, AmrFeatureDocument):
+            raise AmrError(
+                f'Expecting AmrFeatureDocument but got: {type(doc)}')
+        doc.amr.reindex_variables()
