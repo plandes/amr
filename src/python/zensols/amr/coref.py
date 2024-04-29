@@ -7,6 +7,7 @@ from typing import Dict, List, Tuple, Union
 from dataclasses import dataclass, field
 import logging
 from pathlib import Path
+import textwrap as tw
 import platform
 import torch
 from zensols.util import time, Hasher
@@ -112,9 +113,10 @@ class CoreferenceResolver(object):
             try:
                 ref = self._resolve(doc)
             except Exception as e:
+                text: str = tw.shorten(doc.text, width=60)
                 ref = AmrFailure(
                     exception=e,
-                    message=f'could not co-reference <{doc.text}>',
+                    message=f'could not co-reference <{text}>',
                     sent=doc.text)
                 logger.warning(str(ref))
             self.stash.dump(key, ref)
