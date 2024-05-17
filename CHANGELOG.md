@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.1.3] - 2024-05-16
 ### Added
 - "A utility class to reindex variables in an `AmrDocument` and a decorator for
   it.
@@ -16,6 +17,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - A new feature, when enabled, robustly deals with alignment errors.
 - Standardized resource library paths.
+- Move AMR token decorated literals formatted attributes inside the quotes.
+- Fix missing epigraph data for new token decorated nodes.
 
 
 ## [0.1.2] - 2024-04-15
@@ -61,7 +64,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 <!-- links -->
-[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/Paul Landes/amr/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/Paul Landes/amr/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/Paul Landes/amr/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Paul Landes/amr/compare/v0.0.1...v0.1.0
