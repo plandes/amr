@@ -1,0 +1,10 @@
+<map id="inheritance503befa470" name="inheritance503befa470">
+<area shape="rect" id="node1" href="#zensols.amr.wlk.amr_similarity.AmrWasserPreProcessor" target="_top" title="AmrWasserPreProcessor" alt="" coords="5,84,232,115"/>
+<area shape="rect" id="node2" href="#zensols.amr.wlk.amr_similarity.Preprocessor" target="_top" title="(Interface): preprocesses data of paired multi edge networkx Di&#45;Graphs" alt="" coords="37,5,166,36"/>
+<area shape="rect" id="node3" href="#zensols.amr.wlk.amr_similarity.EmSimilarity" target="_top" title="EmSimilarity" alt="" coords="190,5,314,36"/>
+<area shape="rect" id="node4" href="#zensols.amr.wlk.amr_similarity.GraphSimilarityPredictor" target="_top" title="(Interface): predicts similarities for paired Inputs that are multi edge networkx Di&#45;Graphs," alt="" coords="339,5,557,36"/>
+<area shape="rect" id="node5" href="#zensols.amr.wlk.amr_similarity.GraphSimilarityPredictorAligner" target="_top" title="(Interface): predicts similarities for paired amrs Input are multi edge networkx Di&#45;Graphs" alt="" coords="283,84,557,115"/>
+<area shape="rect" id="node7" href="#zensols.amr.wlk.amr_similarity.WLK" target="_top" title="WLK" alt="" coords="581,84,653,115"/>
+<area shape="rect" id="node8" href="#zensols.amr.wlk.amr_similarity.WasserWLK" target="_top" title="WasserWLK" alt="" coords="359,163,481,193"/>
+<area shape="rect" id="node6" href="#zensols.amr.wlk.amr_similarity.NodeDistanceMatrixGenerator" target="_top" title="Given a list with graph tuples, it generates node embeddings " alt="" coords="581,5,848,36"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="inheritance5ef5271825" name="inheritance5ef5271825">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="75,5,147,36"/>
+<area shape="rect" id="node3" title="An abstract base class for scoring methods (bleu, rouge, etc)." alt="" coords="46,84,177,115"/>
+<area shape="rect" id="node2" href="#zensols.amr.score.AmrScoreParser" target="_top" title="Parses :class:`.AmrSentence` instances from the ``snt`` metadata text" alt="" coords="431,5,587,36"/>
+<area shape="rect" id="node4" href="#zensols.amr.score.SmatchScoreCalculator" target="_top" title="Computes the smatch scores of AMR sentences using the `Smatch package`_." alt="" coords="5,163,217,193"/>
+</map>

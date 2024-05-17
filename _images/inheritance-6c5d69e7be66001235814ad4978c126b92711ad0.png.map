@@ -1,0 +1,8 @@
+<map id="inheritanceeb50734dff" name="inheritanceeb50734dff">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="63,5,135,36"/>
+<area shape="rect" id="node4" title="Called by :class:`.Component` to do post spaCy initialization." alt="" coords="5,84,192,115"/>
+<area shape="rect" id="node2" href="#zensols.amr.model.AmrGenerator" target="_top" title="A callable that generates natural language text from an AMR graph." alt="" coords="344,5,483,36"/>
+<area shape="rect" id="node5" href="#zensols.amr.amrlib.AmrlibGenerator" target="_top" title="AmrlibGenerator(name: str = None, installer: zensols.install.installer.Installer = None, alternate_path: pathlib.Path = None, use_tense: bool = True)" alt="" coords="335,84,491,115"/>
+<area shape="rect" id="node3" href="#zensols.amr.model.AmrParser" target="_top" title="Parses natural language into AMR graphs. &#160;It has the ability to change" alt="" coords="44,163,153,193"/>
+<area shape="rect" id="node6" href="#zensols.amr.amrlib.AmrlibParser" target="_top" title="AmrlibParser(model: str = &#39;noop&#39;, add_missing_metadata: bool = True, name: str = None, installer: zensols.install.installer.Installer = None, alternate_path: pathlib.Path = None)" alt="" coords="35,241,162,272"/>
+</map>

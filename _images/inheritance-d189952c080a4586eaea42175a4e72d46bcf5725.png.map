@@ -1,0 +1,5 @@
+<map id="inheritance222daa221f" name="inheritance222daa221f">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="138,5,210,36"/>
+<area shape="rect" id="node2" title="An abstract base class for scoring methods (bleu, rouge, etc)." alt="" coords="109,84,239,115"/>
+<area shape="rect" id="node3" href="#zensols.amr.wlk.score.WeisfeilerLemanKernelScoreCalculator" target="_top" title="Computes the Weisfeiler&#45;Leman Kernel (`WLK`_) scores of AMR sentences" alt="" coords="5,163,343,193"/>
+</map>
