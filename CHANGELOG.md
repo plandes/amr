@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ### Added
-- "A utility class to reindex variables in an `AmrDocument`.
+- "A utility class to reindex variables in an `AmrDocument` and a decorator for
+  it.
+- Integration test automation.
 
 ### Changed
 - A new feature, when enabled, robustly deals with alignment errors.
