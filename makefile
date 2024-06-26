@@ -4,7 +4,7 @@
 ## Build system
 #
 PROJ_TYPE =		python
-PROJ_MODULES =		git python-resources python-cli python-doc python-doc-deploy
+PROJ_MODULES =		git python-resources python-cli python-doc python-doc-deploy markdown
 INFO_TARGETS +=		appinfo
 PY_DEP_POST_DEPS +=	modeldeps
 

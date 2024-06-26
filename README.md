@@ -30,15 +30,25 @@ Features:
 * [API reference](https://plandes.github.io/amr/api.html)
 
 
-## Obtaining
+## Installing
 
-The easiest way to install the command line program is via the `pip` installer:
+The library can be installed with pip from the [pypi] repository:
 ```bash
 pip3 install zensols.amr
 ```
 
-Binaries are also available on [pypi].
+### Installing the Gsii Model
 
+The Gsii model link expires and requires a manual download of the model.  To
+install it, do the following:
+
+1. Download the [Gsii model] (click "direct download").
+1. Move the file to the local directory.
+1. Install the file for forcing a test parse:
+   ```bash
+   amr parse 'Test sentence.' --override \
+       amr_parse_gsii_resource.url=file:model_parse_gsii-v0_1_0.tar.gz
+   ```
 
 ## Usage
 
@@ -224,7 +234,7 @@ If you use this project in your research please use the following BibTeX entry:
 	month = dec,
 	year = "2023",
 	address = "Singapore, Singapore",
-	publisher = "Empirical Methods in Natural Language Processing",
+	publisher = "Association for Computational Linguistics",
 	url = "https://aclanthology.org/2023.nlposs-1.16",
 	pages = "141--146"
 }
@@ -276,3 +286,4 @@ Copyright (c) 2021 - 2024 Paul Landes
 [facebook/bart-base]: https://huggingface.co/facebook/bart-base
 [t5-base]: https://huggingface.co/google-t5/t5-base
 [google/flan-t5-large]: https://huggingface.co/google/flan-t5-large
+[Gsii model]: https://u.pcloud.link/publink/show?code=XZD2z0XZOqRtS2mNMHhMG4UhXOCNO4yzeaLk
