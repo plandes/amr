@@ -44,7 +44,7 @@ install it, do the following:
 
 1. Download the [Gsii model] (click "direct download").
 1. Move the file to the local directory.
-1. Install the file for forcing a test parse:
+1. Install the file by forcing a test parse:
    ```bash
    amr parse 'Test sentence.' --override \
        amr_parse_gsii_resource.url=file:model_parse_gsii-v0_1_0.tar.gz
