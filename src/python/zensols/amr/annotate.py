@@ -626,21 +626,57 @@ class AnnotatedAmrFeatureDocumentFactory(object):
     document missing an ID.
 
     """
-    def _to_annotated_sent(self, sent: AmrFeatureSentence,
-                           sent_type: SentenceType) -> \
-            Tuple[AmrFeatureSentence, bool]:
-        """Clone ``sent`` into an ``AnnotatedAmrSentence``."""
-        mod: bool = False
+    def to_annotated_sent(self, sent: AmrFeatureSentence,
+                          sent_type: SentenceType = None) -> AmrFeatureSentence:
+        """Clone ``sent.amr`` into an :class:`.AnnotatedAmrSentence`.
+
+        :param sent: the sentence to convert to an
+                     :class:`.AnnotatedAmrSentence`
+
+        :param sent_type: the type of sentence to set on
+
+        :return: a feature sentence with a new
+                 :obj:`~zensols.amr.container.AmrFeatureSentence.amr` to new
+                 :class:`AnnotatedAmrSentence`, which is a new instance if
+                 ``sent`` isn't an annotated AMR sentence
+
+        """
+        if sent_type is None:
+            stype_name: str = sent.amr.metadata['snt-type']
+            sent_type = SentenceType[stype_name.upper()]
         if not isinstance(sent.amr, AnnotatedAmrSentence):
             asent = sent.amr.clone(
                 cls=AnnotatedAmrSentence,
                 sent_type=sent_type,
                 doc_sent_idx=0)
-            asent.set_metadata('snt-type', sent_type.name.lower())
+            if sent_type is not None:
+                asent.set_metadata('snt-type', sent_type.name.lower())
             sent = sent.clone()
             sent.amr = asent
-            mod = True
-        return sent, mod
+        return sent
+
+    def to_annotated_doc(self, doc: AmrFeatureDocument) -> AmrFeatureDocument:
+        """Clone ``doc.amr`` into an :class:`.AnnotatedAmrDocument`.
+
+        :param sent: the document to convert to an
+                     :class:`.AnnotatedAmrDocument`
+
+        :return: a feature document with a new
+                 :obj:`~zensols.amr.container.AmrFeatureDocument.amr` to new
+                 :class:`AnnotatedAmrDocument`, which is a new instance if
+                 ``sent`` isn't an annotated AMR document
+
+        """
+        if not isinstance(doc.amr, AnnotatedAmrDocument):
+            fsents: Tuple[AmrFeatureSentence, ...] = \
+                tuple(map(self.to_annotated_sent, doc))
+            adoc = doc.amr.clone(
+                cls=AnnotatedAmrDocument,
+                sents=tuple(map(lambda s: s.amr, fsents)))
+            if adoc.doc_id is None:
+                adoc.doc_id = adoc.get_doc_id()
+            doc = doc.clone(amr=adoc, sents=fsents)
+        return doc
 
     def from_str(self, sents: str, stype: SentenceType) -> \
             Iterable[AmrFeatureSentence]:
@@ -654,7 +690,7 @@ class AnnotatedAmrFeatureDocumentFactory(object):
         if logger.isEnabledFor(logging.INFO):
             logger.info(f'parsing: <{tw.shorten(sents, 60)}>')
         doc: AmrFeatureDocument = self.doc_parser(sents)
-        return map(lambda s: self._to_annotated_sent(s, stype)[0], doc)
+        return map(lambda s: self.to_annotated_sent(s, stype), doc)
 
     def from_dict(self, data: Dict[str, str]) -> AmrFeatureDocument:
         """Parse and create an AMR document from a :class:`dict`.

@@ -58,8 +58,8 @@ scoredeps:
 testparse:
 			@echo "testing parse..."
 			@$(ABIN) parse $(TEST_TEXT) | \
-			diff - test-resources/inttest-should/parse.txt || \
-			  exit 1
+			  diff - test-resources/inttest-should/parse.txt || \
+			    exit 1
 
 # test plotting text
 .PHONY:			testplot

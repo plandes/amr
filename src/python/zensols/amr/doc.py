@@ -26,6 +26,7 @@ class AmrDocument(PersistableContainer, Writable):
 
     """
     _COMMENT_REGEX = re.compile(r'^\s*#\s*[^:]{2}.*')
+    _DOC_ID_REGEX = re.compile(r'^(.+)\.\d+$')
 
     sents: Tuple[AmrSentence, ...] = field()
     """The AMR sentences that make up the document."""
@@ -77,6 +78,23 @@ class AmrDocument(PersistableContainer, Writable):
             if i < n_sents - 1:
                 sio.write('\n\n')
         return sio.getvalue()
+
+    def get_doc_id(self) -> Optional[str]:
+        """Get the ID of the document from the first sentence's ID, if there is
+        one.  For example, if the first sentence's ID is ``liu-example.0``, the
+        string ``liu-example`` is returned.
+
+        :return: the porition of the first sentence's metadata ``id`` of the
+                 characters before the sentence index, or ``None`` if the
+                 metadata is not available
+
+        """
+        if len(self.sents) > 0:
+            sent: AmrSentence = self.sents[0]
+            sid: str = sent.metadata.get('id')
+            m: re.Match = self._DOC_ID_REGEX.match(sid)
+            if m is not None:
+                return m.group(1)
 
     def normalize(self):
         """Normalize the graph string to standard notation per the Penman API.
@@ -147,7 +165,7 @@ class AmrDocument(PersistableContainer, Writable):
             params['sents'] = tuple(map(lambda s: s.clone(), self.sents))
         if 'path' not in params:
             params['path'] = getattr(self, 'path')
-        cls = self.__class__
+        cls = params.pop('cls', self.__class__)
         return cls(**params)
 
     def from_sentences(self, sents: Iterable[AmrSentence],

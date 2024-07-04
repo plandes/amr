@@ -384,6 +384,10 @@ class AmrFeatureDocument(FeatureDocument):
         :class:`~zensols.nlp.container.FeatureDocument` sentences sync'd with
         :class:`.AmrSentence`.
 
+        :param amr_sents: the sentences that will make up the returned document
+
+        :return: a new document composed of ``amr_sent``
+
         :see: :meth:`add_coreferences`
 
         """
@@ -403,9 +407,11 @@ class AmrFeatureDocument(FeatureDocument):
         return doc
 
     def clone(self, cls: Type = None, **kwargs) -> TokenContainer:
+        amr: AmrDocument = kwargs.pop('amr', None)
         clone = super().clone(cls, **kwargs)
-        if not hasattr(self, '_no_amr_clone'):
-            clone.amr = self.amr.clone()
+        if amr is None and not hasattr(self, '_no_amr_clone'):
+            amr = self.amr.clone()
+        clone.amr = amr
         self.add_coreferences(clone)
         return clone
 
