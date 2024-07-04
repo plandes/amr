@@ -1,0 +1,9 @@
+<map id="inheritancec76a37846e" name="inheritancec76a37846e">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="307,5,379,36"/>
+<area shape="rect" id="node6" title="An interface for classes that have multi&#45;line debuging capability." alt="" coords="299,84,387,115"/>
+<area shape="rect" id="node2" href="#zensols.amr.corpprep.AmrReleaseCorpusPrepper" target="_top" title="Writes the `AMR 3 release`_ corpus files." alt="" coords="5,320,249,351"/>
+<area shape="rect" id="node3" href="#zensols.amr.corpprep.CorpusPrepper" target="_top" title="Subclasses know where to download, install, and split the corpus in to" alt="" coords="170,241,314,272"/>
+<area shape="rect" id="node7" href="#zensols.amr.corpprep.SingletonCorpusPrepper" target="_top" title="Prepares the corpus training files from a single AMR Penman encoded file." alt="" coords="274,320,493,351"/>
+<area shape="rect" id="node4" title="A class that that generates a dictionary recursively from data classes" alt="" coords="300,163,387,193"/>
+<area shape="rect" id="node5" href="#zensols.amr.corpprep.CorpusPrepperManager" target="_top" title="Aggregates and applies corpus prepare instances." alt="" coords="338,241,554,272"/>
+</map>

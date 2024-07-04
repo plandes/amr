@@ -1,0 +1,12 @@
+<map id="inheritancee7c2c3dc10" name="inheritancee7c2c3dc10">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="152,5,224,36"/>
+<area shape="rect" id="node4" title="An interface for classes that have multi&#45;line debuging capability." alt="" coords="144,84,232,115"/>
+<area shape="rect" id="node2" href="#zensols.amr.serial.AmrSerializedFactory" target="_top" title="Creates instances of :class:`.Serialized` from instances of" alt="" coords="5,241,200,272"/>
+<area shape="rect" id="node3" title="A class that that generates a dictionary recursively from data classes" alt="" coords="145,163,231,193"/>
+<area shape="rect" id="node7" href="#zensols.amr.serial.Serialized" target="_top" title="A base strategy class that can serialize :class:`.AmrDocument` and" alt="" coords="224,241,325,272"/>
+<area shape="rect" id="node5" title="Create a collection of name/value pairs." alt="" coords="559,5,631,36"/>
+<area shape="rect" id="node6" href="#zensols.amr.serial.Include" target="_top" title="Indicates what to include at each level." alt="" coords="555,84,635,115"/>
+<area shape="rect" id="node8" href="#zensols.amr.serial.SerializedAmrDocument" target="_top" title="Serializes instance of :class:`.AmrDocument`." alt="" coords="76,320,295,351"/>
+<area shape="rect" id="node9" href="#zensols.amr.serial.SerializedAmrSentence" target="_top" title="Serializes instance of :class:`.AmrSentence`." alt="" coords="319,320,529,351"/>
+<area shape="rect" id="node10" href="#zensols.amr.serial.SerializedAnnotatedAmrDocument" target="_top" title="Serializes instance of :class:`.AnnotatedAmrDocument`." alt="" coords="35,399,335,429"/>
+</map>

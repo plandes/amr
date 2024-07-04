@@ -1,0 +1,17 @@
+<map id="inheritance33a9af4a50" name="inheritance33a9af4a50">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="252,5,324,36"/>
+<area shape="rect" id="node8" title="All subclasses have the ability to deallocate any resources. &#160;This is" alt="" coords="80,84,211,115"/>
+<area shape="rect" id="node11" title="An interface for classes that have multi&#45;line debuging capability." alt="" coords="244,84,332,115"/>
+<area shape="rect" id="node13" title="Implementations can add, remove or modify features on a token container." alt="" coords="357,84,646,115"/>
+<area shape="rect" id="node2" title="Base exception from which almost all library raised errors extend." alt="" coords="712,5,803,36"/>
+<area shape="rect" id="node3" href="#zensols.amr.domain.AmrError" target="_top" title="Raised for package API errors." alt="" coords="709,84,805,115"/>
+<area shape="rect" id="node4" href="#zensols.amr.docparser.AmrParseError" target="_top" title="AmrParseError" alt="" coords="686,163,829,193"/>
+<area shape="rect" id="node5" href="#zensols.amr.docparser.AnnotationFeatureDocumentParser" target="_top" title="A document parser that adds and further annotates AMR graphs. &#160;This has" alt="" coords="5,477,312,508"/>
+<area shape="rect" id="node6" title="A document parser that persists previous parses using the hash of the" alt="" coords="15,399,302,429"/>
+<area shape="rect" id="node7" title="This class adapts the :class:`.FeatureDocumentParser` adaptors to the" alt="" coords="7,320,310,351"/>
+<area shape="rect" id="node14" title="Classes can extend this that want to persist :class:`.PersistedWork`" alt="" coords="43,163,232,193"/>
+<area shape="rect" id="node9" title="This class parses text in to instances of :class:`.FeatureDocument`" alt="" coords="49,241,269,272"/>
+<area shape="rect" id="node10" title="A class that that generates a dictionary recursively from data classes" alt="" coords="257,163,343,193"/>
+<area shape="rect" id="node12" title="Implementations can add, remove or modify features on a document." alt="" coords="378,163,625,193"/>
+<area shape="rect" id="node15" href="#zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator" target="_top" title="Annotate features in AMR sentence graphs from indexes annotated from" alt="" coords="311,241,691,272"/>
+</map>

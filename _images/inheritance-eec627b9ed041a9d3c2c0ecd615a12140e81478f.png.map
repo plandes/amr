@@ -1,0 +1,11 @@
+<map id="inheritance6abaffc0bb" name="inheritance6abaffc0bb">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="143,5,215,36"/>
+<area shape="rect" id="node3" title="An interface for classes that have multi&#45;line debuging capability." alt="" coords="135,84,223,115"/>
+<area shape="rect" id="node2" title="A class that that generates a dictionary recursively from data classes" alt="" coords="136,163,223,193"/>
+<area shape="rect" id="node5" href="#zensols.amr.trainer.Trainer" target="_top" title="Interface in to the :mod:`amrlib` package&#39;s trainers" alt="" coords="140,241,219,272"/>
+<area shape="rect" id="node4" href="#zensols.amr.trainer.HFTrainer" target="_top" title="Interface in to the :mod:`amrlib` package&#39;s HuggingFace model trainers." alt="" coords="57,320,160,351"/>
+<area shape="rect" id="node8" href="#zensols.amr.trainer.XfmTrainer" target="_top" title="Trainer for XFM and T5 models." alt="" coords="53,399,165,429"/>
+<area shape="rect" id="node6" href="#zensols.amr.trainer.SpringTrainer" target="_top" title="SPRING model trainer." alt="" coords="185,320,315,351"/>
+<area shape="rect" id="node7" href="#zensols.amr.trainer.T5Trainer" target="_top" title="T5 model trainer." alt="" coords="5,477,105,508"/>
+<area shape="rect" id="node9" href="#zensols.amr.trainer.T5WithTenseGeneratorTrainer" target="_top" title="T5WithTenseGeneratorTrainer(corpus_prep_manager: &#39;CorpusPrepperManager&#39;, model_name: &#39;str&#39;, output_model_dir: &#39;Path&#39;, temporary_dir: &#39;Path&#39;, version: &#39;str&#39; = &#39;0.1.0&#39;, model_installer: &#39;Installer&#39; = None, training_config_file: &#39;Path&#39; = None, training_config_overrides: &#39;Dict[str, Any]&#39; = &lt;factory&gt;, pretrained_path_or_model: &#39;Union[Path, str]&#39; = None, package_dir: &#39;Path&#39; = PosixPath(&#39;.&#39;), nltk_lib_dir: &#39;Path&#39; = None, annotate_dir: &#39;Path&#39; = None, annotate_model: &#39;str&#39; = &#39;en_core_web_sm&#39;)" alt="" coords="130,477,397,508"/>
+</map>

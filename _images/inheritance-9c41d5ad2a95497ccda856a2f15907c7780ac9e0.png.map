@@ -1,0 +1,8 @@
+<map id="inheritancea31b7ba754" name="inheritancea31b7ba754">
+<area shape="rect" id="node1" title="Base exception from which almost all library raised errors extend." alt="" coords="8,5,99,36"/>
+<area shape="rect" id="node2" href="#zensols.amr.domain.AmrError" target="_top" title="Raised for package API errors." alt="" coords="5,84,101,115"/>
+<area shape="rect" id="node3" href="#zensols.amr.domain.AmrFailure" target="_top" title="A container class that describes AMR graph creation or handling error." alt="" coords="237,84,347,115"/>
+<area shape="rect" id="node4" title="Contains information for failures as caught exceptions used by" alt="" coords="253,5,331,36"/>
+<area shape="rect" id="node7" href="#zensols.amr.domain.FeatureMarker" target="_top" title="FeatureMarker" alt="" coords="428,84,569,115"/>
+<area shape="rect" id="node6" href="#zensols.amr.domain.Feature" target="_top" title="Feature" alt="" coords="457,163,541,193"/>
+</map>

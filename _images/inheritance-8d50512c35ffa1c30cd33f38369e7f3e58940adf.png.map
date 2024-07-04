@@ -1,0 +1,11 @@
+<map id="inheritance4b226bc366" name="inheritance4b226bc366">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="144,5,216,36"/>
+<area shape="rect" id="node3" title="All subclasses have the ability to deallocate any resources. &#160;This is" alt="" coords="41,84,172,115"/>
+<area shape="rect" id="node5" title="An interface for classes that have multi&#45;line debuging capability." alt="" coords="211,84,299,115"/>
+<area shape="rect" id="node2" href="#zensols.amr.docfac.AmrFeatureDocumentFactory" target="_top" title="Creates :class:`.AmrFeatureDocument` from :class:`.AmrDocument`" alt="" coords="453,5,715,36"/>
+<area shape="rect" id="node9" title="Classes can extend this that want to persist :class:`.PersistedWork`" alt="" coords="5,163,195,193"/>
+<area shape="rect" id="node4" title="A class that that generates a dictionary recursively from data classes" alt="" coords="219,163,306,193"/>
+<area shape="rect" id="node8" title="This class parses text in to instances of :class:`.FeatureDocument`" alt="" coords="93,241,313,272"/>
+<area shape="rect" id="node6" href="#zensols.amr.docfac.EntityCopySpacyFeatureDocumentParser" target="_top" title="Copy spaCy ``ent_type_`` named entity (NER) tags to" alt="" coords="24,399,381,429"/>
+<area shape="rect" id="node7" title="This langauge resource parses text in to Spacy documents. &#160;Loaded spaCy" alt="" coords="67,320,338,351"/>
+</map>
