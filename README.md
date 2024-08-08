@@ -3,6 +3,7 @@
 [![PyPI][pypi-badge]][pypi-link]
 [![Python 3.10][python310-badge]][python310-link]
 [![Python 3.11][python311-badge]][python311-link]
+[![Build Status][build-badge]][build-link]
 
 Provides support for AMR graph manipulation, annotations and feature
 generation.
@@ -271,6 +272,8 @@ Copyright (c) 2021 - 2024 Paul Landes
 [python310-link]: https://www.python.org/downloads/release/python-3100
 [python311-badge]: https://img.shields.io/badge/python-3.11-blue.svg
 [python311-link]: https://www.python.org/downloads/release/python-3110
+[build-badge]: https://github.com/plandes/amr/workflows/CI/badge.svg
+[build-link]: https://github.com/plandes/amr/actions
 
 [spaCy]: https://spacy.io
 [amrlib]: https://github.com/bjascob/amrlib

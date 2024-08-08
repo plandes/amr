@@ -1,10 +1,12 @@
 from typing import List
+import sys
 from pathlib import Path
 from penman.graph import Graph
 from penman.model import Model
 import penman.models.noop
 from amrlib.graph_processing.amr_loading import load_amr_entries
 from amrlib.alignments.faa_aligner import FAA_Aligner
+from zensols.amr.align import _FastAligner
 from zensols.amr.alignpop import AlignmentPopulator, PathAlignment
 from util import BaseTestApplication
 
@@ -22,6 +24,10 @@ class TestAlignmentPopulation(BaseTestApplication):
         ugraphs: List[Graph] = [
             penman.decode(gs, model=model) for gs in graph_strs]
         sents: List[str] = [g.metadata['snt'] for g in ugraphs]
+        if not _FastAligner.is_available():
+            print('no fast aligner available--skipping alignment test',
+                  file=sys.stderr)
+            return
         inference = FAA_Aligner()
         agraphs, aligns = inference.align_sents(sents, graph_strs)
         tups = zip(sents, ugraphs, agraphs, aligns)
