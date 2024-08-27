@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+### Changed
+- Fix spaCy adapted document missing token index when adding AMR metadata.
+  This happens when tokens are removed by a filter, as happened with a stop
+  word filter in a unit test case.  This also fixes that unit test case.
+
+
 ## [0.1.4] - 2024-07-03
 ### Added
 - `AmrDocument` infers its document ID from the first contained sentence.

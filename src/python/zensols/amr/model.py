@@ -78,7 +78,7 @@ class AmrParser(ComponentInitializer, metaclass=ABCMeta):
             logger.debug(f'add metadata from spacy span: {amr_sent}')
 
         meta: Dict[str, str] = amr_sent.metadata
-        tok: Token = sent[0]
+        tok: Token = next(iter(sent))
         if clobber or 'tokens' not in meta:
             toks = tuple(map(lambda t: t.orth_, sent))
             amr_sent.set_metadata('tokens', json.dumps(toks))
