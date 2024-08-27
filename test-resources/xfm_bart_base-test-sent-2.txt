@@ -1,0 +1,26 @@
+# ::snt A member of the Democratic Party, he was the first African-American president of the United States.
+# ::tokens ["A", "member", "of", "the", "Democratic", "Party", ",", "he", "was", "the", "first", "African", "-", "American", "president", "of", "the", "United", "States", "."]
+# ::lemmas ["a", "member", "of", "the", "Democratic", "Party", ",", "he", "be", "the", "first", "african", "-", "american", "president", "of", "the", "United", "States", "."]
+# ::ner_tags ["O", "O", "O", "ORG", "ORG", "ORG", "O", "O", "O", "O", "ORDINAL", "NORP", "NORP", "NORP", "O", "O", "GPE", "GPE", "GPE", "O"]
+# ::pos_tags ["DT", "NN", "IN", "DT", "NNP", "NNP", ",", "PRP", "VBD", "DT", "JJ", "JJ", "HYPH", "JJ", "NN", "IN", "DT", "NNP", "NNP", "."]
+# ::ner_iob ["O", "O", "O", "B", "I", "I", "O", "O", "O", "O", "B", "B", "I", "I", "O", "O", "B", "I", "I", "O"]
+# ::alignments 1-1.4.1 4-1.4.1.2.1.1 5-1.4.1.2.r 7-1.1 11-1.3.2.1.1 14-1.3 17-1.2.1.1 18-1.2.1.2
+(h / have-org-role-91
+   :ARG0 (h2 / he~e.7)
+   :ARG1 (c / country
+            :name (n / name
+                     :op1 "United"~e.17
+                     :op2 "States"~e.18))
+   :ARG2 (p / president~e.14
+            :ord (o / ordinal-entity
+                    :value 1)
+            :mod (e / ethnic-group
+                    :name (n2 / name
+                              :op1 "African-American"~e.11)))
+   :ARG1-of (c2 / cause-01
+                :ARG0 (m / member~e.1
+                         :domain h2
+                         :part-of~e.5 (p2 / political-party
+                                          :name (n3 / name
+                                                    :op1 "Democratic"~e.4
+                                                    :op2 "Party")))))

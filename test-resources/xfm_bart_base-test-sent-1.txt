@@ -8,13 +8,13 @@
 (p / politician~e.7
    :mod (c / country
            :name (n / name
-                    :op1 "America~NORP"~e.6))
+                    :op1 "America"~e.6))
    :domain (p2 / person
                :name (n2 / name
-                         :op1 "Barack~PERSON"~e.0
-                         :op2 "Hussein~PERSON"~e.1
-                         :op3 "Obama~PERSON"~e.2
-                         :op4 "II~PERSON"~e.3))
+                         :op1 "Barack"~e.0
+                         :op2 "Hussein"~e.1
+                         :op3 "Obama"~e.2
+                         :op4 "II"~e.3))
    :ARG0-of (s / serve-01~e.9
                :ARG1 (p3 / president~e.13
                          :ARG2-of (h / have-org-role-91
@@ -24,6 +24,6 @@
                                  :value 44))
                :time (d / date-interval
                         :op1 (d2 / date-entity
-                                 :year 2009~DATE~e.19)
+                                 :year 2009~e.19)
                         :op2 (d3 / date-entity
-                                 :year 2017~DATE~e.21))))
+                                 :year 2017~e.21))))

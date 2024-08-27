@@ -3,6 +3,7 @@ from io import BytesIO
 import pickle
 import json
 from pathlib import Path
+from util import BaseTestApplication
 from spacy.tokens.doc import Doc
 from spacy.tokens.span import Span
 from penman.graph import Graph
@@ -11,14 +12,14 @@ from zensols.amr import (
     Application
 )
 from zensols.amr.annotate import AnnotationFeatureDocumentParser
-from util import BaseTestApplication
 
 
 class TestApplication(BaseTestApplication):
-    _DEFAULT_MODEL = 'gsii'
+    _DEFAULT_MODEL = 'xfm_bart_base'
     _DEFAULT_TEST = f'{_DEFAULT_MODEL}-test'
 
     def setUp(self):
+        super().setUp()
         self.maxDiff = sys.maxsize
         self.sent = ("""\
 Barack Hussein Obama II is an American politician who served as the 44th \
@@ -162,14 +163,14 @@ Party, he was the first African-American president of the United States.\
         self._test_doc(doc.amr)
 
     def test_filtering_annotator(self):
-        app: Application = self._get_model_app('gsii-filter-test', 'test-filter')
+        app: Application = self._get_model_app('filter-test', 'test-filter')
         doc_parser = app.config_factory('amr_anon_doc_parser')
         doc: AmrFeatureDocument = doc_parser(self.sent)
         self.assertEqual(AmrFeatureDocument, type(doc))
         self.assertEqual(2, len(tuple(doc.sents)))
         self.assertEqual(AmrFeatureSentence, type(next(iter(doc.sents))))
         self.assertEqual(AmrDocument, type(doc.amr))
-        self._test_doc(doc.amr, 'gsii-filter')
+        self._test_doc(doc.amr, 'filter')
 
     def test_annotator_reload(self):
         app: Application = self._get_model_app(self._DEFAULT_TEST)

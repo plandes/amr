@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ### Changed
+- Reset the default AMR parser to the [amrlib] XFM Bart Base model.  This was
+  switched from the GSII model since the authors have not made that model
+  downloadable by robots.  This was done for usage of the library and fix the
+  unit tests in CLI GitHub workflows.
 - Fix spaCy adapted document missing token index when adding AMR metadata.
   This happens when tokens are removed by a filter, as happened with a stop
   word filter in a unit test case.  This also fixes that unit test case.

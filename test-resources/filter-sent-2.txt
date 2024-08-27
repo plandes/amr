@@ -1,0 +1,30 @@
+# ::snt member Democratic Party African American president United States
+# ::tokens ["member", "Democratic", "Party", "African", "American", "president", "United", "States"]
+# ::lemmas ["member", "Democratic", "Party", "african", "american", "president", "United", "States"]
+# ::ner_tags ["O", "ORG", "ORG", "NORP", "NORP", "O", "GPE", "GPE"]
+# ::pos_tags ["NN", "NNP", "NNP", "JJ", "JJ", "NN", "NNP", "NNP"]
+# ::ner_iob ["O", "I", "I", "B", "I", "O", "I", "I"]
+# ::alignments 0-1.2.2 1-1.1.1.1.1 2-1.1.1.1.2 3-1.1.1.2.1.1 5-1.1.2 6-1.2.1.1.1 7-1.2.1.1.2
+(p / person
+   :ARG0-of (h / have-org-role-91
+               :ARG1 (p2 / political-party
+                         :name (n / name
+                                  :op1 "Democratic"~e.1
+                                  :op2 "Party"~e.2
+                                  :norm1 "Democratic"
+                                  :norm2 "Party")
+                         :mod (c / continent
+                                 :name (n2 / name
+                                           :op1 "Africa"~e.3
+                                           :norm1 "African")))
+               :ARG2 (p3 / president~e.5
+                         :norm1 "president"))
+   :ARG0-of (h2 / have-org-role-91
+                :ARG1 (c2 / country
+                          :name (n3 / name
+                                    :op1 "United"~e.6
+                                    :op2 "States"~e.7
+                                    :norm1 "United"
+                                    :norm2 "States"))
+                :ARG2 (m / member~e.0
+                         :norm1 "member")))

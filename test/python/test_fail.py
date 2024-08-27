@@ -9,7 +9,7 @@ from zensols.amr import (
 
 
 class TestApplication(unittest.TestCase):
-    _DEFAULT_MODEL = 'gsii'
+    _DEFAULT_MODEL = 'xfm_bart_base'
     _DEFAULT_TEST = f'{_DEFAULT_MODEL}-test'
 
     def _app(self, model_name: str, config: str = 'test'):
