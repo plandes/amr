@@ -9,7 +9,6 @@ from penman.graph import Graph
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
 from zensols.amr import AmrDocument, AmrSentence, ApplicationFactory
 
-
 if __name__ == '__main__':
     sent: str = """
 

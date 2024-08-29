@@ -1,155 +1,132 @@
-Loading model /Users/landes/.cache/zensols/amr/gsii-v0_1_0/model_stog/model.pt
 # ::snt He was George Washington and first president of the United States.
 # ::tokens ["He", "was", "George", "Washington", "and", "first", "president", "of", "the", "United", "States", "."]
-# ::ner_tags ["O", "O", "PERSON", "PERSON", "O", "ORDINAL", "O", "O", "GPE", "GPE", "GPE", "O"]
-# ::ner_iob ["O", "O", "B", "I", "O", "B", "O", "O", "B", "I", "I", "O"]
-# ::pos_tags ["PRP", "VBD", "NNP", "NNP", "CC", "JJ", "NN", "IN", "DT", "NNP", "NNP", "."]
 # ::lemmas ["he", "be", "George", "Washington", "and", "first", "president", "of", "the", "United", "States", "."]
-# ::alignments 0-1.2.1 2-1.2.2.2 3-1.2.2.1 4-1 6-1.1.2.1 9-1.1.2.2.1.2 10-1.1.2.2.1.1
-(a0 / and~e.4
-      :op2 (p1 / person
-            :ord (o0 / ordinal-entity
-                  :value 1)
-            :ARG0-of (h1 / have-org-role-91
-                  :ARG2 (p2 / president~e.6)
-                  :ARG1 (c0 / country
-                        :name (n1 / name
-                              :op2 "States"~e.10
-                              :op1 "United"~e.9)))
-            :domain h0)
-      :op1 (p0 / person
-            :domain (h0 / he~e.0)
-            :domain (n0 / name
-                  :op2 "Washington"~e.3
-                  :op1 "George"~e.2)))
+# ::ner_tags ["O", "O", "PERSON", "PERSON", "O", "ORDINAL", "O", "O", "GPE", "GPE", "GPE", "O"]
+# ::pos_tags ["PRP", "VBD", "NNP", "NNP", "CC", "JJ", "NN", "IN", "DT", "NNP", "NNP", "."]
+# ::ner_iob ["O", "O", "B", "I", "O", "B", "O", "O", "B", "I", "I", "O"]
+# ::alignments 0-1.3 2-1.1.1 3-1.1.2 6-1.2.2 9-1.2.1.1.1 10-1.2.1.1.2
+(p / person
+      :name (n / name
+            :op1 "George"~e.2
+            :op2 "Washington"~e.3)
+      :ARG0-of (h / have-org-role-91
+            :ARG1 (c / country
+                  :name (n2 / name
+                        :op1 "United"~e.9
+                        :op2 "States"~e.10))
+            :ARG2 (p2 / president~e.6
+                  :ord (o / ordinal-entity
+                        :value 1)))
+      :domain (h2 / he~e.0))
 
 # ::snt He was born On February 22, 1732.
 # ::tokens ["He", "was", "born", "On", "February", "22", ",", "1732", "."]
-# ::ner_tags ["O", "O", "O", "O", "DATE", "DATE", "DATE", "DATE", "O"]
-# ::ner_iob ["O", "O", "O", "O", "B", "I", "I", "I", "O"]
-# ::pos_tags ["PRP", "VBD", "VBN", "IN", "NNP", "CD", ",", "CD", "."]
 # ::lemmas ["he", "be", "bear", "on", "February", "22", ",", "1732", "."]
-# ::alignments 0-1.2 2-1 4-1.1.2 5-1.1.1 7-1.1.3
-(b0 / bear-02~e.2
-      :time (d0 / date-entity
-            :day 22~e.5
+# ::ner_tags ["O", "O", "O", "O", "DATE", "DATE", "DATE", "DATE", "O"]
+# ::pos_tags ["PRP", "VBD", "VBN", "IN", "NNP", "CD", ",", "CD", "."]
+# ::ner_iob ["O", "O", "O", "O", "B", "I", "I", "I", "O"]
+# ::alignments 0-1.1 2-1 4-1.2.2 5-1.2.3 7-1.2.1
+(b / bear-02~e.2
+      :ARG1 (h / he~e.0)
+      :time (d / date-entity
+            :year 1732~e.7
             :month 2~e.4
-            :year 1732~e.7)
-      :ARG1 (h0 / he~e.0))
+            :day 22~e.5))
 sentence:
   He was George Washington and first president of the United States.
 tuples:
-variables: a0, c0, h0, h1, n0, n1, o0, p0, p1, p2
-  ('a0', ':instance', 'and')
-  ('a0', ':op2', 'p1')
-  ('p1', ':instance', 'person')
-  ('p1', ':ord', 'o0')
-  ('o0', ':instance', 'ordinal-entity')
-  ('o0', ':value', '1')
-  ('p1', ':ARG0-of', 'h1')
-  ('h1', ':instance', 'have-org-role-91')
-  ('h1', ':ARG2', 'p2')
+variables: c, h, h2, n, n2, o, p, p2
+  ('p', ':instance', 'person')
+  ('p', ':name', 'n')
+  ('n', ':instance', 'name')
+  ('n', ':op1', '"George"')
+  ('n', ':op2', '"Washington"')
+  ('p', ':ARG0-of', 'h')
+  ('h', ':instance', 'have-org-role-91')
+  ('h', ':ARG1', 'c')
+  ('c', ':instance', 'country')
+  ('c', ':name', 'n2')
+  ('n2', ':instance', 'name')
+  ('n2', ':op1', '"United"')
+  ('n2', ':op2', '"States"')
+  ('h', ':ARG2', 'p2')
   ('p2', ':instance', 'president')
-  ('h1', ':ARG1', 'c0')
-  ('c0', ':instance', 'country')
-  ('c0', ':name', 'n1')
-  ('n1', ':instance', 'name')
-  ('n1', ':op2', '"States"')
-  ('n1', ':op1', '"United"')
-  ('p1', ':domain', 'h0')
-  ('a0', ':op1', 'p0')
-  ('p0', ':instance', 'person')
-  ('p0', ':domain', 'h0')
-  ('h0', ':instance', 'he')
-  ('p0', ':domain', 'n0')
-  ('n0', ':instance', 'name')
-  ('n0', ':op2', '"Washington"')
-  ('n0', ':op1', '"George"')
+  ('p2', ':ord', 'o')
+  ('o', ':instance', 'ordinal-entity')
+  ('o', ':value', '1')
+  ('p', ':domain', 'h2')
+  ('h2', ':instance', 'he')
 edges:
-  Edge(source='a0', role=':op2', target='p1')
-  Edge(source='p1', role=':ord', target='o0')
-  Edge(source='p1', role=':ARG0-of', target='h1')
-  Edge(source='h1', role=':ARG2', target='p2')
-  Edge(source='h1', role=':ARG1', target='c0')
-  Edge(source='c0', role=':name', target='n1')
-  Edge(source='p1', role=':domain', target='h0')
-  Edge(source='a0', role=':op1', target='p0')
-  Edge(source='p0', role=':domain', target='h0')
-  Edge(source='p0', role=':domain', target='n0')
+  Edge(source='p', role=':name', target='n')
+  Edge(source='p', role=':ARG0-of', target='h')
+  Edge(source='h', role=':ARG1', target='c')
+  Edge(source='c', role=':name', target='n2')
+  Edge(source='h', role=':ARG2', target='p2')
+  Edge(source='p2', role=':ord', target='o')
+  Edge(source='p', role=':domain', target='h2')
 # ::snt He was George Washington and first president of the United States.
 # ::tokens ["He", "was", "George", "Washington", "and", "first", "president", "of", "the", "United", "States", "."]
-# ::ner_tags ["O", "O", "PERSON", "PERSON", "O", "ORDINAL", "O", "O", "GPE", "GPE", "GPE", "O"]
-# ::ner_iob ["O", "O", "B", "I", "O", "B", "O", "O", "B", "I", "I", "O"]
-# ::pos_tags ["PRP", "VBD", "NNP", "NNP", "CC", "JJ", "NN", "IN", "DT", "NNP", "NNP", "."]
 # ::lemmas ["he", "be", "George", "Washington", "and", "first", "president", "of", "the", "United", "States", "."]
-# ::alignments 4-1 5-1.1.1.r 5-1.1.1 5-1.1.1.1 6-1.1.2.1
-(a0 / and~e.4
-    :op2 (p1 / person
-             :ord~e.5 (o0 / ordinal-entity~e.5
-                          :value 1~e.5)
-             :ARG0-of (h1 / have-org-role-91
-                          :ARG2 (p2 / president~e.6)
-                          :ARG1 (c0 / country
-                                    :name (n1 / name
-                                              :op2 "States"
-                                              :op1 "United")))
-             :domain h0)
-    :op1 (p0 / person
-             :domain (h0 / he)
-             :domain (n0 / name
-                         :op2 "Washington"
-                         :op1 "George")))
+# ::ner_tags ["O", "O", "PERSON", "PERSON", "O", "ORDINAL", "O", "O", "GPE", "GPE", "GPE", "O"]
+# ::pos_tags ["PRP", "VBD", "NNP", "NNP", "CC", "JJ", "NN", "IN", "DT", "NNP", "NNP", "."]
+# ::ner_iob ["O", "O", "B", "I", "O", "B", "O", "O", "B", "I", "I", "O"]
+# ::alignments 6-1.2.2 5-1.2.2.1.r 5-1.2.2.1 5-1.2.2.1.1
+(p / person
+   :name (n / name
+            :op1 "George"
+            :op2 "Washington")
+   :ARG0-of (h / have-org-role-91
+               :ARG1 (c / country
+                        :name (n2 / name
+                                  :op1 "United"
+                                  :op2 "States"))
+               :ARG2 (p2 / president~e.6
+                         :ord~e.5 (o / ordinal-entity~e.5
+                                     :value 1~e.5)))
+   :domain (h2 / he))
 
 # ::snt He was born On February 22, 1732.
 # ::tokens ["He", "was", "born", "On", "February", "22", ",", "1732", "."]
-# ::ner_tags ["O", "O", "O", "O", "DATE", "DATE", "DATE", "DATE", "O"]
-# ::ner_iob ["O", "O", "O", "O", "B", "I", "I", "I", "O"]
-# ::pos_tags ["PRP", "VBD", "VBN", "IN", "NNP", "CD", ",", "CD", "."]
 # ::lemmas ["he", "be", "bear", "on", "February", "22", ",", "1732", "."]
-# ::alignments 5-1.1.1
-(b0 / bear-02
-    :time (d0 / date-entity
-              :day 22~e.5
-              :month 2
-              :year 1732)
-    :ARG1 (h0 / he))
+# ::ner_tags ["O", "O", "O", "O", "DATE", "DATE", "DATE", "DATE", "O"]
+# ::pos_tags ["PRP", "VBD", "VBN", "IN", "NNP", "CD", ",", "CD", "."]
+# ::ner_iob ["O", "O", "O", "O", "B", "I", "I", "I", "O"]
+# ::alignments 5-1.2.3
+(b / bear-02
+   :ARG1 (h / he)
+   :time (d / date-entity
+            :year 1732
+            :month 2
+            :day 22~e.5))
 sentence:
   He was George Washington and first president of the United States.
 tuples:
-variables: a0, c0, h0, h1, n0, n1, o0, p0, p1, p2
-  ('a0', ':instance', 'and')
-  ('a0', ':op2', 'p1')
-  ('p1', ':instance', 'person')
-  ('p1', ':ord', 'o0')
-  ('o0', ':instance', 'ordinal-entity')
-  ('o0', ':value', '1')
-  ('p1', ':ARG0-of', 'h1')
-  ('h1', ':instance', 'have-org-role-91')
-  ('h1', ':ARG2', 'p2')
+variables: c, h, h2, n, n2, o, p, p2
+  ('p', ':instance', 'person')
+  ('p', ':name', 'n')
+  ('n', ':instance', 'name')
+  ('n', ':op1', '"George"')
+  ('n', ':op2', '"Washington"')
+  ('p', ':ARG0-of', 'h')
+  ('h', ':instance', 'have-org-role-91')
+  ('h', ':ARG1', 'c')
+  ('c', ':instance', 'country')
+  ('c', ':name', 'n2')
+  ('n2', ':instance', 'name')
+  ('n2', ':op1', '"United"')
+  ('n2', ':op2', '"States"')
+  ('h', ':ARG2', 'p2')
   ('p2', ':instance', 'president')
-  ('h1', ':ARG1', 'c0')
-  ('c0', ':instance', 'country')
-  ('c0', ':name', 'n1')
-  ('n1', ':instance', 'name')
-  ('n1', ':op2', '"States"')
-  ('n1', ':op1', '"United"')
-  ('p1', ':domain', 'h0')
-  ('a0', ':op1', 'p0')
-  ('p0', ':instance', 'person')
-  ('p0', ':domain', 'h0')
-  ('h0', ':instance', 'he')
-  ('p0', ':domain', 'n0')
-  ('n0', ':instance', 'name')
-  ('n0', ':op2', '"Washington"')
-  ('n0', ':op1', '"George"')
+  ('p2', ':ord', 'o')
+  ('o', ':instance', 'ordinal-entity')
+  ('o', ':value', '1')
+  ('p', ':domain', 'h2')
+  ('h2', ':instance', 'he')
 edges:
-  Edge(source='a0', role=':op2', target='p1')
-  Edge(source='p1', role=':ord', target='o0')
-  Edge(source='p1', role=':ARG0-of', target='h1')
-  Edge(source='h1', role=':ARG2', target='p2')
-  Edge(source='h1', role=':ARG1', target='c0')
-  Edge(source='c0', role=':name', target='n1')
-  Edge(source='p1', role=':domain', target='h0')
-  Edge(source='a0', role=':op1', target='p0')
-  Edge(source='p0', role=':domain', target='h0')
-  Edge(source='p0', role=':domain', target='n0')
+  Edge(source='p', role=':name', target='n')
+  Edge(source='p', role=':ARG0-of', target='h')
+  Edge(source='h', role=':ARG1', target='c')
+  Edge(source='c', role=':name', target='n2')
+  Edge(source='h', role=':ARG2', target='p2')
+  Edge(source='p2', role=':ord', target='o')
+  Edge(source='p', role=':domain', target='h2')

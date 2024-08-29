@@ -1,50 +1,55 @@
 # ::snt Barack Obama is an American politician who served as the 44th president of the United States from 2009 to 2017.
 # ::tokens ["Barack", "Obama", "is", "an", "American", "politician", "who", "served", "as", "the", "44th", "president", "of", "the", "United", "States", "from", "2009", "to", "2017", "."]
+# ::lemmas ["Barack", "Obama", "be", "an", "american", "politician", "who", "serve", "as", "the", "44th", "president", "of", "the", "United", "States", "from", "2009", "to", "2017", "."]
 # ::ner_tags ["PERSON", "PERSON", "O", "O", "NORP", "O", "O", "O", "O", "O", "ORDINAL", "O", "O", "GPE", "GPE", "GPE", "O", "DATE", "O", "DATE", "O"]
-# ::ner_iob ["B", "I", "O", "O", "B", "O", "O", "O", "O", "O", "B", "O", "O", "B", "I", "I", "O", "B", "O", "B", "O"]
 # ::pos_tags ["NNP", "NNP", "VBZ", "DT", "JJ", "NN", "WP", "VBD", "IN", "DT", "JJ", "NN", "IN", "DT", "NNP", "NNP", "IN", "CD", "IN", "CD", "."]
-# ::lemmas ["Barack", "Obama", "be", "an", "American", "politician", "who", "serve", "as", "the", "44th", "president", "of", "the", "United", "States", "from", "2009", "to", "2017", "."]
-# ::alignments 5-1 7-1.2 16-1.2.1 19-1.2.1.1.1 17-1.2.1.2.1 11-1.2.2
-(p0 / politician~e.5
-    :domain (p1 / person
-                :name (n1 / name
-                          :op2 "Obama"
-                          :op1 "Barack"))
-    :ARG0-of (s0 / serve-01~e.7
-                 :time (d0 / date-interval~e.16
-                           :op2 (d2 / date-entity
-                                    :year 2017~e.19)
-                           :op1 (d1 / date-entity
-                                    :year 2009~e.17))
-                 :ARG1 (p2 / president~e.11
-                           :ord (o0 / ordinal-entity
-                                    :value 14)))
-    :mod (c0 / country
-             :name (n0 / name
-                       :op1 "America")))
+# ::ner_iob ["B", "I", "O", "O", "B", "O", "O", "O", "O", "O", "B", "O", "O", "B", "I", "I", "O", "B", "O", "B", "O"]
+# ::alignments 0-1.2.1.1 1-1.2.1.2 4-1.1.1.1 5-1 7-1.3 11-1.3.1 17-1.3.3.1.1 19-1.3.3.2.1
+(p / politician~e.5
+      :mod (c / country
+            :name (n / name
+                  :op1 "America"~e.4))
+      :domain (p2 / person
+            :name (n2 / name
+                  :op1 "Barack"~e.0
+                  :op2 "Obama"~e.1))
+      :ARG0-of (s / serve-01~e.7
+            :ARG1 (p3 / president~e.11
+                  :ARG2-of (h / have-org-role-91
+                        :ARG0 p2
+                        :ARG1 c)
+                  :ord (o / ordinal-entity
+                        :value 44))
+            :ARG2 c
+            :time (d / date-interval
+                  :op1 (d2 / date-entity
+                        :year 2009~e.17)
+                  :op2 (d3 / date-entity
+                        :year 2017~e.19))))
 
 # ::snt A member of the Democratic Party, he was the first African-American president of the United States.
 # ::tokens ["A", "member", "of", "the", "Democratic", "Party", ",", "he", "was", "the", "first", "African", "-", "American", "president", "of", "the", "United", "States", "."]
+# ::lemmas ["a", "member", "of", "the", "Democratic", "Party", ",", "he", "be", "the", "first", "african", "-", "american", "president", "of", "the", "United", "States", "."]
 # ::ner_tags ["O", "O", "O", "ORG", "ORG", "ORG", "O", "O", "O", "O", "ORDINAL", "NORP", "NORP", "NORP", "O", "O", "GPE", "GPE", "GPE", "O"]
-# ::ner_iob ["O", "O", "O", "B", "I", "I", "O", "O", "O", "O", "B", "B", "I", "I", "O", "O", "B", "I", "I", "O"]
 # ::pos_tags ["DT", "NN", "IN", "DT", "NNP", "NNP", ",", "PRP", "VBD", "DT", "JJ", "JJ", "HYPH", "JJ", "NN", "IN", "DT", "NNP", "NNP", "."]
-# ::lemmas ["a", "member", "of", "the", "Democratic", "Party", ",", "he", "be", "the", "first", "African", "-", "American", "president", "of", "the", "United", "States", "."]
-# ::alignments 1-1.2 7-1.3 14-1.4.1.1 10-1.4.1.1.1.r 10-1.4.1.1.1 10-1.4.1.1.1.1 10-1.4.1.1.2.r
-(h0 / have-org-role-91
-    :ARG1 (p0 / political-party
-              :name (n1 / name
-                        :op2 "Party"
-                        :op1 "Democratic"))
-    :ARG2 (m0 / member~e.1)
-    :ARG0 (h1 / he~e.7)
-    :ARG3 (c0 / country
-              :ARG1-of (h2 / have-org-role-91
-                           :ARG2 (p1 / president~e.14
-                                     :ord~e.10 (o0 / ordinal-entity~e.10
-                                                   :value 1~e.10)
-                                     :ord~e.10 (c1 / continent
-                                                   :name (n2 / name
-                                                             :op2 "States"
-                                                             :op1 "United"))))
-              :name (n0 / name
-                        :op1 "America")))
+# ::ner_iob ["O", "O", "O", "B", "I", "I", "O", "O", "O", "O", "B", "B", "I", "I", "O", "O", "B", "I", "I", "O"]
+# ::alignments 1-1.4.1 4-1.4.1.2.1.1 5-1.4.1.2.r 7-1.1 11-1.3.2.1.1 14-1.3 17-1.2.1.1 18-1.2.1.2
+(h / have-org-role-91
+      :ARG0 (h2 / he~e.7)
+      :ARG1 (c / country
+            :name (n / name
+                  :op1 "United"~e.17
+                  :op2 "States"~e.18))
+      :ARG2 (p / president~e.14
+            :ord (o / ordinal-entity
+                  :value 1)
+            :mod (e / ethnic-group
+                  :name (n2 / name
+                        :op1 "African-American"~e.11)))
+      :ARG1-of (c2 / cause-01
+            :ARG0 (m / member~e.1
+                  :domain h2
+                  :part-of~e.5 (p2 / political-party
+                        :name (n3 / name
+                              :op1 "Democratic"~e.4
+                              :op2 "Party")))))

@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
 from zensols.cli import CliHarness
+from zensols.deeplearn import TorchConfig
 
 
 if (__name__ == '__main__'):
+    TorchConfig.init()
     args: str = ''
     model = {
         0: None,

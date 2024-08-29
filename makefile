@@ -24,7 +24,8 @@ MODEL_FILE =		corpus/amr-bank-struct-v3.0.txt
 EVAL_FILE = 		target/corp/stage/dev/dev.txt
 ABIN =			./amr
 INF_CONF = 		resources/model/inference.conf
-
+INTTEST_PARSE_GOLD =	test-resources/inttest-should/parse.txt
+INTTEST_EX_GOLD =	test-resources/inttest-should/examples.txt
 
 ## Project data
 #
@@ -54,17 +55,27 @@ scoredeps:
 			$(PIP_BIN) install $(PIP_ARGS) -r $(PY_SRC)/requirements-score.txt
 
 # test parsing text
+.PHONY:			testparsewrite
+testparsewrite:
+			@echo "(re)writing testing parse gold..."
+			make clean
+			@$(ABIN) parse -c test-resources/test.conf \
+			  $(TEST_TEXT) > $(INTTEST_PARSE_GOLD)
+
 .PHONY:			testparse
 testparse:
 			@echo "testing parse..."
-			@$(ABIN) parse $(TEST_TEXT) | \
-			  diff - test-resources/inttest-should/parse.txt || \
+			make clean
+			@$(ABIN) parse -c test-resources/test.conf \
+			  --level warn $(TEST_TEXT) | \
+			  diff - $(INTTEST_PARSE_GOLD) || \
 			    exit 1
 
 # test plotting text
 .PHONY:			testplot
 testplot:
 			@echo "testing plots..."
+			make clean
 			@$(ABIN) plot $(TEST_TEXT)
 			@if [ ! `ls -l amr_graph/barack*/*.pdf | wc -l` -eq 2 ] ; then \
 				echo "error: missing plot PDF files" ; \
@@ -73,14 +84,23 @@ testplot:
 				echo "error: missing AMR text output files" ; \
 			fi
 
-# run all examples
+# integration test all examples
+.PHONY:			testexamplewrite
+testexamplewrite:
+			@echo "(re)writing testing examples gold..."
+			make clean
+			@( for i in example/*.py ; \
+			  do PYTHONPATH=src/python ./$$i ; \
+			  done ) > $(INTTEST_EX_GOLD)
+
 .PHONY:			testexample
 testexample:
 			@echo "testing examples..."
+			make clean
 			@( for i in example/*.py ; \
 			  do PYTHONPATH=src/python ./$$i ; \
 			  done ) | \
-			diff - test-resources/inttest-should/examples.txt || \
+			diff - $(INTTEST_EX_GOLD) || \
 			  exit 1
 
 # unit and integration testing
