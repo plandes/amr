@@ -1,0 +1,1546 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2024.07.18 -->
+        <title>zensols.amr.wlk.amr_similarity - AMR annotation and feature generation 0.1.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=613ab9ff" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?v=302659d7" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../../top.html"><div class="brand">AMR annotation and feature generation 0.1.5 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../top.html">
+  
+  
+  <span class="sidebar-brand-text">AMR annotation and feature generation 0.1.5 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/zensols.amr.html">zensols.amr package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of zensols.amr package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/zensols.amr.wlk.html">zensols.amr.wlk package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/zensols.amr.wlk.html">zensols.amr.wlk package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CONTRIBUTING.html">Contributing</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for zensols.amr.wlk.amr_similarity</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cosine</span><span class="p">,</span> <span class="n">cdist</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">entropy</span>
+<span class="kn">from</span> <span class="nn">pyemd</span> <span class="kn">import</span> <span class="n">emd_with_flow</span>
+<span class="kn">import</span> <span class="nn">gensim.downloader</span> <span class="k">as</span> <span class="nn">api</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GraphSimilarityPredictor">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.GraphSimilarityPredictor">[docs]</a>
+<span class="k">class</span> <span class="nc">GraphSimilarityPredictor</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;(Interface): predicts similarities for paired Inputs that are multi edge networkx Di-Graphs,</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GraphSimilarityPredictor.validate">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.GraphSimilarityPredictor.validate">[docs]</a>
+    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">):</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">graphs</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">vals</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;wrong input type, need networkx multi-edge directed graphs&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="GraphSimilarityPredictor.predict">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.GraphSimilarityPredictor.predict">[docs]</a>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs_1</span><span class="p">,</span> <span class="n">graphs_2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predict</span><span class="p">(</span><span class="n">graphs_1</span><span class="p">,</span> <span class="n">graphs_2</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="GraphSimilarityPredictorAligner">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.GraphSimilarityPredictorAligner">[docs]</a>
+<span class="k">class</span> <span class="nc">GraphSimilarityPredictorAligner</span><span class="p">(</span><span class="n">GraphSimilarityPredictor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;(Interface): predicts similarities for paired amrs Input are multi edge networkx Di-Graphs </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="GraphSimilarityPredictorAligner.validate">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.GraphSimilarityPredictorAligner.validate">[docs]</a>
+    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">nodemaps</span><span class="p">):</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">graphs</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">vals</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;wrong input type, need networkx multi-edge directed graphs&quot;</span><span class="p">)</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">for</span> <span class="n">nm</span> <span class="ow">in</span> <span class="n">nodemaps</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">vals</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;wrong input type, need dictionaries&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="GraphSimilarityPredictorAligner.predict_and_align">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.GraphSimilarityPredictorAligner.predict_and_align">[docs]</a>
+    <span class="k">def</span> <span class="nf">predict_and_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs_1</span><span class="p">,</span> <span class="n">graphs_2</span><span class="p">,</span> <span class="n">node_map1</span><span class="p">,</span> <span class="n">node_map2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_predict_and_align</span><span class="p">(</span><span class="n">graphs_1</span><span class="p">,</span> <span class="n">graphs_2</span><span class="p">,</span> <span class="n">node_map1</span><span class="p">,</span> <span class="n">node_map2</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Preprocessor">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.Preprocessor">[docs]</a>
+<span class="k">class</span> <span class="nc">Preprocessor</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;(Interface): preprocesses data of paired multi edge networkx Di-Graphs </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Preprocessor.transform">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.Preprocessor.transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs_1</span><span class="p">,</span> <span class="n">graphs_2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;preprocesses amr graphs&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span><span class="p">(</span><span class="n">graphs_1</span><span class="p">,</span> <span class="n">graphs_2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    
+<div class="viewcode-block" id="Preprocessor.prepare">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.Preprocessor.prepare">[docs]</a>
+    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs_1</span><span class="p">,</span> <span class="n">graphs_2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prepare</span><span class="p">(</span><span class="n">graphs_1</span><span class="p">,</span> <span class="n">graphs_2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    
+<div class="viewcode-block" id="Preprocessor.reset">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.Preprocessor.reset">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
+
+
+ 
+<div class="viewcode-block" id="AmrWasserPreProcessor">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.AmrWasserPreProcessor">[docs]</a>
+<span class="k">class</span> <span class="nc">AmrWasserPreProcessor</span><span class="p">(</span><span class="n">Preprocessor</span><span class="p">):</span>
+
+<div class="viewcode-block" id="AmrWasserPreProcessor.__init__">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.AmrWasserPreProcessor.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w2v_uri</span><span class="o">=</span><span class="s1">&#39;glove-wiki-gigaword-100&#39;</span><span class="p">,</span> 
+                    <span class="n">relation_type</span><span class="o">=</span><span class="s2">&quot;scalar&quot;</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s2">&quot;random_uniform&quot;</span><span class="p">,</span>
+                    <span class="n">is_resettable</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initilize Preprocessor object</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            w2v_uri (string): uri to desired word embedding</span>
+<span class="sd">                              e.g., </span>
+<span class="sd">                              &#39;word2vec-google-news-100&#39;</span>
+<span class="sd">                              &#39;glove-twitter-100&#39;</span>
+<span class="sd">                              &#39;fasttext-wiki-news-subwords-300&#39;</span>
+<span class="sd">                              etc.</span>
+<span class="sd">                              if None, then use only random embeddings</span>
+<span class="sd">                              </span>
+<span class="sd">                              alternatively: a dict type object with </span>
+<span class="sd">                              pretrained vecs</span>
+<span class="sd">            relation_type (string): edge label representation type</span>
+<span class="sd">                                    possible: either &#39;scalar&#39; or &#39;vector&#39;</span>
+<span class="sd">            init (string): how to initialize edge weights?</span>
+<span class="sd">            is_resettable (bool): can the parameters be resetted?</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">w2v_uri</span> <span class="o">=</span> <span class="n">w2v_uri</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relation_type</span> <span class="o">=</span> <span class="n">relation_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params_ready</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">=</span> <span class="n">init</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_keys</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unk_nodes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_resettable</span> <span class="o">=</span> <span class="n">is_resettable</span>
+        <span class="k">if</span> <span class="n">w2v_uri</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">w2v_uri</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span> <span class="o">=</span> <span class="n">w2v_uri</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span><span class="p">[</span><span class="s2">&quot;dog&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">w2v_uri</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span><span class="p">[</span><span class="s2">&quot;dog&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;tried to load word embeddings specified as &#39;</span><span class="si">{}</span><span class="s2">&#39;.</span><span class="se">\</span>
+<span class="s2">                        these are not available. all embeddings will be random.</span><span class="se">\</span>
+<span class="s2">                        If this is desired, no need to worry.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w2v_uri</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs_1</span><span class="p">,</span> <span class="n">graphs_2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;initialize embedding of graph nodes and edges&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params_ready</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xprepare</span><span class="p">(</span><span class="n">graphs_1</span><span class="p">,</span> <span class="n">graphs_2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params_ready</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params_ready</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_keys</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unk_nodes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs1</span><span class="p">,</span> <span class="n">graphs2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;embeds nx multi-digraphs. I.e. assigns every </span>
+<span class="sd">        node and edge attribute &quot;latent&quot; with a parameter</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            graphs1 (list): list withnx medi graph</span>
+<span class="sd">            graphs2 (list): list with nx medi graph </span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            nx multi-edge di graphs with embedded nodes, node map from</span>
+<span class="sd">            graph nodes to original AMR variable nodes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+          
+        <span class="c1">#gather embeddings for nodes and edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embeds</span><span class="p">(</span><span class="n">graphs1</span><span class="p">,</span> <span class="n">graphs2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+     
+<div class="viewcode-block" id="AmrWasserPreProcessor.embeds">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.AmrWasserPreProcessor.embeds">[docs]</a>
+    <span class="k">def</span> <span class="nf">embeds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gs1</span><span class="p">,</span> <span class="n">gs2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; embeds all graphs, i.e., assign embeddings to node labels </span>
+<span class="sd">            and edge labels</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            gs1 (list with nx medi graphs): a list of graphs</span>
+<span class="sd">            gs2 (list with nx medi graphs): a list of graphs</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gs1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gs2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">embed</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;no embeddings available for node labels: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unk_nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    
+<div class="viewcode-block" id="AmrWasserPreProcessor.embed">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.AmrWasserPreProcessor.embed">[docs]</a>
+    <span class="k">def</span> <span class="nf">embed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
+
+        <span class="c1">#get unknown nodes </span>
+        <span class="n">label_no_vec</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">label_vec</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">G</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">unk_nodes</span><span class="p">:</span>
+                <span class="n">label_vec</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unk_nodes</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+                <span class="k">continue</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_vec</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">vec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">label_no_vec</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">label_vec</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span>
+        
+        <span class="n">rand_vecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label_no_vec</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">))</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">label_no_vec</span><span class="p">):</span>
+            <span class="n">vec</span> <span class="o">=</span> <span class="n">rand_vecs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unk_nodes</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span>
+            <span class="n">label_vec</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span>
+        
+        <span class="c1">#set node latent</span>
+        <span class="k">def</span> <span class="nf">_make_latent</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;latent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label_vec</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">_make_latent</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+      
+    <span class="k">def</span> <span class="nf">_get_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;lookup a vector for a string</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            string (str): a string</span>
+<span class="sd">        </span>
+<span class="sd">        Returns: </span>
+<span class="sd">            n-dimensional numpy vector</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="c1"># if the node is a negation node in AMR (indicated as &#39;-&#39;, we assign</span>
+        <span class="c1"># random vec)</span>
+        <span class="k">if</span> <span class="n">string</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;false-not-untrue&quot;</span>
+
+        <span class="c1"># further cleaning</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c1"># we can delete word senses here (since they will get contextualized)</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;-[0-9]+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>
+        
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        
+        <span class="n">vecs</span> <span class="o">=</span> <span class="p">[]</span> 
+         
+        <span class="c1">#lookup</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span><span class="p">:</span>
+                <span class="n">vecs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="s2">&quot;_&quot;</span> <span class="ow">in</span> <span class="n">string</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span><span class="p">:</span>
+                    <span class="n">vecs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">vecs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">vecs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        
+        
+        <span class="k">if</span> <span class="n">string</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">():</span>
+            <span class="n">chars</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chars</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span><span class="p">:</span>
+                    <span class="n">vecs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wordvecs</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">i</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">vecs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">vecs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_xprepare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs1</span><span class="p">,</span> <span class="n">graphs2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepares the edge label parameters.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            graphs1 (list with nx medi graphs): a list with graphs</span>
+<span class="sd">            graphs2 (list with nx medi graphs): a list with graphs</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">es</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_edge_labels</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">graphs1</span><span class="p">]</span>
+        <span class="n">es</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_edge_labels</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">graphs2</span><span class="p">]</span>
+        <span class="n">edge_labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">es</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">el</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+                    <span class="n">edge_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+                    <span class="n">dic</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">param</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_edge_label_param</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">edge_labels</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">param</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">edge_labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]:</span><span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edge_labels</span><span class="p">))}</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="AmrWasserPreProcessor.get_edge_labels">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.AmrWasserPreProcessor.get_edge_labels">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_edge_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve all edge labels from a graph</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            G (nx medi graph): nx multi edge dir. graph</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list with edge labels</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+            <span class="n">edat</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">edat</span><span class="p">:</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">edat</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="AmrWasserPreProcessor.sample_edge_label_param">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.AmrWasserPreProcessor.sample_edge_label_param">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample_edge_label_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;initialize edge parameters. </span>
+<span class="sd">        </span>
+<span class="sd">        The idea with min entropy </span>
+<span class="sd">        is to better be able distinguish between edges. This helps with </span>
+<span class="sd">        label discirmintation in ARG tasks (but slightly reduces performance</span>
+<span class="sd">        in other tasks, for other tasks similar or learnt edge weights may </span>
+<span class="sd">        be better)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            n (int): how many parameters are needed?</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            array with parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">==</span> <span class="s2">&quot;ones&quot;</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">==</span> <span class="s2">&quot;constant&quot;</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mf">0.2</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">==</span> <span class="s2">&quot;random_uniform&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">init</span> <span class="o">==</span> <span class="s2">&quot;min_entropy&quot;</span><span class="p">:</span> 
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">sample</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+                    <span class="n">sample</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+                <span class="n">entropies</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+                    <span class="n">entropies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="n">entropy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> 
+                                        <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+                <span class="n">argmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">entropies</span><span class="p">)</span>
+                <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="n">argmin</span><span class="p">])</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">params</span></div>
+</div>
+
+            
+<div class="viewcode-block" id="NodeDistanceMatrixGenerator">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.NodeDistanceMatrixGenerator">[docs]</a>
+<span class="k">class</span> <span class="nc">NodeDistanceMatrixGenerator</span><span class="p">():</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a list with graph tuples, it generates node embeddings </span>
+<span class="sd">    and produces distance matrix&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NodeDistanceMatrixGenerator.__init__">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.NodeDistanceMatrixGenerator.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">param_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                    <span class="n">iters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">communication_direction</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Intitalizes node embedding generatror</span>
+<span class="sd">            </span>
+<span class="sd">            Args:</span>
+<span class="sd">                params (array): edge parameters</span>
+<span class="sd">                param_keys (dict): maps from edge labels to parameter index</span>
+<span class="sd">                iters (int): contextualization iterations</span>
+<span class="sd">                communication_direction: either &quot;both&quot;, &quot;fromout&quot;, or &quot;fromin&quot;</span>
+<span class="sd">                                        specifies message passing direction </span>
+<span class="sd">                                        (see arguments of main_wlk_wasser.py)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_keys</span> <span class="o">=</span> <span class="n">param_keys</span>
+        <span class="k">if</span> <span class="n">param_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">param_keys</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unk_edge</span> <span class="o">=</span> <span class="mf">0.2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unk_edge</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">iters</span> <span class="o">=</span> <span class="n">iters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">communication_direction</span> <span class="o">=</span> <span class="n">communication_direction</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+     
+    <span class="k">def</span> <span class="nf">_wl_embed_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphtuple</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Embed nodes and generate distance matrix for a (A,B) graph tuple</span>
+<span class="sd">            This is required as EMD input.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            graphtuple (tuple): graph tuple (A,B) of nx medi graphs</span>
+<span class="sd">            iters (int): what degree of contextualization is wanted?</span>
+<span class="sd">                        default=2</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            - distance matrix</span>
+<span class="sd">            - node weights graph 1</span>
+<span class="sd">            - node weights graph 2</span>
+<span class="sd">            - order of nodes in matrix graph1</span>
+<span class="sd">            - order of nodes in matrix graph2</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">a1</span> <span class="o">=</span> <span class="n">graphtuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">a2</span> <span class="o">=</span> <span class="n">graphtuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        
+        <span class="n">e1</span><span class="p">,</span> <span class="n">order1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_graph_embed</span><span class="p">(</span><span class="n">a1</span><span class="p">)</span>
+        <span class="n">e2</span><span class="p">,</span> <span class="n">order2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_graph_embed</span><span class="p">(</span><span class="n">a2</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iters</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">E1</span><span class="p">,</span> <span class="n">E2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_WL_latent</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">iters</span><span class="p">)</span>
+            <span class="n">E1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">e1</span><span class="p">,</span> <span class="n">E1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">E2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">e2</span><span class="p">,</span> <span class="n">E2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">E1</span><span class="p">,</span> <span class="n">E2</span> <span class="o">=</span> <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span>
+        
+        <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">dists</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_emd_input</span><span class="p">(</span><span class="n">E1</span><span class="p">,</span> <span class="n">E2</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">dists</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">order1</span><span class="p">,</span> <span class="n">order2</span>
+
+<div class="viewcode-block" id="NodeDistanceMatrixGenerator.generate">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.NodeDistanceMatrixGenerator.generate">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amrs1</span><span class="p">,</span> <span class="n">amrs2</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;two (parallel) data sets, call _wl_embed_single </span>
+<span class="sd">        on each paired graph</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            amrs1 (list): list with nx medi graphs a_1,...,a_n</span>
+<span class="sd">            amrs2 (list): list with nx medi graphs b_1,...,b_n</span>
+<span class="sd">            parallel (boolean): parallelize computation? default=no</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            output of _wl_embed_single for each graph pair</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">amrs2</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">amrs1</span><span class="p">)</span>
+         
+        <span class="n">zipped</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">amrs1</span><span class="p">,</span> <span class="n">amrs2</span><span class="p">))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wl_embed_single</span><span class="p">,</span> <span class="n">zipped</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zipped</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2"> node distance matrices computed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">zipped</span><span class="p">)))</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wl_embed_single</span><span class="p">(</span><span class="n">zipped</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_get_emd_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mat1</span><span class="p">,</span> <span class="n">mat2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepares input for pyemd</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            mat1 (matrix): embeddings fror nodes x_1,...,x_n</span>
+<span class="sd">            mat2 (matrix): embeddings fror nodes y_1,...,y_m</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            - prior weights for nodes of A</span>
+<span class="sd">            - prior weights for nodes of B</span>
+<span class="sd">            - cost matrix</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">mat1</span> <span class="o">=</span> <span class="n">mat1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">mat1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">]</span> 
+        <span class="n">mat2</span> <span class="o">=</span> <span class="n">mat2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">mat2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">]</span>
+        
+        <span class="c1"># construct prior weights of nodes... all are set equal here</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">mat1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">mat2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">mat1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">mat2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])])</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">v2</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+        
+        <span class="c1"># build cost matrix</span>
+        <span class="n">dist_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">v1</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
+        
+        <span class="n">idxs1</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat1</span><span class="p">)))</span>
+        <span class="n">idxs2</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mat1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat1</span><span class="p">)))</span>
+        
+        <span class="c1">#set distances</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">mat1</span><span class="p">,</span> <span class="n">mat2</span><span class="p">)</span>
+        <span class="n">dist_mat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">idxs1</span><span class="p">,</span> <span class="n">idxs2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">dx</span>
+        
+        <span class="k">return</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">dist_mat</span>
+
+<div class="viewcode-block" id="NodeDistanceMatrixGenerator.norm">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.NodeDistanceMatrixGenerator.norm">[docs]</a>
+    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;scale vector to length 1&quot;&quot;&quot;</span>
+        <span class="n">div</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">/</span> <span class="n">div</span></div>
+
+
+<div class="viewcode-block" id="NodeDistanceMatrixGenerator.set_params">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.NodeDistanceMatrixGenerator.set_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;set edge params&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    
+<div class="viewcode-block" id="NodeDistanceMatrixGenerator.get_params">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.NodeDistanceMatrixGenerator.get_params">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;get edge params&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span></div>
+
+     
+<div class="viewcode-block" id="NodeDistanceMatrixGenerator.collect_graph_embed">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.NodeDistanceMatrixGenerator.collect_graph_embed">[docs]</a>
+    <span class="k">def</span> <span class="nf">collect_graph_embed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx_latent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;collect the node embeddings from a graph</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            nx_latent (nx medi graph): a graph that has node embeddings </span>
+<span class="sd">                                        as attributes</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            - the node embeddings</span>
+<span class="sd">            - labels of nodes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">vecs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nx_latent</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">vecs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nx_latent</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;latent&quot;</span><span class="p">])</span>
+            <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vecs</span><span class="p">),</span> <span class="n">labels</span></div>
+
+
+<div class="viewcode-block" id="NodeDistanceMatrixGenerator.maybe_has_param">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.NodeDistanceMatrixGenerator.maybe_has_param">[docs]</a>
+    <span class="k">def</span> <span class="nf">maybe_has_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;safe retrieval of an edge parameter&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_keys</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unk_edge</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_params</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">param_keys</span><span class="p">[</span><span class="n">label</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">param_keys</span><span class="p">[</span><span class="n">label</span><span class="p">]]</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_communicate_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;In-place contextualization of a node with neighborhood</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            G (nx medi graph): input graph</span>
+<span class="sd">            node: the node</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">summ</span> <span class="o">=</span> <span class="p">[]</span>
+         
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">communication_direction</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="s2">&quot;fromout&quot;</span><span class="p">]:</span>
+            <span class="c1"># iterate over outgoing</span>
+            <span class="k">for</span> <span class="n">nb</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="c1"># get node embedding of neighbor</span>
+                <span class="n">latentv</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">nb</span><span class="p">][</span><span class="s2">&quot;latent&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="c1"># multi di graph can have multiple edges, so iterate over all</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nb</span><span class="p">):</span>
+                    <span class="n">e_latent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maybe_has_param</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nb</span><span class="p">)[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+                    <span class="n">latentv</span> <span class="o">*=</span> <span class="n">e_latent</span>
+                <span class="n">summ</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">latentv</span><span class="p">)</span>
+              
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">communication_direction</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="s2">&quot;fromin&quot;</span><span class="p">]:</span>
+            <span class="c1"># iterate over incoming, see above</span>
+            <span class="k">for</span> <span class="n">nb</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">predecessors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="n">latentv</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">nb</span><span class="p">][</span><span class="s2">&quot;latent&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+                    <span class="n">e_latent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maybe_has_param</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="n">node</span><span class="p">)[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+                    <span class="n">latentv</span> <span class="o">*=</span> <span class="n">e_latent</span>
+                <span class="n">summ</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">latentv</span><span class="p">)</span>
+        
+        <span class="c1"># handle possible exception case</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">summ</span><span class="p">:</span>
+            <span class="n">summ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;latent&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="c1"># compute new embedding of node</span>
+        <span class="n">summ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">summ</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;newlatent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;latent&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">summ</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_communicate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx_latent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Applies contextualization (in-place) for all nodes of a graph</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            G (nx medi graph): input graph</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1">#collect new embeddings</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nx_latent</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_communicate_node</span><span class="p">(</span><span class="n">nx_latent</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+
+        <span class="c1">#set new embeddings</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nx_latent</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">nx_latent</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;latent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx_latent</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;newlatent&quot;</span><span class="p">]</span>
+        
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_wl_iter_latent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx_g1_latent</span><span class="p">,</span> <span class="n">nx_g2_latent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;apply one WL iteration and get node embeddings for two graphs A and B</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            nx_g1_latent (nx medi graph): graph A</span>
+<span class="sd">            nx_g2_latent (nx medi graph): graph B</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            - contextualized node embeddings for A</span>
+<span class="sd">            - contextualized node embeddings for B</span>
+<span class="sd">            - new copy of A</span>
+<span class="sd">            - new copy of B</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_communicate</span><span class="p">(</span><span class="n">nx_g1_latent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_communicate</span><span class="p">(</span><span class="n">nx_g2_latent</span><span class="p">)</span>
+        <span class="n">mat1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_graph_embed</span><span class="p">(</span><span class="n">nx_g1_latent</span><span class="p">)</span>
+        <span class="n">mat2</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_graph_embed</span><span class="p">(</span><span class="n">nx_g2_latent</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mat1</span><span class="p">,</span> <span class="n">mat2</span>
+
+    <span class="k">def</span> <span class="nf">_WL_latent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx_g1_latent</span><span class="p">,</span> <span class="n">nx_g2_latent</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;apply K WL iteration and get node embeddings for two graphs A and B</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            nx_g1_latent (nx medi graph): graph A</span>
+<span class="sd">            nx_g2_latent (nx medi graph): graph B</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            - contextualized node embeddings for A for k=1,..k=n</span>
+<span class="sd">            - contextualized node embeddings for B for k=1,..k=n</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">v1s</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">v2s</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iters</span><span class="p">):</span>
+            <span class="n">x1_mat</span><span class="p">,</span> <span class="n">x2_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wl_iter_latent</span><span class="p">(</span><span class="n">nx_g1_latent</span><span class="p">,</span> <span class="n">nx_g2_latent</span><span class="p">)</span>
+            <span class="n">v1s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x1_mat</span><span class="p">)</span>
+            <span class="n">v2s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x2_mat</span><span class="p">)</span>
+        <span class="n">g_embed1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">v1s</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">g_embed2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">v2s</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">g_embed1</span><span class="p">,</span> <span class="n">g_embed2</span></div>
+
+
+
+<div class="viewcode-block" id="EmSimilarity">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.EmSimilarity">[docs]</a>
+<span class="k">class</span> <span class="nc">EmSimilarity</span><span class="p">():</span>
+
+<div class="viewcode-block" id="EmSimilarity.__init__">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.EmSimilarity.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+  
+    <span class="k">def</span> <span class="nf">_ems_single</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Predict WWLK similarity for a (A,B) graph tuple</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            graphtuple (tuple): graph tuple (A,B) of nx medi graphs</span>
+<span class="sd">            iters (int): what degree of contextualization is desired?</span>
+<span class="sd">                        default=2</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            similarity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">dists</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">data</span>
+        
+        <span class="c1">#compute wmd</span>
+        <span class="n">emd</span><span class="p">,</span> <span class="n">flow</span> <span class="o">=</span> <span class="n">emd_with_flow</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">dists</span><span class="p">)</span>
+        
+        <span class="c1">#change to similarity in -1, 1</span>
+        <span class="n">ems</span> <span class="o">=</span> <span class="n">emd</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">ems</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">ems</span><span class="p">,</span> <span class="n">flow</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EmSimilarity.ems_multi">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.EmSimilarity.ems_multi">[docs]</a>
+    <span class="k">def</span> <span class="nf">ems_multi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distss</span><span class="p">,</span> <span class="n">v1s</span><span class="p">,</span> <span class="n">v2s</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Predict WWLK similarities for two (parallel) data sets</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            amrs1 (list): list with nx medi graphs a_1,...,a_n</span>
+<span class="sd">            amrs2 (list): list with nx medi graphs b_1,...,b_n</span>
+<span class="sd">            parallel (boolean): parallelize computation? default=no</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            similarities for AMR graphs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+         
+        <span class="n">zipped</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">distss</span><span class="p">,</span> <span class="n">v1s</span><span class="p">,</span> <span class="n">v2s</span><span class="p">))</span>
+        <span class="n">preds</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
+                <span class="n">preds</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ems_single</span><span class="p">,</span> <span class="n">zipped</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">zipped</span><span class="p">)):</span>  
+                <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2"> Wasserstein distances computed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">zipped</span><span class="p">)))</span>
+                <span class="n">preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ems_single</span><span class="p">(</span><span class="n">zipped</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">preds</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="WasserWLK">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WasserWLK">[docs]</a>
+<span class="k">class</span> <span class="nc">WasserWLK</span><span class="p">(</span><span class="n">GraphSimilarityPredictorAligner</span><span class="p">):</span>
+
+<div class="viewcode-block" id="WasserWLK.__init__">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WasserWLK.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preprocessor</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stability</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">communication_direction</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes Wasserstein Weisfeiler Leman Kernel</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            preprocessor (Preprocessor): an object that assigns embeddings </span>
+<span class="sd">                                        to graph nodes and labels</span>
+<span class="sd">            iters (int): K</span>
+<span class="sd">            stability (int): in case there is randomness in pre-processing </span>
+<span class="sd">                             (e.g., random embeddings for node labels not found in word2vec)</span>
+<span class="sd">                            then we compute an expected distance matrix by repeated sampling</span>
+<span class="sd">            communication_direction (string): communication direction in which messages are passed</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor</span> <span class="o">=</span> <span class="n">preprocessor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iters</span> <span class="o">=</span> <span class="n">iters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ems</span> <span class="o">=</span> <span class="n">EmSimilarity</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wl_dist_mat_generator</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stability</span> <span class="o">=</span> <span class="n">stability</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">communication_direction</span> <span class="o">=</span> <span class="n">communication_direction</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    
+    <span class="k">def</span> <span class="nf">_gen_dist_mats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs1</span><span class="p">,</span> <span class="n">graphs2</span><span class="p">):</span>
+        
+        <span class="c1"># if resettable then reset </span>
+        <span class="c1"># recall: preprocessor generates random embeddings for OOV </span>
+        <span class="c1"># so this is needed for distance matrix samples (stability)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor</span><span class="o">.</span><span class="n">is_resettable</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        
+        <span class="c1"># if preprocessor not fitted, fit prepro and create Wl generator</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor</span><span class="o">.</span><span class="n">params_ready</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">graphs1</span><span class="p">,</span> <span class="n">graphs2</span><span class="p">)</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor</span><span class="o">.</span><span class="n">params</span>
+            <span class="n">param_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor</span><span class="o">.</span><span class="n">param_keys</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wl_dist_mat_generator</span> <span class="o">=</span> <span class="n">NodeDistanceMatrixGenerator</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> 
+                                                                    <span class="n">param_keys</span><span class="o">=</span><span class="n">param_keys</span><span class="p">,</span> 
+                                                                    <span class="n">iters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">iters</span><span class="p">,</span>
+                                                                    <span class="n">communication_direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">communication_direction</span><span class="p">)</span>
+
+        <span class="c1"># no WL generator ready, create WL generator</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wl_dist_mat_generator</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor</span><span class="o">.</span><span class="n">params</span>
+            <span class="n">param_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor</span><span class="o">.</span><span class="n">param_keys</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wl_dist_mat_generator</span> <span class="o">=</span> <span class="n">NodeDistanceMatrixGenerator</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> 
+                                                                    <span class="n">param_keys</span><span class="o">=</span><span class="n">param_keys</span><span class="p">,</span> 
+                                                                    <span class="n">iters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">iters</span><span class="p">,</span>
+                                                                    <span class="n">communication_direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">communication_direction</span><span class="p">)</span>
+        
+        <span class="c1"># init node embeddings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocessor</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">graphs1</span><span class="p">,</span> <span class="n">graphs2</span><span class="p">)</span>
+        
+        <span class="c1"># contextualize</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wl_dist_mat_generator</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">graphs1</span><span class="p">,</span> <span class="n">graphs2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="nf">_gen_expected_dist_mats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs1</span><span class="p">,</span> <span class="n">graphs2</span><span class="p">):</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_dist_mats</span><span class="p">(</span><span class="n">graphs1</span><span class="p">,</span> <span class="n">graphs2</span><span class="p">)</span>
+        <span class="n">mats</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+         
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stability</span> <span class="c1">#100</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;sampled </span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2"> distance matrices&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+            <span class="n">mats_tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_dist_mats</span><span class="p">(</span><span class="n">graphs1</span><span class="p">,</span> <span class="n">graphs2</span><span class="p">)]</span>
+            <span class="n">mats</span> <span class="o">=</span> <span class="p">[</span><span class="n">mat</span> <span class="o">+</span> <span class="n">mats_tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mats</span><span class="p">)]</span>
+        <span class="n">new_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mats</span><span class="p">):</span>
+            <span class="n">dat</span> <span class="o">=</span> <span class="p">[</span><span class="n">mat</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">new_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_data</span>
+    
+
+    <span class="k">def</span> <span class="nf">_predict_and_align</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amrs1</span><span class="p">,</span> <span class="n">amrs2</span><span class="p">,</span> <span class="n">node2nodeorig_1</span><span class="p">,</span> <span class="n">node2nodeorig_2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Predict WWLK similarities for two (parallel) data sets </span>
+<span class="sd">            and get alignments</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            amrs1 (list): list with nx medi graphs a_1,...,a_n</span>
+<span class="sd">            amrs2 (list): list with nx medi graphs b_1,...,b_n</span>
+<span class="sd">            nodemap1 (dict): mapping from nx medi graph nodes </span>
+<span class="sd">                             to standard AMR variables for amrs1</span>
+<span class="sd">            nodemap2 (dict): mapping from nx medi graph nodes </span>
+<span class="sd">                             to standard AMR variables for amrs2</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            - similarities for AMR graphs</span>
+<span class="sd">            - alignments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+ 
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_expected_dist_mats</span><span class="p">(</span><span class="n">amrs1</span><span class="p">,</span> <span class="n">amrs2</span><span class="p">)</span>
+        <span class="n">mats</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">v1s</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">v2s</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">orders1</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">orders2</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">sim_flow_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ems</span><span class="o">.</span><span class="n">ems_multi</span><span class="p">(</span><span class="n">mats</span><span class="p">,</span> <span class="n">v1s</span><span class="p">,</span> <span class="n">v2s</span><span class="p">)</span>
+        
+        <span class="n">preds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">aligns</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sim_flow_list</span><span class="p">)):</span>
+            <span class="n">sim</span><span class="p">,</span> <span class="n">flow</span> <span class="o">=</span> <span class="n">sim_flow_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">dist_mat</span> <span class="o">=</span> <span class="n">mats</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">order1</span> <span class="o">=</span> <span class="n">orders1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">order2</span> <span class="o">=</span> <span class="n">orders2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">align_dict</span> <span class="o">=</span> <span class="p">{}</span> 
+            <span class="c1"># project alignment to orig AMR graphs</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">order1</span><span class="p">):</span>
+                <span class="n">align_dict</span><span class="p">[</span><span class="n">node2nodeorig_1</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">label</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">cutv</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">order1</span><span class="p">)</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="n">flow</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">cutv</span><span class="p">:]</span>
+                <span class="n">cost_row</span> <span class="o">=</span> <span class="n">dist_mat</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">cutv</span><span class="p">:]</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                        <span class="n">varnode1</span> <span class="o">=</span> <span class="n">node2nodeorig_1</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">label</span><span class="p">]</span>
+                        <span class="n">varnode2</span> <span class="o">=</span> <span class="n">node2nodeorig_2</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">order2</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span>
+                        <span class="n">align_dict</span><span class="p">[</span><span class="n">varnode1</span><span class="p">][</span><span class="n">varnode2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">cost_row</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">aligns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">align_dict</span><span class="p">)</span>
+            <span class="n">preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">preds</span><span class="p">,</span> <span class="n">aligns</span>
+
+
+    <span class="k">def</span> <span class="nf">_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amrs1</span><span class="p">,</span> <span class="n">amrs2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Predict WWLK similarities for two (parallel) data sets </span>
+<span class="sd">            and get alignments</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            amrs1 (list): list with nx medi graphs a_1,...,a_n</span>
+<span class="sd">            amrs2 (list): list with nx medi graphs b_1,...,b_n</span>
+<span class="sd">            nodemap1 (dict): mapping from nx medi graph nodes </span>
+<span class="sd">                             to standard AMR variables for amrs1</span>
+<span class="sd">            nodemap2 (dict): mapping from nx medi graph nodes </span>
+<span class="sd">                             to standard AMR variables for amrs2</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            - similarities for AMR graphs</span>
+<span class="sd">            - alignments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_expected_dist_mats</span><span class="p">(</span><span class="n">amrs1</span><span class="p">,</span> <span class="n">amrs2</span><span class="p">)</span>
+        <span class="n">mats</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">v1s</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">v2s</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">sim_flow_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ems</span><span class="o">.</span><span class="n">ems_multi</span><span class="p">(</span><span class="n">mats</span><span class="p">,</span> <span class="n">v1s</span><span class="p">,</span> <span class="n">v2s</span><span class="p">)</span>
+        <span class="n">preds</span> <span class="o">=</span> <span class="p">[</span><span class="n">dat</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">sim_flow_list</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">preds</span></div>
+
+
+
+<div class="viewcode-block" id="WLK">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK">[docs]</a>
+<span class="k">class</span> <span class="nc">WLK</span><span class="p">(</span><span class="n">GraphSimilarityPredictor</span><span class="p">):</span>
+    
+<div class="viewcode-block" id="WLK.__init__">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simfun</span><span class="o">=</span><span class="s1">&#39;cosine&#39;</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">communication_direction</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">simfun</span> <span class="o">=</span> <span class="n">simfun</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iters</span> <span class="o">=</span> <span class="n">iters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">communication_direction</span> <span class="o">=</span> <span class="n">communication_direction</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amrs1</span><span class="p">,</span> <span class="n">amrs2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;predicts similarity scores for paired graphs</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            amrs1 (list with nx medi graphs): graphs</span>
+<span class="sd">            amrs2 (list with nx medi graphs): other graphs</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list with floats (similarities)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">kvs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">a1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">amrs1</span><span class="p">):</span>
+            <span class="n">a2</span> <span class="o">=</span> <span class="n">amrs2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">gs1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_stats</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">stattype</span><span class="o">=</span><span class="s1">&#39;nodeoccurence&#39;</span><span class="p">)</span>
+            <span class="n">gs2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_stats</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">stattype</span><span class="o">=</span><span class="s1">&#39;tripleoccurence&#39;</span><span class="p">)</span>
+            <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">gs1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gs1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">v1</span><span class="p">,</span> <span class="n">gs2</span><span class="p">[</span><span class="mi">0</span><span class="p">]]),</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">v2</span><span class="p">,</span> <span class="n">gs2</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+            <span class="n">kv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wlk</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">iters</span><span class="p">,</span> <span class="n">kt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">simfun</span><span class="p">,</span> <span class="n">init_vecs</span><span class="o">=</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">),</span> 
+                            <span class="n">weighting</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">stattype</span><span class="o">=</span><span class="s2">&quot;nodeoccurence&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">kv</span><span class="p">):</span>
+                <span class="n">kv</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">kvs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kv</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2"> graph pairs fully processed&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">amrs1</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">kvs</span>
+        
+<div class="viewcode-block" id="WLK.wl_gather_node">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.wl_gather_node">[docs]</a>
+    <span class="k">def</span> <span class="nf">wl_gather_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; gather edges+labels for a node from the neighborhood</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            node (hashable object): a node of the graph</span>
+<span class="sd">            G (nx medi graph): the graph</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a list with edge+label from neighbors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">newn</span> <span class="o">=</span> <span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]]</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">communication_direction</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="s2">&quot;fromout&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">nb</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nb</span><span class="p">):</span>
+                    <span class="n">el</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nb</span><span class="p">)[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">nb</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                    <span class="n">newn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">label</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">communication_direction</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="s2">&quot;fromin&quot;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">nb</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">predecessors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+                    <span class="n">el</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">nb</span><span class="p">,</span> <span class="n">node</span><span class="p">)[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">nb</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                    <span class="n">newn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">label</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">newn</span></div>
+
+    
+<div class="viewcode-block" id="WLK.wl_gather_nodes">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.wl_gather_nodes">[docs]</a>
+    <span class="k">def</span> <span class="nf">wl_gather_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;apply gathering (wl_gather_node) for all nodes</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            G (nx medi graph): the graph</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a dictionary node -&gt; neigjborhood</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+            <span class="n">dic</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wl_gather_node</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">G</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dic</span></div>
+
+    
+<div class="viewcode-block" id="WLK.sort_relabel">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.sort_relabel">[docs]</a>
+    <span class="k">def</span> <span class="nf">sort_relabel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dic1</span><span class="p">,</span> <span class="n">dic2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;form aggregate labels via sorting</span>
+<span class="sd">        </span>
+<span class="sd">        Args: </span>
+<span class="sd">            dic1 (dict): node-neighborhood dict of graph A</span>
+<span class="sd">            dic2 (dict): node-neighborhood dict of graph B</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            two dicts where keys are same and values are strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">dic1</span><span class="p">:</span>
+            <span class="n">dic1</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; ::: &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">dic1</span><span class="p">[</span><span class="n">node</span><span class="p">])))</span>
+
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">dic2</span><span class="p">:</span>
+            <span class="n">dic2</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; ::: &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">dic2</span><span class="p">[</span><span class="n">node</span><span class="p">])))</span>
+
+        <span class="k">return</span> <span class="n">dic1</span><span class="p">,</span> <span class="n">dic2</span></div>
+
+     
+<div class="viewcode-block" id="WLK.wlk">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.wlk">[docs]</a>
+    <span class="k">def</span> <span class="nf">wlk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx_g1</span><span class="p">,</span> <span class="n">nx_g2</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">weighting</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">kt</span><span class="o">=</span><span class="s1">&#39;dot&#39;</span><span class="p">,</span> 
+            <span class="n">stattype</span><span class="o">=</span><span class="s1">&#39;nodecount&#39;</span><span class="p">,</span> <span class="n">init_vecs</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;compute WL kernel similarity of graph A and B</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            nx_g1 (nx medi graph): graph A</span>
+<span class="sd">            nx_g2 (nx medi graph): graph B</span>
+<span class="sd">            iters (int): iterations</span>
+<span class="sd">            weighting (string): decrease weight of iteration stats</span>
+<span class="sd">            kt (string): kernel type, default dot</span>
+<span class="sd">            stattype (string): which features? default: nodecount</span>
+<span class="sd">            init_vecs (tuple): perhaps there are already </span>
+<span class="sd">                             some features for A and B?</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            kernel similarity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">v1s</span><span class="p">,</span> <span class="n">v2s</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wl</span><span class="p">(</span><span class="n">nx_g1</span><span class="p">,</span> <span class="n">nx_g2</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="n">iters</span><span class="p">,</span> <span class="n">stattype</span><span class="o">=</span><span class="n">stattype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">init_vecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">v1s</span> <span class="o">=</span> <span class="p">[</span>
+             <span class="n">init_vecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">+</span> <span class="n">v1s</span>
+            <span class="n">v2s</span> <span class="o">=</span> <span class="p">[</span><span class="n">init_vecs</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="n">v2s</span>
+        <span class="k">if</span> <span class="n">weighting</span> <span class="o">==</span> <span class="s1">&#39;exp&#39;</span><span class="p">:</span>
+            <span class="n">wts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">e</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)])</span>
+            <span class="n">wts</span> <span class="o">=</span> <span class="n">wts</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">v1s</span><span class="p">)]</span>
+            <span class="n">v1s</span> <span class="o">=</span> <span class="p">[</span><span class="n">vec</span> <span class="o">*</span> <span class="n">wts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v1s</span><span class="p">)]</span>
+            <span class="n">v2s</span> <span class="o">=</span> <span class="p">[</span><span class="n">vec</span> <span class="o">*</span> <span class="n">wts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v2s</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">weighting</span> <span class="o">==</span> <span class="s1">&#39;linear&#39;</span><span class="p">:</span>
+            <span class="n">wts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)])</span>
+            <span class="n">wts</span> <span class="o">=</span> <span class="n">wts</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">v1s</span><span class="p">)]</span>
+            <span class="n">v1s</span> <span class="o">=</span> <span class="p">[</span><span class="n">vec</span> <span class="o">*</span> <span class="n">wts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v1s</span><span class="p">)]</span>
+            <span class="n">v2s</span> <span class="o">=</span> <span class="p">[</span><span class="n">vec</span> <span class="o">*</span> <span class="n">wts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">vec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v2s</span><span class="p">)]</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">v1s</span><span class="p">)</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">v2s</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kt</span> <span class="o">==</span> <span class="s1">&#39;cosine&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">cosine</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kt</span> <span class="o">==</span> <span class="s1">&#39;rbf&#39;</span><span class="p">:</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="mf">2.5</span>
+            <span class="n">diff</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">-</span> <span class="n">v2</span>
+            <span class="n">dot</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;i,i -&gt;&#39;</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">diff</span><span class="p">)</span>
+            <span class="n">div</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">dot</span> <span class="o">/</span> <span class="n">div</span><span class="p">)</span>
+        <span class="c1"># dot product</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s1">&#39;i,i -&gt;&#39;</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="WLK.wl">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.wl">[docs]</a>
+    <span class="k">def</span> <span class="nf">wl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx_g1</span><span class="p">,</span> <span class="n">nx_g2</span><span class="p">,</span> <span class="n">iters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stattype</span><span class="o">=</span><span class="s1">&#39;nodecount&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;collect vectors over WL iterations</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            nx_g1 (nx medi graph): graph A</span>
+<span class="sd">            nx_g2 (nx medi graph): graph B</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a list for every graph that contains vectors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">v1s</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">v2s</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">vocabs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iters</span><span class="p">):</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">vocab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wl_iter</span><span class="p">(</span><span class="n">nx_g1</span><span class="p">,</span> <span class="n">nx_g2</span><span class="p">,</span> <span class="n">stattype</span><span class="o">=</span><span class="n">stattype</span><span class="p">)</span>
+            <span class="n">v1s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+            <span class="n">v2s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+            <span class="n">vocabs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vocab</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v1s</span><span class="p">,</span> <span class="n">v2s</span><span class="p">,</span> <span class="n">vocabs</span></div>
+
+
+<div class="viewcode-block" id="WLK.wl_iter">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.wl_iter">[docs]</a>
+    <span class="k">def</span> <span class="nf">wl_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx_g1</span><span class="p">,</span> <span class="n">nx_g2</span><span class="p">,</span> <span class="n">stattype</span><span class="o">=</span><span class="s1">&#39;nodecount&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;collect vectors over one WL iteration</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            nx_g1 (nx medi graph): graph A</span>
+<span class="sd">            nx_g2 (nx medi graph): graph B</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            - a list for every graph that contains vectors</span>
+<span class="sd">            - new aggreagate graphs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">dic_g1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wl_gather_nodes</span><span class="p">(</span><span class="n">nx_g1</span><span class="p">)</span>
+        <span class="n">dic_g2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wl_gather_nodes</span><span class="p">(</span><span class="n">nx_g2</span><span class="p">)</span>
+        <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sort_relabel</span><span class="p">(</span><span class="n">dic_g1</span><span class="p">,</span> <span class="n">dic_g2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_node_labels</span><span class="p">(</span><span class="n">nx_g1</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_node_labels</span><span class="p">(</span><span class="n">nx_g2</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span>
+        <span class="n">stats1</span><span class="p">,</span> <span class="n">stats2</span><span class="p">,</span> <span class="n">vocab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_stats</span><span class="p">(</span><span class="n">nx_g1</span><span class="p">,</span> <span class="n">nx_g2</span><span class="p">,</span> <span class="n">stattype</span><span class="o">=</span><span class="n">stattype</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stats1</span><span class="p">,</span> <span class="n">stats2</span><span class="p">,</span> <span class="n">vocab</span></div>
+
+
+<div class="viewcode-block" id="WLK.update_node_labels">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.update_node_labels">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_node_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">dic</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+            <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+    
+<div class="viewcode-block" id="WLK.get_stats">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.get_stats">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">,</span> <span class="n">stattype</span><span class="o">=</span><span class="s1">&#39;nodecount&#39;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;get feature vec for a statistitic type</span>
+<span class="sd">        </span>
+<span class="sd">        Args: </span>
+<span class="sd">            g1 (nx medi graph): graph A</span>
+<span class="sd">            g2 (nx medi graph): graph B</span>
+<span class="sd">            stattype (string): statistics type, default: node count</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            - vector for A</span>
+<span class="sd">            - vector for B</span>
+<span class="sd">            - vocab</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vocab</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">stattype</span> <span class="o">==</span> <span class="s1">&#39;nodecount&#39;</span><span class="p">:</span>
+            <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vocab</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">nc</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stattype</span> <span class="o">==</span> <span class="s1">&#39;nodeoccurence&#39;</span><span class="p">:</span>
+            <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">voc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nc</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">)</span>
+            <span class="n">v1</span><span class="p">[</span><span class="n">v1</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">v2</span><span class="p">[</span><span class="n">v2</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vocab</span> <span class="o">=</span>  <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">voc</span>
+        <span class="k">if</span> <span class="n">stattype</span> <span class="o">==</span> <span class="s1">&#39;triplecount&#39;</span><span class="p">:</span>
+            <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vocab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stattype</span> <span class="o">==</span> <span class="s1">&#39;tripleoccurence&#39;</span><span class="p">:</span>
+            <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">voc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tc</span><span class="p">(</span><span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">)</span>
+            <span class="n">v1</span><span class="p">[</span><span class="n">v1</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">v2</span><span class="p">[</span><span class="n">v2</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vocab</span> <span class="o">=</span>  <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">voc</span>
+        
+        <span class="k">return</span> <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vocab</span></div>
+
+    
+<div class="viewcode-block" id="WLK.create_fea_vec">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.create_fea_vec">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_fea_vec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">,</span> <span class="n">vocab</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;create freture vector from bow list and vocab</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            items (list): list with items e.g. [x, y, z]</span>
+<span class="sd">            vocab (dict): dict with item-&gt; id eg. {x:2, y:4, z:5}</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            feature vector, e.g., [0, 0, 1, 0, 1, 1]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vocab</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="n">vec</span><span class="p">[</span><span class="n">vocab</span><span class="p">[</span><span class="n">item</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">vec</span></div>
+
+
+<div class="viewcode-block" id="WLK.nc">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.nc">[docs]</a>
+    <span class="k">def</span> <span class="nf">nc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; feature vector constructor for node BOW of two graphs</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            g1 (nx medi graph): graph A</span>
+<span class="sd">            g2 (nx medi graph): graph B</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            feature vector for graph A, feature vector for graph B, vocab </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">vocab</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">g1bow</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">g2bow</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">g1</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">g1</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+            <span class="n">g1bow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vocab</span><span class="p">:</span>
+                <span class="n">vocab</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">g2</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">g2</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+            <span class="n">g2bow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vocab</span><span class="p">:</span>
+                <span class="n">vocab</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">vec1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_fea_vec</span><span class="p">(</span><span class="n">g1bow</span><span class="p">,</span> <span class="n">vocab</span><span class="p">)</span>
+        <span class="n">vec2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_fea_vec</span><span class="p">(</span><span class="n">g2bow</span><span class="p">,</span> <span class="n">vocab</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vocab</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WLK.tc">
+<a class="viewcode-back" href="../../../../api/zensols.amr.wlk.html#zensols.amr.wlk.amr_similarity.WLK.tc">[docs]</a>
+    <span class="k">def</span> <span class="nf">tc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; feature vector constructor for triple BOW of two graphs</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            g1 (nx medi graph): graph A</span>
+<span class="sd">            g2 (nx medi graph): graph B</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            feature vector for graph A, feature vector for graph B, vocab </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">vocab</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">g1bow</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">g2bow</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">g1</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">nb</span> <span class="ow">in</span> <span class="n">g1</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">g1</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nb</span><span class="p">):</span>
+                    <span class="n">el</span> <span class="o">=</span> <span class="n">g1</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                    <span class="n">el</span> <span class="o">+=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">g1</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nb</span><span class="p">)[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> 
+                    <span class="n">el</span> <span class="o">+=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">g1</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">nb</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                    <span class="n">g1bow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">el</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vocab</span><span class="p">:</span>
+                        <span class="n">vocab</span><span class="p">[</span><span class="n">el</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">g2</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">nb</span> <span class="ow">in</span> <span class="n">g2</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">g2</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nb</span><span class="p">):</span>
+                    <span class="n">el</span> <span class="o">=</span> <span class="n">g2</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                    <span class="n">el</span> <span class="o">+=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">g2</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">nb</span><span class="p">)[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> 
+                    <span class="n">el</span> <span class="o">+=</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">g2</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">nb</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span>
+                    <span class="n">g2bow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">el</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">vocab</span><span class="p">:</span>
+                        <span class="n">vocab</span><span class="p">[</span><span class="n">el</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+                        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+ 
+        <span class="n">vec1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_fea_vec</span><span class="p">(</span><span class="n">g1bow</span><span class="p">,</span> <span class="n">vocab</span><span class="p">)</span>
+        <span class="n">vec2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_fea_vec</span><span class="p">(</span><span class="n">g2bow</span><span class="p">,</span> <span class="n">vocab</span><span class="p">)</span>
+        <span class="n">vec1</span> <span class="o">=</span> <span class="n">vec1</span>
+        <span class="n">vec2</span> <span class="o">=</span> <span class="n">vec2</span>
+        <span class="k">return</span> <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vocab</span></div>
+</div>
+
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Paul Landes
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../../_static/documentation_options.js?v=59fadc99"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/furo.js?v=5fa4622c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>
