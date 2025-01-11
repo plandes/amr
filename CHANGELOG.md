@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.2.0] - 2025-01-11
+### Removed
+- Support for Python 3.10.
+
+### Changed
+- Upgraded to [zensols.nlparse] version 1.12
+
+
 ## [0.1.5] - 2024-08-27
 ### Changed
 - Reset the default AMR parser to the [amrlib] XFM Bart Base model.  This was
@@ -82,7 +90,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 <!-- links -->
-[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/Paul Landes/amr/compare/v0.1.5...v0.2.0
 [0.1.5]: https://github.com/Paul Landes/amr/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/Paul Landes/amr/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/Paul Landes/amr/compare/v0.1.2...v0.1.3
@@ -93,3 +102,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 [amrlib]: https://github.com/bjascob/amrlib
 [zensols.amrspring]: https://github.com/plandes/amrspring
+[zensols.nlparse]: https://github.com/plandes/nlparse

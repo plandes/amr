@@ -14,9 +14,9 @@ cached-property~=1.5.2
 networkx~=3.2.1
 
 # model download/paths
-zensols.install~=1.1.2
+zensols.install~=1.2.0
 # langugae parsing/features
-zensols.nlp~=1.11.0
+zensols.nlp~=1.12.0
 
 # coref
 zensols.amr_coref~=0.0.2
