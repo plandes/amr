@@ -14,7 +14,6 @@ transformers version 4.48.
 
 ### Changes
 - Recover when [zensols.deeplearn] is not installed.
-- Upgrade [zensols.install] version 1.2.0 and [zensols.nlp] version 1.12.0.
 - Ignore [amrlib] induced warning about torch `TypedStorage`.
 
 
