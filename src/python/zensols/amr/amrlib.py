@@ -79,6 +79,13 @@ class _AmrlibModelContainer(object):
 
 @dataclass
 class AmrlibParser(_AmrlibModelContainer, AmrParser):
+    def __post_init__(self):
+        super().__post_init__()
+        warnings.filterwarnings(
+            'ignore',
+            message=r'^TypedStorage is deprecated. It wil.*of tensor.storage()',
+            category=UserWarning)
+
     def init_nlp_model(self, model: Language, component: Component):
         """Reset the installer to all reloads in a Python REPL with different
         installers.
@@ -143,7 +150,8 @@ class AmrlibParser(_AmrlibModelContainer, AmrParser):
                     graph_str = tw.shorten(str(graph), width=60)
                     logger.info(f'adding graph for sent {six}: <{graph_str}>')
             except Exception as e:
-                err = AmrFailure(e, sent=sent.text)
+                err = AmrFailure(exception=e, sent=sent.text)
+                err.write_to_log(logger, logging.DEBUG)
             if err is None:
                 if logger.isEnabledFor(logging.DEBUG):
                     logger.debug(f'creating sentence with model: {self.model}')
