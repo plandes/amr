@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.2.1] - 2025-01-25
+This is an upgrade release, but the Spring parser failed with HuggingFace
+transformers version 4.48.
+
+### Changes
+- Recover when [zensols.deeplearn] is not installed.
+- Upgrade [zensols.install] version 1.2.0 and [zensols.nlp] version 1.12.0.
+- Ignore [amrlib] induced warning about torch `TypedStorage`.
+
+
 ## [0.2.0] - 2025-01-11
 ### Removed
 - Support for Python 3.10.
@@ -90,7 +100,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 <!-- links -->
-[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/Paul Landes/amr/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/Paul Landes/amr/compare/v0.1.5...v0.2.0
 [0.1.5]: https://github.com/Paul Landes/amr/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/Paul Landes/amr/compare/v0.1.3...v0.1.4
@@ -103,3 +114,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [amrlib]: https://github.com/bjascob/amrlib
 [zensols.amrspring]: https://github.com/plandes/amrspring
 [zensols.nlparse]: https://github.com/plandes/nlparse
+[zensols.install]: https://github.com/plandes/install
+[zensols.deeplearn]: https://github.com/plandes/deeplearn
