@@ -329,10 +329,8 @@ class AmrSentence(PersistableContainer, Writable):
         if self.is_failure:
             parse_failure = self.metadata['parse_failure']
             self._write_line(f'error: {parse_failure}', depth + 2, writer)
-            if include_stack and \
-               self._failure is not None and \
-               self._failure.stack is not None:
-                writer.write(self._failure.stack)
+            if include_stack:
+                self._write_object(self._failure, depth + 1, writer)
         else:
             graph = self.graph_string if include_metadata else self.graph_only
             self._write_block(graph, depth, writer)
