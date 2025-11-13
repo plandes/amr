@@ -46,7 +46,7 @@ class WeisfeilerLemanKernelScoreCalculator(ScoreMethod):
     """
     @classmethod
     def _get_external_modules(cls: Type) -> Tuple[PackageRequirement, ...]:
-        return (PackageRequirement.from_spec('pyemd~=0.5.1'),)
+        return (PackageRequirement.from_spec('pyemd'),)
 
     def _score(self, meth: str, context: ScoreContext) -> Iterable[FloatScore]:
         # import after framework installs dependencies
