@@ -2,6 +2,7 @@
 
 [![PyPI][pypi-badge]][pypi-link]
 [![Python 3.11][python311-badge]][python311-link]
+[![Python 3.12][python312-badge]][python312-link]
 [![Build Status][build-badge]][build-link]
 
 Provides support for AMR graph manipulation, annotations and feature
@@ -263,12 +264,10 @@ Copyright (c) 2021 - 2025 Paul Landes
 [pypi]: https://pypi.org/project/zensols.amr/
 [pypi-link]: https://pypi.python.org/pypi/zensols.amr
 [pypi-badge]: https://img.shields.io/pypi/v/zensols.amr.svg
-[python37-badge]: https://img.shields.io/badge/python-3.7-blue.svg
-[python37-link]: https://www.python.org/downloads/release/python-370
-[python38-badge]: https://img.shields.io/badge/python-3.8-blue.svg
-[python38-link]: https://www.python.org/downloads/release/python-380
 [python311-badge]: https://img.shields.io/badge/python-3.11-blue.svg
 [python311-link]: https://www.python.org/downloads/release/python-3110
+[python312-badge]: https://img.shields.io/badge/python-3.12-blue.svg
+[python312-link]: https://www.python.org/downloads/release/python-3120
 [build-badge]: https://github.com/plandes/amr/workflows/CI/badge.svg
 [build-link]: https://github.com/plandes/amr/actions
 

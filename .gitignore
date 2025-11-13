@@ -6,3 +6,6 @@
 /download
 /amr_graph
 /models
+# pixi environments
+.pixi
+/pyproject.toml

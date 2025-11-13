@@ -4,33 +4,44 @@
 ## Build system
 #
 PROJ_TYPE =		python
-PROJ_MODULES =		git python-resources python-cli python-doc python-doc-deploy markdown
-INFO_TARGETS +=		appinfo
-PY_DEP_POST_DEPS +=	modeldeps
+PROJ_MODULES =		python/doc python/package python/deploy
 
-
-## Project build
-#
 # additional cleanup
 ADD_CLEAN +=		amr-bank-struct-v3.0-scored.csv \
 			corpus/amr-bank-struct-v3.0-parsed.txt
 ADD_CLEAN_ALL +=	amr_graph models
 CLEAN_DEPS +=		cleanexample
 CLEAN_ALL_DEPS +=	cleanalldep
+VAPORIZE_DEPS +=	vaporizedep
 
+# targets for the pytestall target
+PY_TEST_ALL_TARGETS +=	testparse testplot testexample
+
+
+## Project build
+#
 # file, models and entry point
 MODEL_CONF_DIR = 	train-config
 MODEL_FILE =		corpus/amr-bank-struct-v3.0.txt
 EVAL_FILE = 		target/corp/stage/dev/dev.txt
-ABIN =			./amr
 INF_CONF = 		resources/model/inference.conf
-INTTEST_PARSE_GOLD =	test-resources/inttest-should/parse.txt
-INTTEST_EX_GOLD =	test-resources/inttest-should/examples.txt
+IT_PARSE_GOLD =		test-resources/inttest-should/parse.txt
+IT_EX_GOLD =		test-resources/inttest-should/examples.txt
+
 
 ## Project data
 #
 # text to parse for run examples
 TEST_TEXT = 		"Barack Obama is an American politician who served as the 44th president of the United States from 2009 to 2017. A member of the Democratic Party, he was the first African-American president of the United States."
+
+
+## Definitions
+#
+define arun
+	@$(MAKE) $(PY_MAKE_ARGS) pyharn \
+		BUILD_INFO=0 PY_INVOKE_ARG='-e testcur' ARG='$(1)'
+endef
+
 
 
 ## Includes
@@ -40,43 +51,29 @@ include ./zenbuild/main.mk
 
 ## Targets
 #
-.PHONY:			appinfo
-appinfo:
-			@echo "app-resources-dir: $(RESOURCES_DIR)"
-
-# download [spacy models](https://spacy.io/models/en)
-.PHONY:			modeldeps
-modeldeps:
-			$(PIP_BIN) install $(PIP_ARGS) -r $(PY_SRC)/requirements-model.txt
-
-# requirements for scoring (i.e. WLK)
-.PHONY:			scoredeps
-scoredeps:
-			$(PIP_BIN) install $(PIP_ARGS) -r $(PY_SRC)/requirements-score.txt
-
 # test parsing text
 .PHONY:			testparsewrite
 testparsewrite:
-			@echo "(re)writing testing parse gold..."
-			make clean
-			@$(ABIN) parse -c test-resources/test.conf \
-			  $(TEST_TEXT) > $(INTTEST_PARSE_GOLD)
+			@$(call loginfo,writing parse gold $(IT_PARSE_GOLD)...)
+			@$(MAKE) clean
+			@$(call arun,parse -c test-resources/test.conf \
+			  $(TEST_TEXT)) > $(IT_PARSE_GOLD)
 
 .PHONY:			testparse
 testparse:
-			@echo "testing parse..."
-			make clean
-			@$(ABIN) parse -c test-resources/test.conf \
-			  --level warn $(TEST_TEXT) | \
-			  diff - $(INTTEST_PARSE_GOLD) || \
+			@$(MAKE) clean
+			@$(call loginfo,testing parse $(IT_PARSE_GOLD)...)
+			@$(call arun,parse -c test-resources/test.conf \
+				--level warn $(TEST_TEXT)) | \
+			  diff - $(IT_PARSE_GOLD) || \
 			    exit 1
 
 # test plotting text
 .PHONY:			testplot
 testplot:
-			@echo "testing plots..."
-			make clean
-			@$(ABIN) plot $(TEST_TEXT)
+			@$(call loginfo,testing plots...)
+			@$(MAKE) clean
+			$(call arun,plot $(TEST_TEXT))
 			@if [ ! `ls -l amr_graph/barack*/*.pdf | wc -l` -eq 2 ] ; then \
 				echo "error: missing plot PDF files" ; \
 			fi
@@ -87,62 +84,54 @@ testplot:
 # integration test all examples
 .PHONY:			testexamplewrite
 testexamplewrite:
-			@echo "(re)writing testing examples gold..."
-			make clean
+			@$(call loginfo,(re)writing testing examples gold...)
+			@$(MAKE) clean
 			@( for i in example/*.py ; \
-			  do PYTHONPATH=src/python ./$$i ; \
-			  done ) > $(INTTEST_EX_GOLD)
+			  do PYTHONPATH=src $(PY_PX_BIN) run \
+				$(PY_INVOKE_ARG) python ./$$i ; \
+			  done ) > $(IT_EX_GOLD)
 
 .PHONY:			testexample
 testexample:
-			@echo "testing examples..."
-			make clean
+			@$(call loginfo,testing examples...)
+			@$(MAKE) clean pyinit
 			@( for i in example/*.py ; \
-			  do PYTHONPATH=src/python ./$$i ; \
+			  do PYTHONPATH=src $(PY_PX_BIN) run \
+				$(PY_INVOKE_ARG) python ./$$i ; \
 			  done ) | \
-			diff - $(INTTEST_EX_GOLD) || \
+			  diff - $(IT_EX_GOLD) || \
 			  exit 1
-
-# unit and integration testing
-.PHONY:			testall
-testall:		test testparse testplot testexample
 
 # generate AMR plots of the little prince and the biomedical corpora
 .PHONY:			renderexamples
 renderexamples:
-			$(ABIN) plotfile $(MODEL_FILE)
+			@$(call arun,plotfile $(MODEL_FILE))
 
 # train on the little prince corpus
 .PHONY:			trainmodel
 trainmodel:
-			$(ABIN) --config $(MODEL_CONF_DIR)/parse-spring.conf \
-				train
+			@$(call arun,--config $(MODEL_CONF_DIR)/parse-spring.conf
+				train)
 
 # inference a new trained model
 .PHONY:			testmodel
 testmodel:
-			$(ABIN) --config $(INF_CONF) parse $(TEST_TEXT)
+			@$(call arun,--config $(INF_CONF) parse $(TEST_TEXT))
 
 # evaluation model "EVAL_MODEL"
 .PHONY:			evalmodel
 evalmodel:
-			$(ABIN) prep
-			$(ABIN) parsefile $(EVAL_FILE) --config $(INF_CONF) \
+			@$(call arun,prep)
+			@$(call arun,parsefile $(EVAL_FILE) --config $(INF_CONF) \
 				--limit 50 \
-				--override amr_default.parse_model=$(EVAL_MODEL)
-			$(ABIN) score $(EVAL_FILE) --config $(INF_CONF) \
+				--override amr_default.parse_model=$(EVAL_MODEL) )
+			@$(call arun,score $(EVAL_FILE) --config $(INF_CONF) \
 				--override amr_default.parse_model=$(EVAL_MODEL)
 
 # evaluate the corpus on the trained little prince corpus (test)
 .PHONY:			evalspring
 evalspring:
-			make EVAL_MODEL=zsl_spring evalmodel
-
-# stop any training
-.PHONY:			stop
-stop:
-			ps -eaf | grep python | grep $(ABIN) | \
-				awk '{print $2}' | xargs kill
+			@$(MAKE)EVAL_MODEL=zsl_spring evalmodel
 
 # additional clean up using the harness/API (data dir)
 .PHONY:			cleanalldep
@@ -151,10 +140,10 @@ cleanalldep:
 
 # clean data generated by examples
 .PHONY:			cleanexample
-cleanexample:		pycleancache
+cleanexample:
 			rm -fr example/data
 
 # remove the ./data and ./corpus dir
-.PHONY:			vaporize
-vaporize:		cleanall
+.PHONY:			vaporizedep
+vaporizedep:
 			rm -rf corpus

@@ -12,10 +12,11 @@ Citation::
 :see: `WLK <https://github.com/flipz357/weisfeiler-leman-amr-metrics>`_
 
 """
-from typing import Iterable, List, Dict, Any
+from typing import Tuple, List, Dict, Iterable, Any, Type
 from dataclasses import dataclass, field
 import logging
 import numpy as np
+from zensols.util import PackageRequirement
 from zensols.nlp.score import ScoreMethod, ScoreContext, FloatScore
 from .graph_helpers import GraphParser
 from .amr_similarity import WLK
@@ -44,6 +45,10 @@ class WeisfeilerLemanKernelScoreCalculator(ScoreMethod):
     scoring method :class:`.WLK` class.
 
     """
+    @classmethod
+    def _get_external_modules(cls: Type) -> Tuple[str, ...]:
+        return (PackageRequirement.from_spec('pyemd~=0.5.1'),)
+
     def _score(self, meth: str, context: ScoreContext) -> Iterable[FloatScore]:
         def map_sent(s: AmrFeatureSentence) -> str:
             assert isinstance(s, AmrFeatureSentence)

@@ -29,7 +29,7 @@ if (__name__ == '__main__'):
     else:
         args = f' -c train-config/{model}.conf'
     harness = CliHarness(
-        src_dir_name='src/python',
+        src_dir_name='src',
         app_factory_class='zensols.amr.ApplicationFactory',
         proto_args='proto' + args,
         proto_factory_kwargs={'reload_pattern': r'^zensols\.amr\.(?!annotate)'}

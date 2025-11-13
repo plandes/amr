@@ -44,6 +44,8 @@ amr_pipeline_doc_parser:
   doc_class: 'class: zensols.amr.AmrFeatureDocument'
   sent_class: 'class: zensols.amr.AmrFeatureSentence'
   components: 'instance: list: amr_parser_component'
+  model_name: en_core_web_md
+  auto_install_model: true
   reload_components: true
 
 # used for parsing human annotated AMR graphs with ``snt`` metadata, which is
@@ -54,6 +56,8 @@ amr_human_anon_doc_parser:
   doc_class: 'class: zensols.amr.AmrFeatureDocument'
   sent_class: 'class: zensols.amr.AmrFeatureSentence'
   components: 'instance: list: remove_sent_boundaries_component, amr_parser_component'
+  model_name: en_core_web_md
+  auto_install_model: true
   reload_components: true
 
 # base document parser that splits on entities; this (token normalizer)
@@ -62,6 +66,8 @@ amr_human_anon_doc_parser:
 amr_base_doc_parser:
   class_name: zensols.amr.docfac.EntityCopySpacyFeatureDocumentParser
   token_normalizer: 'instance: amr_map_filter_token_normalizer'
+  model_name: en_core_web_md
+  auto_install_model: true
 
 # creates feature docs from amr docs
 amr_feature_doc_factory:

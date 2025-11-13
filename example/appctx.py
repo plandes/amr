@@ -16,7 +16,6 @@ from penman.graph import Graph
 from zensols.cli import CliHarness, ProgramNameConfigurator
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
 from zensols.amr import AmrDocument, AmrSentence
-from zensols.deeplearn import TorchConfig
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +102,6 @@ He was born On February 22, 1732.
 
 
 if (__name__ == '__main__'):
-    TorchConfig.init()
     CliHarness(
         app_config_resource=StringIO(CONFIG),
         app_config_context=ProgramNameConfigurator(

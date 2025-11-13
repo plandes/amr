@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.2.2] - 2025-11-12
+### Changed
+- Add support for Python 3.12.
+- Switch build tools to [pixi].
+- Upgraded dependencies:
+  - [zensols.install] 1.2.1
+  - [zensols.nlparse] 1.12.8
+
+
 ## [0.2.1] - 2025-01-25
 This is an upgrade release, but the Spring parser failed with HuggingFace
 transformers version 4.48.
@@ -99,7 +108,8 @@ transformers version 4.48.
 
 
 <!-- links -->
-[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/Paul Landes/amr/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/Paul Landes/amr/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/Paul Landes/amr/compare/v0.1.5...v0.2.0
 [0.1.5]: https://github.com/Paul Landes/amr/compare/v0.1.4...v0.1.5
@@ -115,3 +125,4 @@ transformers version 4.48.
 [zensols.nlparse]: https://github.com/plandes/nlparse
 [zensols.install]: https://github.com/plandes/install
 [zensols.deeplearn]: https://github.com/plandes/deeplearn
+[pixi]: https://pixi.sh

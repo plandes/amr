@@ -7,6 +7,7 @@ from typing import Tuple, Iterable, Dict, Any, Type
 from dataclasses import dataclass, field
 import logging
 import smatch
+from zensols.util import PackageRequirement
 from zensols.nlp import FeatureDocumentParser
 from zensols.nlp.score import (
     ErrorScore, ScoreMethod, ScoreContext, HarmonicMeanScore
@@ -36,7 +37,7 @@ class SmatchScoreCalculator(ScoreMethod):
     """
     @classmethod
     def _get_external_modules(cls: Type) -> Tuple[str, ...]:
-        return ('smatch',)
+        return (PackageRequirement.from_spec('smatch~=1.0.4'),)
 
     @staticmethod
     def _match_pair(s1: str, s2: str) -> Tuple[float, float, float]:
