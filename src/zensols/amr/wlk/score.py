@@ -19,7 +19,6 @@ import numpy as np
 from zensols.util import PackageRequirement
 from zensols.nlp.score import ScoreMethod, ScoreContext, FloatScore
 from .graph_helpers import GraphParser
-from .amr_similarity import WLK
 from zensols.nlp.score import ErrorScore
 from zensols.amr import AmrFeatureSentence
 
@@ -46,10 +45,13 @@ class WeisfeilerLemanKernelScoreCalculator(ScoreMethod):
 
     """
     @classmethod
-    def _get_external_modules(cls: Type) -> Tuple[str, ...]:
+    def _get_external_modules(cls: Type) -> Tuple[PackageRequirement, ...]:
         return (PackageRequirement.from_spec('pyemd~=0.5.1'),)
 
     def _score(self, meth: str, context: ScoreContext) -> Iterable[FloatScore]:
+        # import after framework installs dependencies
+        from .amr_similarity import WLK
+
         def map_sent(s: AmrFeatureSentence) -> str:
             assert isinstance(s, AmrFeatureSentence)
             return s.amr.graph_single_line

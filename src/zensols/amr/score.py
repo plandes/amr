@@ -36,7 +36,7 @@ class SmatchScoreCalculator(ScoreMethod):
 
     """
     @classmethod
-    def _get_external_modules(cls: Type) -> Tuple[str, ...]:
+    def _get_external_modules(cls: Type) -> Tuple[PackageRequirement, ...]:
         return (PackageRequirement.from_spec('smatch~=1.0.4'),)
 
     @staticmethod

@@ -7,8 +7,7 @@ def suppress_warnings():
         category=SyntaxWarning)
     warnings.filterwarnings(
         'ignore',
-        message=("'pin_memory' argument is set as true but not supported "
-                 "on MPS now, device pinned memory won't be used."),
+        message=r"'pin_memory' argument is set as true but not supported .*",
         category=UserWarning)
 
 
