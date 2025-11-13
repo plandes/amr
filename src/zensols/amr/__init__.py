@@ -5,6 +5,11 @@ def suppress_warnings():
         'ignore',
         message=r"invalid escape sequence '\\d'",
         category=SyntaxWarning)
+    warnings.filterwarnings(
+        'ignore',
+        message=("'pin_memory' argument is set as true but not supported "
+                 "on MPS now, device pinned memory won't be used."),
+        category=UserWarning)
 
 
 suppress_warnings()

@@ -1,6 +1,7 @@
 from typing import List
 import sys
 from pathlib import Path
+from util import BaseTestApplication
 from penman.graph import Graph
 from penman.model import Model
 import penman.models.noop
@@ -8,7 +9,6 @@ from amrlib.graph_processing.amr_loading import load_amr_entries
 from amrlib.alignments.faa_aligner import FAA_Aligner
 from zensols.amr.align import _FastAligner
 from zensols.amr.alignpop import AlignmentPopulator, PathAlignment
-from util import BaseTestApplication
 
 
 class TestAlignmentPopulation(BaseTestApplication):

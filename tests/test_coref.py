@@ -3,6 +3,7 @@ import sys
 import unittest
 from zensols.cli import CliHarness
 from zensols.amr import (
+    suppress_warnings,
     Relation, RelationSet,
     AmrFeatureDocument, ApplicationFactory
 )
@@ -16,6 +17,7 @@ class TestCoreference(unittest.TestCase):
         self.inst = hrn.get_instance(cmd)
         self.assertFalse(self.inst is None)
         self.astash = self.inst.config_factory('amr_anon_feature_doc_stash')
+        suppress_warnings()
 
     def _assert_magnificent(self, r: Relation):
         self.assertEqual(len(r), 3)

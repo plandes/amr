@@ -7,6 +7,7 @@ from zensols.cli import CliHarness
 from penman.surface import Alignment
 from penman import constant, Graph
 from zensols.amr import (
+    suppress_warnings,
     ApplicationFactory, AmrFeatureSentence, AmrFeatureDocument
 )
 from zensols.amr.annotate import (
@@ -24,6 +25,7 @@ class TestAnnotatedCorpus(unittest.TestCase):
         targ = Path('target')
         if targ.is_dir():
             shutil.rmtree(targ)
+        suppress_warnings()
 
     def test_corp_anon(self):
         astash = self.inst.config_factory('amr_anon_doc_stash')
