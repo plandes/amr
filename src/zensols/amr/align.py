@@ -1,4 +1,6 @@
-"""Add alignments to AMR sentences.
+"""Add alignments to AMR sentences.  To use the Fast Aligner (aka FAA aligner)
+set the enviornment variable ``FABIN_DIR`` to the directory to where it is
+installed.
 
 """
 __author__ = 'Paul Landes'
@@ -43,7 +45,7 @@ class _RuleAligner(object):
 @dataclass
 class _FastAligner(object):
     """Uses Dyer et al. :class:`~amrlib.alignments.faa_aligner.FAA_Aligner`
-    aligner.
+    aligner.  See the :mod:`zensols.amr.align` module documentation.
 
     :see: `Amrlib Docs <https://amrlib.readthedocs.io/en/latest/faa_aligner/>'_
 
