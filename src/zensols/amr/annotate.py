@@ -588,7 +588,7 @@ class AnnotatedAmrFeatureDocumentFactory(object):
     and :obj:`.AmrFeatureSentence.amr` with :class:`.AnnotatedAmrSentence`.
     This is created using a JSON file or a list of :class:`dict`.
 
-    The keys each dictionary are the case-insensitive enumeration values of
+    The keys of each dictionary are the case-insensitive enumeration values of
     :class:`.SentenceType`.  Keys ``id`` and ``comment`` are the unique document
     identifier and a comment that is added to the AMR sentence metadata.  Both
     are optional, and if ``id`` is missing, :obj:``doc_id``.
