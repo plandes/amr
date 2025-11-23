@@ -151,7 +151,7 @@ class AmrAlignmentPopulator(object):
         sent: Union[AmrSentence, AmrFailure, Span]
         for sent in doc.sents:
             if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(f'aligning: {sent}')
+                logger.debug(f'text aligning: {sent}')
             if not isinstance(sent, AmrSentence):
                 spacy_sent = sent
                 sent: AmrSentence = sent._.amr
@@ -175,7 +175,7 @@ class AmrAlignmentPopulator(object):
                 try:
                     if logger.isEnabledFor(logging.INFO):
                         sent_str: str = tw.shorten(str(sent), width=40)
-                        logger.info(f"adding alignments to '{sent_str}'")
+                        logger.info(f"adding text alignments to '{sent_str}'")
                     self.aligner(sent)
                 except Exception as e:
                     sent_str: str = f'<error: {(type(sent))}>'
