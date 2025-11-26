@@ -273,9 +273,6 @@ class AnnotatedAmrDocumentStash(Stash):
     """Used to annotated AMR documents if not ``None``."""
 
     def __post_init__(self):
-        if self.doc_dir is not None:
-            self.doc_dir.mkdir(parents=True, exist_ok=True)
-        self.corpus_cache_dir.mkdir(parents=True, exist_ok=True)
         self._corpus_doc = PersistedWork(
             self.corpus_cache_dir / 'doc.dat', self, mkdir=True)
         self._corpus_df = PersistedWork(
