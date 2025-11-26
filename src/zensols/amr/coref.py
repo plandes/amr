@@ -14,7 +14,7 @@ from zensols.util import time, Hasher
 from zensols.persist import persisted, Stash, DictionaryStash
 from zensols.install import Installer
 from amr_coref.coref.inference import Inference
-from . import AmrFailure, AmrFeatureDocument
+from . import AmrFailure, AmrFeatureDocument, AmrFeatureSentence
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +44,9 @@ class CoreferenceResolver(object):
     empty coreferences used for caught errors.
 
     """
+    hasher: Hasher = field(default_factory=Hasher)
+    """Used to create unique file names."""
+
     def _use_multithreading(self) -> bool:
         return self.use_multithreading and \
             not platform.system() != 'Linux'
@@ -85,10 +88,11 @@ class CoreferenceResolver(object):
         document.
 
         """
-        hasher = Hasher()
+        self.hasher.reset()
+        sent: AmrFeatureSentence
         for sent in doc:
-            hasher.update(sent.text)
-        return hasher()
+            self.hasher.update(sent.text)
+        return self.hasher()
 
     def clear(self):
         """Clear the stash cashe."""

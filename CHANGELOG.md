@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+### Changed
+- File name hashing is now configurable in `CoreferenceResolver`.
+
+
 ## [0.2.4] - 2025-11-12
 ### Changed
 - Fix scoring dependency install.
