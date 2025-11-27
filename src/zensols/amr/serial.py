@@ -127,9 +127,11 @@ class SerializedAnnotatedAmrDocument(SerializedAmrDocument):
 @dataclass
 class AmrSerializedFactory(Dictable):
     """Creates instances of :class:`.Serialized` from instances of
-    :class:`AmrDocument`, :class:`AmrSentence` or :class:`AnnotatedAmrDocument`.
-    These can then be used as :class:`~zensols.config.dictable.Dictable`
-    instances, specifically with the ``asdict`` and ``asjson`` methods.
+    :class:`.AmrDocument`, :class:`.AmrSentence` or
+    :class:`.AnnotatedAmrDocument`.  These can then be used as
+    :class:`~zensols.config.dictable.Dictable` instances, specifically with the
+    :meth:`~zensols.config.dictable.Dictable.asdict` and
+    :meth:`~zensols.config.dictable.Dictable.asjson` methods.
 
     """
     includes: Sequence[Union[Include, str]] = field()
