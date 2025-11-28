@@ -22,7 +22,8 @@ from zensols.config import Writable
 from zensols.install import Installer
 from zensols.nlp import FeatureDocumentParser
 from . import (
-    AmrError, AmrDocument, AmrSentence, AmrFeatureSentence, AmrFeatureDocument
+    AmrError, AmrFailure, AmrDocument, AmrSentence,
+    AmrFeatureSentence, AmrFeatureDocument
 )
 from .model import AmrParser
 from .coref import CoreferenceResolver
@@ -375,14 +376,14 @@ class AnnotatedAmrDocumentStash(Stash):
         assert len(sent_types) == len(st_df)
         return sent_types
 
-    def _map_sent_types(self, sent_types: Dict[int, str]):
+    def _map_sent_types(self, sent_types: Dict[int, str], doc_id: str):
         stm: Dict[str, str] = self.sent_type_mapping
         if stm is not None:
             ntypes = {}
             for k, v in sent_types.items():
                 if v not in stm:
-                    raise AmrError(
-                        f'Not sentence type: {v} in {stm} from {sent_types}')
+                    raise AmrError(f'Not sentence type: {v} in {stm} from ' +
+                                   f'{sent_types} for doc ID {doc_id}')
                 ntypes[k] = stm[v]
             sent_types = ntypes
         return sent_types
@@ -411,7 +412,7 @@ class AnnotatedAmrDocumentStash(Stash):
                 logger.debug(f'sides: {sids} ({len(sids)}), ' +
                              f'stypes: {stypes} ({len(stypes)}), ' +
                              f'sent_types: {sent_types} {len(sent_types)}')
-        sent_types = self._map_sent_types(sent_types)
+        sent_types = self._map_sent_types(sent_types, doc_id)
         if len(sent_types) != len(df):
             raise AmrError(f'Expected {len(df)} sentence types ' +
                            f'but got {len(sent_types)}')
@@ -699,23 +700,27 @@ class AnnotatedAmrFeatureDocumentFactory(object):
                        :obj:`.AmrFeatureDocument.doc_id`
 
         """
-        def map_sent_type(stype: str) -> Iterable[SentenceType]:
+        def map_sent_type(stype: str, sent: str) -> Iterable[SentenceType]:
             stkey: str = stype.upper()
             if stkey not in SentenceType._member_map_:
                 mems: List[str] = SentenceType._member_names_
-                raise AmrError(f"No such sentence type '{stkey}' in {mems}")
+                raise AmrError(
+                    msg=f"No such sentence type '{stkey}' in {mems}",
+                    sent=sent)
             return SentenceType[stype.upper()]
 
+        data = dict(data)
         doc_id: str = data.pop('id', None)
         comment: str = data.pop('comment', None)
         if doc_id is None:
             doc_id = str(self.doc_id)
             self.doc_id += 1
-        sents: Tuple[AmrFeatureSentence] = tuple(ch.from_iterable(
+        sents: Tuple[AmrFeatureSentence, ...] = tuple(ch.from_iterable(
             map(lambda t: self.from_str(t[1], t[0]),
-                sorted(map(lambda t: (map_sent_type(t[0]), t[1]), data.items()),
+                sorted(map(lambda t: (map_sent_type(*t), t[1]), data.items()),
                        key=lambda t: t[0]))))
 
+        sent: AmrSentence
         for sid, sent in enumerate(sents):
             sent.doc_sent_idx = sid
             sent.amr.set_metadata('id', f'{doc_id}.{sid}')
