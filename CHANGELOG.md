@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.2.6] - 2025-12-02
+### Changed
+- Add error handling to AMR parsing.
+
+
 ## [0.2.5] - 2025-11-26
 ### Changed
 - File name hashing is now configurable in `CoreferenceResolver`.
@@ -125,7 +130,8 @@ transformers version 4.48.
 
 
 <!-- links -->
-[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.5...HEAD
+[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.6...HEAD
+[0.2.6]: https://github.com/Paul Landes/amr/compare/v0.2.5...v0.2.6
 [0.2.5]: https://github.com/Paul Landes/amr/compare/v0.2.4...v0.2.5
 [0.2.4]: https://github.com/Paul Landes/amr/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/Paul Landes/amr/compare/v0.2.2...v0.2.3
