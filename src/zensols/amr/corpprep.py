@@ -115,7 +115,7 @@ class SingletonCorpusPrepper(CorpusPrepper):
 class AmrReleaseCorpusPrepper(CorpusPrepper):
     """Writes the `AMR 3 release`_ corpus files.
 
-    .. AMR 3 release: https://catalog.ldc.upenn.edu/LDC2020T02
+    .. _AMR 3 release: https://catalog.ldc.upenn.edu/LDC2020T02/
 
     """
     def read_docs(self, target: Path) -> Iterable[Tuple[str, AmrDocument]]:
@@ -149,8 +149,8 @@ class CorpusPrepperManager(Dictable):
 
     """
     key_splits: Path = field(default=None)
-    """The AMR ``id``s from the sentence metadatas for each split are written to
-    this JSON file if specified.
+    """The AMR ``id`` keys from the sentence metadatas for each split are
+    written to this JSON file if specified.
 
     """
     @property

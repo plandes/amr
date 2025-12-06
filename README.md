@@ -19,7 +19,7 @@ Features:
 * AMR parsing ([amrlib]) and AMR co-reference ([amr_coref]).
 * Command line and API utilities for AMR graph Penman graphs, debugging and
   files.
-* Tools for [training and evaluating](training) new AMR parse (text to graph)
+* Tools for [training and evaluating](#training) new AMR parse (text to graph)
   and generation (graph to text) models.
 * A method for re-indexing and updating AMR graph variables so that all in a
   document collection are unique.
@@ -54,9 +54,12 @@ install it, do the following:
 ## Usage
 
 ```python
+from typing import List
+from pathlib import Path
 from penman.graph import Graph
 from zensols.nlp import FeatureDocument, FeatureDocumentParser
 from zensols.amr import AmrDocument, AmrSentence, Dumper, ApplicationFactory
+import pandas
 
 sent: str = """
 
@@ -95,16 +98,13 @@ for e in pgraph.edges():
 
 # visualize the graph as a PDF
 dumper: Dumper = ApplicationFactory.get_dumper()
-dumper(amr_doc)
+List[Path] = dumper(amr_doc)
 ```
 
-Per the example, the [t5.conf](test-resources/t5.conf) and
-[gsii.conf](test-resources/gsii.conf) configuration show how to include
-configuration needed per AMR model.  These files can also be used directly with
-the `amr` command using the `--config` option.
-
-However, the other resources in the example must be imported unless you
-redefine them yourself.
+The [default.conf](resources/default.conf) sets the default AMR parser, which
+is overridden by the `amr_default:parse_mode` property.  You can select the
+large BART AMR parser with `--override=amr_default:parse_mode=xfm_bart_large`
+on the command line.
 
 
 ### Library
@@ -124,8 +124,11 @@ line utility `amr` is also available to demonstrate its usage and to generate
 ARM graphs on the command line.
 
 To parse:
-```lisp
+```bash
 $ amr parse -c test-resources/t5.conf 'This is a test of the AMR command line utility.'
+```
+output:
+```clojure
 # ::snt This is a test of the AMR command line utility.
 (t / test-01
    :ARG1 (u / utility
@@ -250,7 +253,8 @@ An extensive changelog is available [here](CHANGELOG.md).
 ## Community
 
 Please star this repository and let me know how and where you use this API.
-Contributions as pull requests, feedback and any input is welcome.
+[Contributions](CONTRIBUTIONS.md) as pull requests, feedback and any input is
+welcome.
 
 
 ## License

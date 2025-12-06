@@ -1,7 +1,6 @@
 """AMR annotated corpus utility classes.
 
 """
-from __future__ import annotations
 __author__ = 'Paul Landes'
 from typing import Dict, List, Iterable, Set, Tuple, Type, Union, Any, Sequence
 from enum import Enum
@@ -22,8 +21,7 @@ from zensols.config import Writable
 from zensols.install import Installer
 from zensols.nlp import FeatureDocumentParser
 from . import (
-    AmrError, AmrFailure, AmrDocument, AmrSentence,
-    AmrFeatureSentence, AmrFeatureDocument
+    AmrError, AmrDocument, AmrSentence, AmrFeatureSentence, AmrFeatureDocument
 )
 from .model import AmrParser
 from .coref import CoreferenceResolver
@@ -45,7 +43,7 @@ class SentenceType(Enum):
     FIGURE = 'f'
     OTHER = 'o'
 
-    def __lt__(self, other: SentenceType) -> bool:
+    def __lt__(self, other: Enum) -> bool:
         return self.value < other.value
 
 
@@ -504,7 +502,7 @@ class AnnotatedAmrFeatureDocumentStash(PrimeableStash):
     annotates from :class:`.AnnotatedAmrDocumentStash` as a source.  The key set
     and *exists* behavior is identical between to two stashes.  However, the
     instances of :class:`.AmrFeatureDocument` (and its constituent sentences)
-    are generated from the AMR annotated sentences (i.e. from the ``::snt`
+    are generated from the AMR annotated sentences (i.e. from the ``::snt``
     metadata field).
 
     This stash keeps the persistance of the :class:`.AmrDocument` separate from

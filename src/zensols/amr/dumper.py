@@ -112,7 +112,7 @@ class Dumper(Dictable, metaclass=ABCMeta):
         """Create a plot of the AMR graph visually.  The file is generated with
         graphviz in a temporary space, then moved to the target path.
 
-        :param target_name: the file name added to :object:`target_dir`, or if
+        :param target_name: the file name added to :obj:`target_dir`, or if
                             ``None``, computed from the sentence text
 
         :return: the path(s) where the file(s) were generated

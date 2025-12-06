@@ -150,7 +150,7 @@ class TreeNavigator(object):
 @dataclass
 class TreePruner(object):
     """Create a subgraph using a tuple found in the graph *configured*
-    (:mth:`penman.configure`) as a tree
+    (:meth:`penman.configure`) as a tree
 
     """
     graph: Graph = field()
@@ -165,7 +165,7 @@ class TreePruner(object):
     """
     def create_sub(self, query: Tuple[str, str, Any]) -> Graph:
         """Create a subgraph using a tuple found in the graph *configured*
-        (:mth:`penman.configure`) as a tree.  Everything starting at ``query``
+        (:meth:`penman.configure`) as a tree.  Everything starting at ``query``
         and down is included in the resulting graph.
 
         :param query: a triple found in the contained graph
