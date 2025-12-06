@@ -8,9 +8,12 @@ from zensols.amr import Application, ApplicationFactory
 
 
 class BaseTestApplication(unittest.TestCase):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.target_dir = Path('target')
+
     def setUp(self):
         super().setUp()
-        self.target_dir = Path('target')
         try:
             from zensols.deeplearn import TorchConfig
             TorchConfig.init()
