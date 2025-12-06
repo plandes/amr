@@ -10,6 +10,7 @@ from zensols.amr import Application, ApplicationFactory
 class BaseTestApplication(unittest.TestCase):
     def setUp(self):
         super().setUp()
+        self.target_dir = Path('target')
         try:
             from zensols.deeplearn import TorchConfig
             TorchConfig.init()
@@ -30,6 +31,5 @@ class BaseTestApplication(unittest.TestCase):
         return inst
 
     def _clean_targ(self):
-        targ = Path('target')
-        if targ.is_dir():
-            shutil.rmtree(targ)
+        if self.target_dir.is_dir():
+            shutil.rmtree(self.target_dir)

@@ -1,3 +1,4 @@
+from typing import List, Set
 import sys
 from io import BytesIO
 import pickle
@@ -7,9 +8,10 @@ from util import BaseTestApplication
 from spacy.tokens.doc import Doc
 from spacy.tokens.span import Span
 from penman.graph import Graph
+from zensols.nlp import FeatureDocumentParser
 from zensols.amr import (
     AmrSentence, AmrDocument, AmrFeatureDocument, AmrFeatureSentence,
-    Application
+    Dumper, Application
 )
 from zensols.amr.annotate import AnnotationFeatureDocumentParser
 
@@ -184,3 +186,25 @@ Party, he was the first African-American president of the United States.\
         sent2: AmrSentence = doc2.amr[1]
         self._fix_sent_norm(sent2)
         self._test_doc(doc2.amr)
+
+    def test_dumper(self):
+        bd: Path = self.target_dir
+        dd: Path = bd / 'barack-hussein-obama-ii-is-an'
+        app: Application = self._get_model_app(self._DEFAULT_TEST)
+        doc_parser: FeatureDocumentParser = app.config_factory(
+            'amr_pipeline_doc_parser')
+        dumper: Dumper = app.config_factory('amr_dumper')
+        dumper.target_dir = bd
+        doc: AmrFeatureDocument = doc_parser(self.sent)
+        paths: List[Path] = dumper(doc.amr)
+        should: Set[Path] = {
+            dd / 'barack-hussein-obama-ii-is-an.txt',
+            dd / 'barack-hussein-obama-ii-is-an.pdf',
+            dd / 'a-member-of-the-democratic-par.pdf',
+            dd / 'a-member-of-the-democratic-par.txt',
+            dd / 'doc.txt'}
+        self.assertEqual(len(should), len(paths))
+        self.assertEqual(should, set(paths))
+        path: Path
+        for path in paths:
+            self.assertTrue(path.is_file(), f'dumper failed to create: {path}')

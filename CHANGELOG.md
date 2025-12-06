@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+### Changed
+- Fix path reporting when rendering graphs from `Dumper` and add test for it.
+
+
 ## [0.2.6] - 2025-12-02
 ### Changed
 - Add error handling to AMR parsing.

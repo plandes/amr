@@ -203,7 +203,7 @@ class Dumper(Dictable, metaclass=ABCMeta):
             for path in paths:
                 dst: Path = doc_path / path.name
                 shutil.move(path, dst)
-                gen_paths.append(path)
+                gen_paths.append(dst)
             if self.write_text:
                 doc_seq_path: Path = doc_path / 'doc.txt'
                 with open(doc_seq_path, 'w') as f:
