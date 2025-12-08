@@ -215,7 +215,7 @@ class AnnotatedAmrDocument(AmrDocument):
 
 
 @dataclass
-class AnnotatedAmrDocumentStash(Stash):
+class AnnotatedAmrDocumentStash(PrimeableStash):
     """A factory stash that creates :class:`.AnnotatedAmrDocument` instances of
     annotated documents from a single text file containing a corpus of AMR
     Penman formatted graphs.
@@ -286,6 +286,8 @@ class AnnotatedAmrDocumentStash(Stash):
     @persisted('_corpus_doc')
     def corpus_doc(self) -> AmrDocument:
         """A document containing all the sentences from the corpus."""
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'creating corpus doc in {self._corpus_doc.path}')
         self.installer()
         corp_path: Path = self.installer.get_singleton_path()
         return AmrDocument.from_source(corp_path, model=self.amr_sent_model)
@@ -307,7 +309,8 @@ class AnnotatedAmrDocumentStash(Stash):
         """
         id_name: str = self.id_name
         if logger.isEnabledFor(logging.INFO):
-            logger.info(f'creating corpus dataframe for: {id_name}')
+            ex: bool = self._corpus_df.path.exists()
+            logger.info(f'creating corpus dataframe id={id_name}, exists={ex}')
         metas: List[Dict[str, str]] = []
         for six, doc in enumerate(self.corpus_doc):
             meta = dict(doc.metadata)
@@ -495,6 +498,12 @@ class AnnotatedAmrDocumentStash(Stash):
         if self.doc_annotator is not None:
             self.doc_annotator.clear()
 
+    def prime(self):
+        if logger.isEnabledFor(logging.INFO):
+            logger.info(f'priming {type(self)}...')
+        self.corpus_df
+        super().prime()
+
 
 @dataclass
 class AnnotatedAmrFeatureDocumentStash(PrimeableStash):
@@ -575,6 +584,7 @@ class AnnotatedAmrFeatureDocumentStash(PrimeableStash):
         for stash in (self.doc_stash, self.amr_stash):
             if isinstance(stash, PrimeableStash):
                 stash.prime()
+        super().prime()
 
 
 @dataclass

@@ -8,8 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.2.7] - 2025-12-07
 ### Changed
 - Fix path reporting when rendering graphs from `Dumper` and add test for it.
+- Stash priming semantics to fix dependent `zensols.calamr`.
 
 
 ## [0.2.6] - 2025-12-02
@@ -134,7 +136,8 @@ transformers version 4.48.
 
 
 <!-- links -->
-[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.6...HEAD
+[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.7...HEAD
+[0.2.7]: https://github.com/Paul Landes/amr/compare/v0.2.6...v0.2.7
 [0.2.6]: https://github.com/Paul Landes/amr/compare/v0.2.5...v0.2.6
 [0.2.5]: https://github.com/Paul Landes/amr/compare/v0.2.4...v0.2.5
 [0.2.4]: https://github.com/Paul Landes/amr/compare/v0.2.3...v0.2.4
