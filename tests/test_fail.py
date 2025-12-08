@@ -22,7 +22,7 @@ class TestApplication(unittest.TestCase):
         return inst
 
     def test_parse(self):
-        debug: bool = 0
+        DEBUG: bool = 0
         app: Application = self._app(self._DEFAULT_TEST)
         self.assertEqual(Application, type(app))
         doc_fac = app.config_factory('amr_feature_doc_factory')
@@ -45,9 +45,8 @@ Could not parse:
   line 1
     (h / have-org-role-91
                          ^
-DecodeError: Unexpected end of input: <(h / have-org-role-91>\
-"""
-        if debug:
+DecodeError: Unexpected end of input"""
+        if DEBUG:
             print('fail str:')
             print(str(fail))
             print()

@@ -319,11 +319,13 @@ class AnnotatedAmrDocumentStash(PrimeableStash):
             if self.id_regexp is None:
                 logger.warning(f"ID mismatch: {meta['id']}: {self.id_regexp}")
             else:
-                key_data: Tuple[str, str] = self.parse_id(meta['id'])
-                if key_data is not None:
-                    id, dsix = key_data
-                    meta[id_name] = id
-                    meta['doc_sent_idx'] = dsix
+                doc_id: str = meta.get('id')
+                if doc_id is not None:
+                    key_data: Tuple[str, str] = self.parse_id(doc_id)
+                    if key_data is not None:
+                        id, dsix = key_data
+                        meta[id_name] = id
+                        meta['doc_sent_idx'] = dsix
             metas.append(meta)
         return pd.DataFrame(metas)
 

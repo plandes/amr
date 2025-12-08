@@ -57,6 +57,15 @@ class AmrDocument(PersistableContainer, Writable):
         self.path = path
 
     @property
+    def failure_count(self) -> int:
+        """Return the number of sentences that are failures.
+
+        :see: :meth:`.AmrSentence.is_failure`
+
+        """
+        return sum(map(lambda s: 1 if s.is_failure else 0, self.sents))
+
+    @property
     @persisted('_text', transient=True)
     def text(self) -> str:
         """The text of the natural language form of the document.  This is the

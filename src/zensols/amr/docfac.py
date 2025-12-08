@@ -90,24 +90,29 @@ class AmrFeatureDocumentFactory(object):
             sent_text: str = None
             ex: Exception = None
             try:
-                # force white space tokenization to match the already tokenized
-                # metadata ('tokens' key); examples include numbers followed by
-                # commas such as dates like "April 25 , 2008"
-                sent_text = amr_sent.tokenized_text
-                sent_doc: FeatureDocument = self.doc_parser(sent_text)
-                sent: FeatureSentence = sent_doc.to_sentence(
-                    contiguous_i_sent=True)
-                sent = sent.clone(cls=AmrFeatureSentence, amr=None)
-                if add_metadata is not False:
-                    AmrParser.add_metadata(amr_sent, sent_doc.spacy_doc,
-                                           clobber=(add_metadata == 'clobber'))
-                if add_alignment:
-                    if self.alignment_populator is None:
-                        logger.warning(
-                            f'request alignment but no populator set in {self}')
-                    else:
-                        self.alignment_populator.align(amr_doc)
-                sents.append(sent)
+                if amr_sent.is_failure:
+                    fails.append(amr_sent.failure)
+                    ex = amr_sent.failure.exception
+                else:
+                    # force white space tokenization to match the already
+                    # tokenized metadata ('tokens' key); examples include
+                    # numbers followed by commas such as dates
+                    # like "April 25 , 2008"
+                    sent_text = amr_sent.tokenized_text
+                    sent_doc: FeatureDocument = self.doc_parser(sent_text)
+                    sent: FeatureSentence = sent_doc.to_sentence(
+                        contiguous_i_sent=True)
+                    sent = sent.clone(cls=AmrFeatureSentence, amr=None)
+                    if add_metadata is not False:
+                        AmrParser.add_metadata(amr_sent, sent_doc.spacy_doc,
+                                               clobber=(add_metadata == 'clobber'))
+                    if add_alignment:
+                        if self.alignment_populator is None:
+                            logger.warning(
+                                f'request alignment but no populator set in {self}')
+                        else:
+                            self.alignment_populator.align(amr_doc)
+                    sents.append(sent)
             except Exception as e:
                 fails.append(AmrFailure(e, sent=sent_text))
                 ex = e

@@ -80,10 +80,7 @@ class AmrSentence(PersistableContainer, Writable):
             self._graph = data
         elif isinstance(data, AmrFailure):
             # upstream issues (see method doc)
-            self._graph = Graph()
-            self._graph.metadata['snt'] = data.sent
-            self._graph.metadata['parse_failure'] = str(data)
-            self._failure = data
+            self._set_failure(data, None)
         else:
             # be paranoid
             raise AmrError(f'Unknown data type: {type(data)}')
@@ -102,10 +99,39 @@ class AmrSentence(PersistableContainer, Writable):
             logger.debug(f'creating sent with model: {model} ({self._model})')
         return model
 
+    def _set_failure(self, failure: AmrFailure, graph_str: str):
+        graph: Graph = None
+        if graph_str is not None:
+            try:
+                amr_met: Tuple[List[str], List[str]] = split_amr_meta(graph_str)
+                graph = penman.decode('\n'.join(amr_met[0] + ['()']))
+            except Exception as e:
+                logger.warning(f'Failed to recover failed metadata: {e}')
+        if graph is None:
+            graph = Graph()
+        if 'snt' not in graph.metadata:
+            graph.metadata['snt'] = failure.sent
+        graph.metadata['parse_failure'] = str(failure)
+        self._failure = failure
+        self._graph = graph
+
     @property
     def is_failure(self) -> bool:
         """Whether the AMR graph failed to be parsed."""
         return 'parse_failure' in self.metadata
+
+    @property
+    def failure_reason(self) -> str:
+        """Get the reason for the parse failure or ``None`` if this instance
+        :obj:`is_failure` return ``False``.
+
+        """
+        return self.metadata.get('parse_failure')
+
+    @property
+    def failure(self) -> AmrFailure:
+        """The failure if :obj:`is_failure` is ``True``."""
+        return self._failure
 
     @property
     def text(self) -> str:
@@ -138,7 +164,8 @@ class AmrSentence(PersistableContainer, Writable):
             try:
                 self._graph = penman.decode(self._str, model=self._get_model())
             except DecodeError as e:
-                raise AmrError(f'Could not parse: {e}', self._str) from e
+                ex = AmrError(f'Could not parse: {e}')
+                self._set_failure(ex.to_failure(), self._str)
         return self._graph
 
     @graph.setter
@@ -300,7 +327,7 @@ class AmrSentence(PersistableContainer, Writable):
             for i in rms:
                 del epi[i]
         metadata = self.metadata
-        del metadata['alignments']
+        metadata.pop('alignments', None)
         self.metadata = metadata
         self.invalidate_graph_string()
 
@@ -327,7 +354,7 @@ class AmrSentence(PersistableContainer, Writable):
                               error occured while trying to do so
         """
         if self.is_failure:
-            parse_failure = self.metadata['parse_failure']
+            parse_failure = self.failure_reason
             self._write_line(f'error: {parse_failure}', depth + 2, writer)
             if include_stack:
                 self._write_object(self._failure, depth + 1, writer)
@@ -337,7 +364,8 @@ class AmrSentence(PersistableContainer, Writable):
 
     def __str__(self) -> str:
         if self.is_failure:
-            return f"parse failure: {self.metadata['parse_failure']}"
+            reason: str = tw.shorten(self.failure_reason, 80)
+            return f"parse failure: {reason}"
         return self.text
 
     def __repr__(self) -> str:

@@ -280,6 +280,15 @@ class AmrFeatureDocument(FeatureDocument):
             self.amr = self.spacy_doc._.amr
 
     @property
+    def failure_count(self) -> int:
+        """Return the number of sentences that are failures.
+
+        :see: :meth:`.AmrSentence.is_failure`
+
+        """
+        return self.amr.failure_count
+
+    @property
     def _amr(self) -> AmrDocument:
         return self._amr_val
 
