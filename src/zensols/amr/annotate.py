@@ -511,7 +511,7 @@ class AnnotatedAmrDocumentStash(PrimeableStash):
 class AnnotatedAmrFeatureDocumentStash(PrimeableStash):
     """A stash that persists :class:`.AmrFeatureDocument` instances using AMR
     annotates from :class:`.AnnotatedAmrDocumentStash` as a source.  The key set
-    and *exists* behavior is identical between to two stashes.  However, the
+    and *exists* behavior is identical between the two stashes.  However, the
     instances of :class:`.AmrFeatureDocument` (and its constituent sentences)
     are generated from the AMR annotated sentences (i.e. from the ``::snt``
     metadata field).
