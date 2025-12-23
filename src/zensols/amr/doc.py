@@ -3,7 +3,9 @@
 """
 from __future__ import annotations
 __author__ = 'Paul Landes'
-from typing import Union, List, Tuple, Dict, Iterable, Any, Optional, Type
+from typing import (
+    Union, List, Tuple, Dict, Iterable, Any, Optional, Type, ClassVar
+)
 from dataclasses import dataclass, field
 import sys
 import re
@@ -16,7 +18,7 @@ from zensols.install import Installer
 from zensols.persist import PersistableContainer, persisted
 from amrlib.graph_processing.amr_loading import load_amr_entries
 from amrlib.graph_processing.amr_loading_raw import load_raw_amr
-from . import AmrSentence, AmrGeneratedSentence
+from . import AmrFailure, AmrSentence, AmrGeneratedSentence
 from .varidx import VariableIndexer
 
 
@@ -28,6 +30,11 @@ class AmrDocument(PersistableContainer, Writable):
     _COMMENT_REGEX = re.compile(r'^\s*#\s*[^:]{2}.*')
     _DOC_ID_REGEX = re.compile(r'^(.+)\.\d+$')
 
+    ID_FIELD: ClassVar[str] = 'id'
+    """The :obj:`.AmrSentence.metadata` key that contains the document and
+    sentence ID.  This is usually in the form ``<doc ID>.<sentence index>``.
+
+    """
     sents: Tuple[AmrSentence, ...] = field()
     """The AMR sentences that make up the document."""
 
@@ -66,6 +73,18 @@ class AmrDocument(PersistableContainer, Writable):
         return sum(map(lambda s: 1 if s.is_failure else 0, self.sents))
 
     @property
+    def is_failure(self) -> bool:
+        """Whether the AMR graph failed to be parsed or resulted in error."""
+        return self.failure_count > 0
+
+    @property
+    def failures(self) -> Tuple[AmrFailure, ...]:
+        """Problematic sentences failures."""
+        return tuple(map(
+            lambda s: s.failure,
+            filter(lambda s: s.is_failure, self.sents)))
+
+    @property
     @persisted('_text', transient=True)
     def text(self) -> str:
         """The text of the natural language form of the document.  This is the
@@ -100,7 +119,7 @@ class AmrDocument(PersistableContainer, Writable):
         """
         if len(self.sents) > 0:
             sent: AmrSentence = self.sents[0]
-            sid: str = sent.metadata.get('id')
+            sid: str = sent.metadata.get(self.ID_FIELD)
             m: re.Match = self._DOC_ID_REGEX.match(sid)
             if m is not None:
                 return m.group(1)
@@ -167,6 +186,20 @@ class AmrDocument(PersistableContainer, Writable):
                 load_amr_entries(str(source), False)))
         return cls(sents=entries, path=source, **kwargs)
 
+    @classmethod
+    def from_failure(cls, failure: AmrFailure, doc_id: str) -> AmrDocument:
+        """Create a document that represents a failed parse and/or error.
+
+        :param failure: contains the error information that created the error
+
+        :param doc_id: identifies the document as the ID
+                       :obj:`.AmrSententence.metadata` field
+
+        """
+        sent = AmrSentence(failure)
+        sent.set_metadata(cls.ID_FIELD, f'{doc_id}.0')
+        return cls((sent,))
+
     def clone(self, **kwargs) -> AmrDocument:
         """Return a deep copy of this instance."""
         params = dict(kwargs)
@@ -223,10 +256,13 @@ class AmrDocument(PersistableContainer, Writable):
                          AMR Penman notation
 
         """
+        if self.is_failure:
+            self._write_line(f'sentence failures: {self.failure_count}',
+                             depth, writer)
         sent: AmrSentence
         for i, sent in enumerate(it.islice(self.sents, limit_sent)):
             if add_sent_id:
-                self._write_line(f'# ::id {i+1}', depth, writer)
+                self._write_line(f'# ::id {i + 1}', depth, writer)
             if text_only:
                 self._write_line(sent.text, depth, writer)
             else:

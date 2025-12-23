@@ -21,7 +21,8 @@ from zensols.config import Writable
 from zensols.install import Installer
 from zensols.nlp import FeatureDocumentParser
 from . import (
-    AmrError, AmrDocument, AmrSentence, AmrFeatureSentence, AmrFeatureDocument
+    AmrError, AmrFailure,
+    AmrDocument, AmrSentence, AmrFeatureSentence, AmrFeatureDocument
 )
 from .model import AmrParser
 from .coref import CoreferenceResolver
@@ -415,7 +416,16 @@ class AnnotatedAmrDocumentStash(PrimeableStash):
                 logger.debug(f'sides: {sids} ({len(sids)}), ' +
                              f'stypes: {stypes} ({len(stypes)}), ' +
                              f'sent_types: {sent_types} {len(sent_types)}')
-        sent_types = self._map_sent_types(sent_types, doc_id)
+        try:
+            sent_types = self._map_sent_types(sent_types, doc_id)
+        except AmrError as e:
+            # previous errors in the pipeline will fail here, so report the
+            # original along with the new error resulting from the previous
+            if cdoc.is_failure:
+                fails: Tuple[AmrFailure, ...] = cdoc.failures
+                if len(fails) > 0:
+                    fails[0].rethrow()
+            raise e
         if len(sent_types) != len(df):
             raise AmrError(f'Expected {len(df)} sentence types ' +
                            f'but got {len(sent_types)}')
@@ -441,7 +451,7 @@ class AnnotatedAmrDocumentStash(PrimeableStash):
             doc: Doc = self.doc_parser.parse_spacy_doc(sent.text)
             AmrParser.add_metadata(sent, doc)
 
-    def load(self, doc_id: str) -> AnnotatedAmrDocument:
+    def _load(self, doc_id: str) -> AnnotatedAmrDocument:
         """
         :param doc_id: the document unique identifier
         """
@@ -455,11 +465,28 @@ class AnnotatedAmrDocumentStash(PrimeableStash):
         if logger.isEnabledFor(logging.DEBUG):
             logger.debug(f'get doc from path: id={doc_id}, stypes={sent_types}')
         doc: AnnotatedAmrDocument = self._get_doc_from_path(doc_id, sent_types)
-        if self.doc_annotator is not None:
+        if self.doc_annotator is not None and not doc.is_failure:
             if self.doc_parser is not None:
                 self._add_metadata(doc)
             if self.doc_annotator.alignment_populator is not None:
                 self.doc_annotator.alignment_populator.align(doc)
+        return doc
+
+    def load(self, doc_id: str) -> AnnotatedAmrDocument:
+        doc: AnnotatedAmrDocument
+        try:
+            doc = self._load(doc_id)
+        except AmrError as e:
+            failure: AmrFailure = e.to_failure()
+            failure.message += f" for document: '{doc_id}'"
+            doc = AmrDocument.from_failure(failure, doc_id)
+            doc = AnnotatedAmrDocument(sents=doc.sents, doc_id=doc_id)
+        except Exception as e:
+            fail = AmrFailure(
+                exception=e,
+                message=f"Could not load annotated document '{doc_id}': {e}")
+            doc = AmrDocument.from_failure(fail, doc_id)
+            doc = AnnotatedAmrDocument(sents=doc.sents, doc_id=doc_id)
         return doc
 
     def keys(self) -> Iterable[str]:
@@ -540,26 +567,47 @@ class AnnotatedAmrFeatureDocumentStash(PrimeableStash):
     coref_resolver: CoreferenceResolver = field(default=None)
     """Adds coreferences between the sentences of the document."""
 
-    def load(self, doc_id: str) -> AmrFeatureDocument:
+    def _load(self, doc_id: str) -> AmrFeatureDocument:
         amr_doc: AnnotatedAmrDocument = self.amr_stash.load(doc_id)
-        doc: AmrFeatureDocument = self.doc_stash.load(doc_id)
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug(f'loaded: {doc_id}: {doc}')
-        if doc is None:
-            doc = self.feature_doc_factory.to_feature_doc(amr_doc)
-            # clear the amr document so it isn't persisted; this is set in
-            # :meth:`to_feature_doc` for client use
-            doc.amr = None
+        doc: AmrFeatureDocument
+        if amr_doc.is_failure and False:
+            doc = AmrFeatureDocument.from_failure(amr_doc, doc_id)
+        else:
+            doc = self.doc_stash.load(doc_id)
             if logger.isEnabledFor(logging.DEBUG):
-                logger.debug(f'dumping {doc_id}: {doc}')
-            self.doc_stash.dump(doc_id, doc)
-        # set the document and the respective AmrSentences
-        doc.amr = amr_doc
-        # optionally add coreference; we could persist res (move after the
-        # `to_feature_doc` call) to save with the doc; but better to let the
-        # coref_resolver cache it, which is configured to persist
-        if self.coref_resolver is not None:
-            self.coref_resolver(doc)
+                logger.debug(f'loaded: {doc_id}: {doc}')
+            if doc is None:
+                doc = self.feature_doc_factory.to_feature_doc(amr_doc)
+                # clear the amr document so it isn't persisted; this is set in
+                # :meth:`to_feature_doc` for client use
+                doc.amr = None
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug(f'dumping {doc_id}: {doc}')
+                self.doc_stash.dump(doc_id, doc)
+            # set the document and the respective AmrSentences
+            doc.amr = amr_doc
+            # optionally add coreference; we could persist res (move after the
+            # `to_feature_doc` call) to save with the doc; but better to let the
+            # coref_resolver cache it, which is configured to persist
+            if self.coref_resolver is not None:
+                self.coref_resolver(doc)
+        return doc
+
+    def load(self, doc_id: str) -> AmrFeatureDocument:
+        doc: AmrFeatureDocument
+        try:
+            doc = self._load(doc_id)
+        except AmrError as e:
+            failure: AmrFailure = e.to_failure()
+            failure.message += f" for document: '{doc_id}'"
+            doc = AmrFeatureDocument.from_failure(failure, doc_id)
+        except Exception as e:
+            msg: str = f"Could not load document '{doc_id}': {e}"
+            fail = AmrFailure(
+                exception=e,
+                thrower=self,
+                message=msg)
+            doc = AmrFeatureDocument.from_failure(fail, doc_id)
         return doc
 
     def keys(self) -> Iterable[str]:

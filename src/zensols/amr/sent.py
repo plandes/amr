@@ -45,6 +45,9 @@ class AmrSentence(PersistableContainer, Writable):
     _PERSITABLE_TRANSIENT_ATTRIBUTES: ClassVar[Set[str]] = {'_graph'}
     _PERSITABLE_PROPERTIES: ClassVar[Set[str]] = {'graph_string'}
 
+    FAILURE_INCLUDE_STACK: ClassVar[bool] = False
+    """Whether to include the stack of failures on :meth:`write`."""
+
     MAX_SHORT_NAME_LEN: ClassVar[int] = 30
     """Max length of `short_name` property."""
 
@@ -117,7 +120,7 @@ class AmrSentence(PersistableContainer, Writable):
 
     @property
     def is_failure(self) -> bool:
-        """Whether the AMR graph failed to be parsed."""
+        """Whether the AMR graph failed to be parsed or resulted in error."""
         return 'parse_failure' in self.metadata
 
     @property
@@ -356,16 +359,18 @@ class AmrSentence(PersistableContainer, Writable):
         return self.graph == other.graph and self.metadata == other.metadata
 
     def write(self, depth: int = 0, writer: TextIOBase = sys.stdout,
-              include_metadata: bool = True, include_stack: bool = False):
+              include_metadata: bool = True, include_stack: bool = None):
         """
         :param include_metadata: whether to add graph metadata to the output
 
         :param include_stack: whether to add the stack trace of the parse of an
                               error occured while trying to do so
         """
+        if include_stack is None:
+            include_stack = self.FAILURE_INCLUDE_STACK
         if self.is_failure:
             parse_failure = self.failure_reason
-            self._write_line(f'error: {parse_failure}', depth + 2, writer)
+            self._write_line(f'error: {parse_failure}', depth + 1, writer)
             if include_stack:
                 self._write_object(self._failure, depth + 1, writer)
         else:

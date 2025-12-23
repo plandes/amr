@@ -375,6 +375,8 @@ class AnnotationFeatureDocumentParser(CachingFeatureDocumentParser):
         return amr_fdoc
 
     def parse(self, text: str, *args, **kwargs) -> FeatureDocument:
+        if len(text) == 0:
+            raise AmrError('Can not parse empty string into a document')
         self._log_parse(text, logger)
         doc, key, loaded = self._load_or_parse(text, False, *args, **kwargs)
         if not loaded:

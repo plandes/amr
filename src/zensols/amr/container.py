@@ -3,7 +3,7 @@
 """
 from __future__ import annotations
 __author__ = 'Paul Landes'
-from typing import Type, Iterable, Dict, Tuple, List, ClassVar, Set, Any
+from typing import Type, Iterable, Dict, Tuple, List, ClassVar, Set, Any, Union
 from dataclasses import dataclass, field
 import sys
 from io import TextIOBase
@@ -18,7 +18,7 @@ from zensols.nlp import (
     FeatureToken, FeatureSentence, FeatureDocument,
 )
 from zensols.nlp.decorate import FeatureDocumentDecorator
-from . import AmrError, AmrSentence, AmrDocument
+from . import AmrError, AmrFailure, AmrSentence, AmrDocument
 
 
 @dataclass
@@ -184,7 +184,7 @@ class AmrFeatureSentence(FeatureSentence):
 
     @property
     def is_failure(self) -> bool:
-        """Whether the AMR graph failed to be parsed."""
+        """Whether the AMR graph failed to be parsed or resulted in error."""
         return self.amr.is_failure
 
     @property
@@ -287,6 +287,11 @@ class AmrFeatureDocument(FeatureDocument):
 
         """
         return self.amr.failure_count
+
+    @property
+    def is_failure(self) -> bool:
+        """Whether the AMR graph failed to be parsed or resulted in error."""
+        return self.amr.is_failure
 
     @property
     def _amr(self) -> AmrDocument:
@@ -441,6 +446,32 @@ class AmrFeatureDocument(FeatureDocument):
             rels.append(Relation(rix, tuple(corefs)))
         return RelationSet(tuple(rels))
 
+    @classmethod
+    def from_failure(cls, failure: Union[AmrFailure, AmrDocument],
+                     doc_id: str) -> AmrDocument:
+        """Create a document that represents a failed parse and/or error.
+
+        :param failure: contains the error information that created the error;
+                        if :class:`.AmrDocument` is given, the first failed
+                        sentence is used to create the new error document
+
+        :param doc_id: identifies the document as the ID
+                       :obj:`.AmrSententence.metadata` field
+
+        """
+        doc: AmrDocument
+        if isinstance(failure, AmrDocument):
+            fail_doc: AmrDocument = failure
+            assert fail_doc.is_failure
+            fails: Tuple[AmrFailure, ...] = fail_doc.failures
+            assert len(fails) > 0
+            doc = cls.from_failure(fails[0], doc_id)
+        else:
+            doc = cls(
+                sents=(FeatureSentence.EMPTY_SENTENCE,),
+                amr=AmrDocument.from_failure(failure, doc_id))
+        return doc
+
     def write(self, depth: int = 0, writer: TextIOBase = sys.stdout,
               n_tokens: int = 0, include_relation_set: bool = False,
               include_original: bool = False, include_normalized: bool = True,
@@ -452,6 +483,8 @@ class AmrFeatureDocument(FeatureDocument):
             amr_kwargs = dict(include_amr=False)
         else:
             include_amr = False
+        if self.is_failure:
+            include_amr = True
         TextContainer.write(self, depth, writer,
                             include_original=include_original,
                             include_normalized=include_normalized)
@@ -468,6 +501,12 @@ class AmrFeatureDocument(FeatureDocument):
         if include_amr:
             self._write_line('amr:', depth, writer)
             self.amr.write(depth + 1, writer, **amr_kwargs)
+
+    def __str__(self) -> str:
+        if self.is_failure:
+            errs: str = ', '.join(map(str, self.amr.sents))
+            return f'error: {errs}'
+        return super().__str__()
 
     def __eq__(self, other: FeatureDocument) -> bool:
         return super().__eq__(other) and self.amr == other.amr
