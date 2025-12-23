@@ -1,0 +1,197 @@
+zensols.amr package
+===================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   zensols.amr.wlk
+
+Submodules
+----------
+
+zensols.amr.align module
+------------------------
+
+.. automodule:: zensols.amr.align
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.alignpop module
+---------------------------
+
+.. automodule:: zensols.amr.alignpop
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.amrlib module
+-------------------------
+
+.. automodule:: zensols.amr.amrlib
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.annotate module
+---------------------------
+
+.. automodule:: zensols.amr.annotate
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.app module
+----------------------
+
+.. automodule:: zensols.amr.app
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.cli module
+----------------------
+
+.. automodule:: zensols.amr.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.container module
+----------------------------
+
+.. automodule:: zensols.amr.container
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.coref module
+------------------------
+
+.. automodule:: zensols.amr.coref
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.corpprep module
+---------------------------
+
+.. automodule:: zensols.amr.corpprep
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.doc module
+----------------------
+
+.. automodule:: zensols.amr.doc
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.docfac module
+-------------------------
+
+.. automodule:: zensols.amr.docfac
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.docparser module
+----------------------------
+
+.. automodule:: zensols.amr.docparser
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.domain module
+-------------------------
+
+.. automodule:: zensols.amr.domain
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.dumper module
+-------------------------
+
+.. automodule:: zensols.amr.dumper
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.model module
+------------------------
+
+.. automodule:: zensols.amr.model
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.score module
+------------------------
+
+.. automodule:: zensols.amr.score
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.sent module
+-----------------------
+
+.. automodule:: zensols.amr.sent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.serial module
+-------------------------
+
+.. automodule:: zensols.amr.serial
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.spacyadapt module
+-----------------------------
+
+.. automodule:: zensols.amr.spacyadapt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.trainer module
+--------------------------
+
+.. automodule:: zensols.amr.trainer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.tree module
+-----------------------
+
+.. automodule:: zensols.amr.tree
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+zensols.amr.varidx module
+-------------------------
+
+.. automodule:: zensols.amr.varidx
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: zensols.amr
+   :members:
+   :undoc-members:
+   :show-inheritance:

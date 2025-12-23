@@ -1,0 +1,1832 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#"><link rel="search" title="Search" href="search.html">
+
+    <!-- Generated with Sphinx 7.4.7 and Furo 2025.09.25 --><title>Index - Adapts amrlib in the Zensols framework. 0.2.10 documentation</title>
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=b2176991" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/codeautolink.css?v=57550ae3" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="top.html"><div class="brand">Adapts amrlib in the Zensols framework. 0.2.10 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="top.html">
+  
+  <span class="sidebar-brand-text">Adapts amrlib in the Zensols framework. 0.2.10 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/zensols.amr.html">zensols.amr package</a><input aria-label="Toggle navigation of zensols.amr package" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/zensols.amr.wlk.html">zensols.amr.wlk package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/zensols.amr.wlk.html">zensols.amr.wlk package</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          
+<section class="genindex-section">
+  <h1 id="index">Index</h1>
+  <div class="genindex-jumpbox"><a href="#_"><strong>_</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#J"><strong>J</strong></a> | <a href="#K"><strong>K</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#O"><strong>O</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#V"><strong>V</strong></a> | <a href="#W"><strong>W</strong></a> | <a href="#X"><strong>X</strong></a> | <a href="#Z"><strong>Z</strong></a></div>
+</section>
+<section id="_" class="genindex-section">
+  <h2>_</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.domain.AmrError.__annotations__">__annotations__ (zensols.amr.domain.AmrError attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.align.AmrAlignmentPopulator.__init__">__init__() (zensols.amr.align.AmrAlignmentPopulator method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.alignpop.AlignmentPopulator.__init__">(zensols.amr.alignpop.AlignmentPopulator method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.alignpop.PathAlignment.__init__">(zensols.amr.alignpop.PathAlignment method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.amrlib.AmrlibGenerator.__init__">(zensols.amr.amrlib.AmrlibGenerator method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.amrlib.AmrlibParser.__init__">(zensols.amr.amrlib.AmrlibParser method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocument.__init__">(zensols.amr.annotate.AnnotatedAmrDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.__init__">(zensols.amr.annotate.AnnotatedAmrDocumentStash method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.__init__">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.__init__">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrSectionDocument.__init__">(zensols.amr.annotate.AnnotatedAmrSectionDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrSentence.__init__">(zensols.amr.annotate.AnnotatedAmrSentence method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.CorpusWriter.__init__">(zensols.amr.annotate.CorpusWriter method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.FileCorpusWriter.__init__">(zensols.amr.annotate.FileCorpusWriter method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.app.Application.__init__">(zensols.amr.app.Application method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.app.BaseApplication.__init__">(zensols.amr.app.BaseApplication method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.app.ScorerApplication.__init__">(zensols.amr.app.ScorerApplication method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.app.TrainerApplication.__init__">(zensols.amr.app.TrainerApplication method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.cli.ApplicationFactory.__init__">(zensols.amr.cli.ApplicationFactory method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.__init__">(zensols.amr.container.AmrFeatureDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureSentence.__init__">(zensols.amr.container.AmrFeatureSentence method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.Reference.__init__">(zensols.amr.container.Reference method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.ReferenceObject.__init__">(zensols.amr.container.ReferenceObject method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.ReindexVariableFeatureDocumentDecorator.__init__">(zensols.amr.container.ReindexVariableFeatureDocumentDecorator method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.Relation.__init__">(zensols.amr.container.Relation method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.RelationSet.__init__">(zensols.amr.container.RelationSet method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.coref.CoreferenceResolver.__init__">(zensols.amr.coref.CoreferenceResolver method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.AmrReleaseCorpusPrepper.__init__">(zensols.amr.corpprep.AmrReleaseCorpusPrepper method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepper.__init__">(zensols.amr.corpprep.CorpusPrepper method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.__init__">(zensols.amr.corpprep.CorpusPrepperManager method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.SingletonCorpusPrepper.__init__">(zensols.amr.corpprep.SingletonCorpusPrepper method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.__init__">(zensols.amr.doc.AmrDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrGeneratedDocument.__init__">(zensols.amr.doc.AmrGeneratedDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.docfac.AmrFeatureDocumentFactory.__init__">(zensols.amr.docfac.AmrFeatureDocumentFactory method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.docfac.EntityCopySpacyFeatureDocumentParser.__init__">(zensols.amr.docfac.EntityCopySpacyFeatureDocumentParser method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser.__init__">(zensols.amr.docparser.AnnotationFeatureDocumentParser method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator.__init__">(zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.domain.AmrError.__init__">(zensols.amr.domain.AmrError method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.domain.AmrFailure.__init__">(zensols.amr.domain.AmrFailure method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.domain.FeatureMarker.__init__">(zensols.amr.domain.FeatureMarker method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.__init__">(zensols.amr.dumper.Dumper method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.dumper.GraphvizDumper.__init__">(zensols.amr.dumper.GraphvizDumper method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.model.AmrGenerator.__init__">(zensols.amr.model.AmrGenerator method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.model.AmrParser.__init__">(zensols.amr.model.AmrParser method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.score.AmrScoreParser.__init__">(zensols.amr.score.AmrScoreParser method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.score.SmatchScoreCalculator.__init__">(zensols.amr.score.SmatchScoreCalculator method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrGeneratedSentence.__init__">(zensols.amr.sent.AmrGeneratedSentence method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.__init__">(zensols.amr.sent.AmrSentence method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.serial.AmrSerializedFactory.__init__">(zensols.amr.serial.AmrSerializedFactory method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.serial.Serialized.__init__">(zensols.amr.serial.Serialized method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.serial.SerializedAmrDocument.__init__">(zensols.amr.serial.SerializedAmrDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.serial.SerializedAmrSentence.__init__">(zensols.amr.serial.SerializedAmrSentence method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.serial.SerializedAnnotatedAmrDocument.__init__">(zensols.amr.serial.SerializedAnnotatedAmrDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.spacyadapt.SpacyDocAdapter.__init__">(zensols.amr.spacyadapt.SpacyDocAdapter method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.trainer.HFTrainer.__init__">(zensols.amr.trainer.HFTrainer method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.trainer.SpringTrainer.__init__">(zensols.amr.trainer.SpringTrainer method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.trainer.T5Trainer.__init__">(zensols.amr.trainer.T5Trainer method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.trainer.T5WithTenseGeneratorTrainer.__init__">(zensols.amr.trainer.T5WithTenseGeneratorTrainer method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.__init__">(zensols.amr.trainer.Trainer method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.trainer.XfmTrainer.__init__">(zensols.amr.trainer.XfmTrainer method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.tree.TreeNavigator.__init__">(zensols.amr.tree.TreeNavigator method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.tree.TreePruner.__init__">(zensols.amr.tree.TreePruner method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.varidx.VariableIndexer.__init__">(zensols.amr.varidx.VariableIndexer method)</a>
+</li>
+          <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.GraphParser.__init__">(zensols.amr.wlk.graph_helpers.GraphParser method)</a>
+</li>
+          <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.score.WeisfeilerLemanKernelScoreCalculator.__init__">(zensols.amr.wlk.score.WeisfeilerLemanKernelScoreCalculator method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.AmrParseError.__module__">__module__ (zensols.amr.docparser.AmrParseError attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.domain.AmrError.__module__">(zensols.amr.domain.AmrError attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="A" class="genindex-section">
+  <h2>A</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.CorpusWriter.add">add() (zensols.amr.annotate.CorpusWriter method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.add_coreferences">add_coreferences() (zensols.amr.container.AmrFeatureDocument method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.add_description">add_description (zensols.amr.dumper.Dumper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.add_doc_dir">add_doc_dir (zensols.amr.dumper.Dumper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.add_edges">add_edges() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.model.AmrParser.add_metadata">add_metadata() (zensols.amr.model.AmrParser class method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.align.AmrAlignmentPopulator.add_missing_metadata">add_missing_metadata (zensols.amr.align.AmrAlignmentPopulator attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.model.AmrParser.add_missing_metadata">(zensols.amr.model.AmrParser attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.add_nodes">add_nodes() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator.add_none">add_none (zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.align.AmrAlignmentPopulator.align">align() (zensols.amr.align.AmrAlignmentPopulator method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.align.AmrAlignmentPopulator.aligner">aligner (zensols.amr.align.AmrAlignmentPopulator attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.PathAlignment.alignment">alignment (zensols.amr.alignpop.PathAlignment attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.AlignmentPopulator.alignment_key">alignment_key (zensols.amr.alignpop.AlignmentPopulator attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docfac.AmrFeatureDocumentFactory.alignment_populator">alignment_populator (zensols.amr.docfac.AmrFeatureDocumentFactory attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser.alignment_populator">(zensols.amr.docparser.AnnotationFeatureDocumentParser attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.PathAlignment.alignment_str">alignment_str (zensols.amr.alignpop.PathAlignment attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.AlignmentPopulator">AlignmentPopulator (class in zensols.amr.alignpop)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureSentence.alignments">alignments (zensols.amr.container.AmrFeatureSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.amr">amr (zensols.amr.container.AmrFeatureDocument property)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureSentence.amr">(zensols.amr.container.AmrFeatureSentence property)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrGeneratedDocument.amr">(zensols.amr.doc.AmrGeneratedDocument attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrGeneratedSentence.amr">(zensols.amr.sent.AmrGeneratedSentence attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.amr_doc_class">amr_doc_class (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser.amr_doc_class">(zensols.amr.docparser.AnnotationFeatureDocumentParser attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser.amr_parser">amr_parser (zensols.amr.docparser.AnnotationFeatureDocumentParser attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.amr_sent_class">amr_sent_class (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser.amr_sent_class">(zensols.amr.docparser.AnnotationFeatureDocumentParser attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.amr_sent_model">amr_sent_model (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.amr_stash">amr_stash (zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.align.AmrAlignmentPopulator">AmrAlignmentPopulator (class in zensols.amr.align)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument">AmrDocument (class in zensols.amr.doc)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.domain.AmrError">AmrError</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.domain.AmrFailure">AmrFailure (class in zensols.amr.domain)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument">AmrFeatureDocument (class in zensols.amr.container)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.docfac.AmrFeatureDocumentFactory">AmrFeatureDocumentFactory (class in zensols.amr.docfac)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureSentence">AmrFeatureSentence (class in zensols.amr.container)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrGeneratedDocument">AmrGeneratedDocument (class in zensols.amr.doc)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrGeneratedSentence">AmrGeneratedSentence (class in zensols.amr.sent)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.model.AmrGenerator">AmrGenerator (class in zensols.amr.model)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.amrlib.AmrlibGenerator">AmrlibGenerator (class in zensols.amr.amrlib)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.amrlib.AmrlibParser">AmrlibParser (class in zensols.amr.amrlib)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.AmrParseError">AmrParseError</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.model.AmrParser">AmrParser (class in zensols.amr.model)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.AmrReleaseCorpusPrepper">AmrReleaseCorpusPrepper (class in zensols.amr.corpprep)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.score.AmrScoreParser">AmrScoreParser (class in zensols.amr.score)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence">AmrSentence (class in zensols.amr.sent)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.AmrSerializedFactory">AmrSerializedFactory (class in zensols.amr.serial)</a>
+</li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.amrtriples2nxmedigraph">amrtriples2nxmedigraph() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser.annotate">annotate() (zensols.amr.docparser.AnnotationFeatureDocumentParser method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.model.AmrParser.annotate_amr">annotate_amr() (zensols.amr.model.AmrParser method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.T5WithTenseGeneratorTrainer.annotate_dir">annotate_dir (zensols.amr.trainer.T5WithTenseGeneratorTrainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.T5WithTenseGeneratorTrainer.annotate_model">annotate_model (zensols.amr.trainer.T5WithTenseGeneratorTrainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include.annotated_body">annotated_body (zensols.amr.serial.Include attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include.annotated_document_id">annotated_document_id (zensols.amr.serial.Include attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include.annotated_sections">annotated_sections (zensols.amr.serial.Include attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include.annotated_summary">annotated_summary (zensols.amr.serial.Include attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocument">AnnotatedAmrDocument (class in zensols.amr.annotate)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash">AnnotatedAmrDocumentStash (class in zensols.amr.annotate)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory">AnnotatedAmrFeatureDocumentFactory (class in zensols.amr.annotate)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash">AnnotatedAmrFeatureDocumentStash (class in zensols.amr.annotate)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrSectionDocument">AnnotatedAmrSectionDocument (class in zensols.amr.annotate)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrSentence">AnnotatedAmrSentence (class in zensols.amr.annotate)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser">AnnotationFeatureDocumentParser (class in zensols.amr.docparser)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.CorpusWriter.anon_doc_factory">anon_doc_factory (zensols.amr.annotate.CorpusWriter attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Application.anon_doc_stash">anon_doc_stash (zensols.amr.app.Application attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Application">Application (class in zensols.amr.app)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.cli.ApplicationFactory">ApplicationFactory (class in zensols.amr.cli)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.RelationSet.as_set">as_set() (zensols.amr.container.RelationSet method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.GraphvizDumper.attribs">attribs (zensols.amr.dumper.GraphvizDumper attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="B" class="genindex-section">
+  <h2>B</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.BaseApplication">BaseApplication (class in zensols.amr.app)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocument.body">body (zensols.amr.annotate.AnnotatedAmrDocument property)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.SentenceType.BODY">BODY (zensols.amr.annotate.SentenceType attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.Relation.by_sent">by_sent (zensols.amr.container.Relation property)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="C" class="genindex-section">
+  <h2>C</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.clean">clean() (zensols.amr.dumper.Dumper method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.clear">clear() (zensols.amr.annotate.AnnotatedAmrDocumentStash method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.clear">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.app.Application.clear">(zensols.amr.app.Application method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.coref.CoreferenceResolver.clear">(zensols.amr.coref.CoreferenceResolver method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.clear">(zensols.amr.corpprep.CorpusPrepperManager method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser.clear">(zensols.amr.docparser.AnnotationFeatureDocumentParser method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrGeneratedSentence.clipped">clipped (zensols.amr.sent.AmrGeneratedSentence attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocument.clone">clone() (zensols.amr.annotate.AnnotatedAmrDocument method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrSentence.clone">(zensols.amr.annotate.AnnotatedAmrSentence method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.clone">(zensols.amr.container.AmrFeatureDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureSentence.clone">(zensols.amr.container.AmrFeatureSentence method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.clone">(zensols.amr.doc.AmrDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.clone">(zensols.amr.sent.AmrSentence method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Application.config_factory">config_factory (zensols.amr.app.Application attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.app.ScorerApplication.config_factory">(zensols.amr.app.ScorerApplication attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.app.TrainerApplication.config_factory">(zensols.amr.app.TrainerApplication attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.coref_resolver">coref_resolver (zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser.coref_resolver">(zensols.amr.docparser.AnnotationFeatureDocumentParser attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.coreference_relations">coreference_relations (zensols.amr.container.AmrFeatureDocument property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.coref.CoreferenceResolver">CoreferenceResolver (class in zensols.amr.coref)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.corpus_cache_dir">corpus_cache_dir (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.corpus_df">corpus_df (zensols.amr.annotate.AnnotatedAmrDocumentStash property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.corpus_doc">corpus_doc (zensols.amr.annotate.AnnotatedAmrDocumentStash property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.corpus_prep_manager">corpus_prep_manager (zensols.amr.trainer.Trainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepper">CorpusPrepper (class in zensols.amr.corpprep)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager">CorpusPrepperManager (class in zensols.amr.corpprep)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.CorpusWriter">CorpusWriter (class in zensols.amr.annotate)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Application.count">count() (zensols.amr.app.Application method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.AmrSerializedFactory.create">create() (zensols.amr.serial.AmrSerializedFactory method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.align.create_amr_align_component">create_amr_align_component() (in module zensols.amr.align)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.model.create_amr_parser">create_amr_parser() (in module zensols.amr.model)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.tree.TreePruner.create_sub">create_sub() (zensols.amr.tree.TreePruner method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Format.csv">csv (zensols.amr.app.Format attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="D" class="genindex-section">
+  <h2>D</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.ReindexVariableFeatureDocumentDecorator.decorate">decorate() (zensols.amr.container.ReindexVariableFeatureDocumentDecorator method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator.decorate">(zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.DEFAULT_MODEL">DEFAULT_MODEL (zensols.amr.sent.AmrSentence attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.delete">delete() (zensols.amr.annotate.AnnotatedAmrDocumentStash method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.delete">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.dev_file">dev_file (zensols.amr.corpprep.CorpusPrepperManager property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.SpringTrainer.dev_files">dev_files (zensols.amr.trainer.SpringTrainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.SingletonCorpusPrepper.dev_portion">dev_portion (zensols.amr.corpprep.SingletonCorpusPrepper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepper.DEV_SPLIT_NAME">DEV_SPLIT_NAME (zensols.amr.corpprep.CorpusPrepper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.do_edge_node_transform">do_edge_node_transform() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.doc_annotator">doc_annotator (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.doc_counts">doc_counts (zensols.amr.annotate.AnnotatedAmrDocumentStash property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.doc_dir">doc_dir (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.ScorerApplication.doc_factory">doc_factory (zensols.amr.app.ScorerApplication attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocument.doc_id">doc_id (zensols.amr.annotate.AnnotatedAmrDocument attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.doc_id">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.doc_parser">doc_parser (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.doc_parser">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.app.Application.doc_parser">(zensols.amr.app.Application attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.docfac.AmrFeatureDocumentFactory.doc_parser">(zensols.amr.docfac.AmrFeatureDocumentFactory attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.score.AmrScoreParser.doc_parser">(zensols.amr.score.AmrScoreParser attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.doc_stash">doc_stash (zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.CorpusWriter.docs">docs (zensols.amr.annotate.CorpusWriter property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.SerializedAmrDocument.document">document (zensols.amr.serial.SerializedAmrDocument attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.score.SmatchScoreCalculator.document_smatch">document_smatch() (zensols.amr.score.SmatchScoreCalculator method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include.document_text">document_text (zensols.amr.serial.Include attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.dump">dump() (zensols.amr.annotate.AnnotatedAmrDocumentStash method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.dump">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.dump_doc">dump_doc() (zensols.amr.dumper.Dumper method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.dump_sent">dump_sent() (zensols.amr.dumper.Dumper method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper">Dumper (class in zensols.amr.dumper)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Application.dumper">dumper (zensols.amr.app.Application attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="E" class="genindex-section">
+  <h2>E</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.docfac.EntityCopySpacyFeatureDocumentParser">EntityCopySpacyFeatureDocumentParser (class in zensols.amr.docfac)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.exists">exists() (zensols.amr.annotate.AnnotatedAmrDocumentStash method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.exists">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.export_sent_type_template">export_sent_type_template() (zensols.amr.annotate.AnnotatedAmrDocumentStash method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.GraphvizDumper.extension">extension (zensols.amr.dumper.GraphvizDumper attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="F" class="genindex-section">
+  <h2>F</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.failure">failure (zensols.amr.sent.AmrSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.failure_count">failure_count (zensols.amr.container.AmrFeatureDocument property)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.failure_count">(zensols.amr.doc.AmrDocument property)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.FAILURE_INCLUDE_STACK">FAILURE_INCLUDE_STACK (zensols.amr.sent.AmrSentence attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.failure_reason">failure_reason (zensols.amr.sent.AmrSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.failures">failures (zensols.amr.doc.AmrDocument property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.domain.FeatureMarker.feat_id">feat_id (zensols.amr.domain.FeatureMarker attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.domain.Feature">Feature (class in zensols.amr.domain)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.feature_doc_factory">feature_doc_factory (zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator.feature_id">feature_id (zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.domain.FeatureMarker">FeatureMarker (class in zensols.amr.domain)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.SentenceType.FIGURE">FIGURE (zensols.amr.annotate.SentenceType attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.SentenceType.FIGURE_TITLE">FIGURE_TITLE (zensols.amr.annotate.SentenceType attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.FileCorpusWriter">FileCorpusWriter (class in zensols.amr.annotate)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Format">Format (class in zensols.amr.app)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.from_amr_sentences">from_amr_sentences() (zensols.amr.container.AmrFeatureDocument method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.from_data">from_data() (zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.from_dict">from_dict() (zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.from_dicts">from_dicts() (zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.from_failure">from_failure() (zensols.amr.container.AmrFeatureDocument class method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.from_failure">(zensols.amr.doc.AmrDocument class method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.from_file">from_file() (zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.from_sentences">from_sentences() (zensols.amr.container.AmrFeatureDocument method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.from_sentences">(zensols.amr.doc.AmrDocument method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.from_source">from_source() (zensols.amr.doc.AmrDocument class method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.from_str">from_str() (zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.domain.FeatureMarker.from_string">from_string() (zensols.amr.domain.FeatureMarker class method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.front_text">front_text (zensols.amr.dumper.Dumper attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="G" class="genindex-section">
+  <h2>G</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.amrlib.AmrlibGenerator.generate">generate() (zensols.amr.amrlib.AmrlibGenerator method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.model.AmrGenerator.generate">(zensols.amr.model.AmrGenerator method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.AlignmentPopulator.get_alignments">get_alignments() (zensols.amr.alignpop.AlignmentPopulator method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.get_data">get_data() (zensols.amr.sent.AmrSentence method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.get_doc_id">get_doc_id() (zensols.amr.doc.AmrDocument method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.cli.ApplicationFactory.get_doc_parser">get_doc_parser() (zensols.amr.cli.ApplicationFactory class method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.cli.ApplicationFactory.get_dumper">get_dumper() (zensols.amr.cli.ApplicationFactory class method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocument.get_feature_sentences">get_feature_sentences() (zensols.amr.annotate.AnnotatedAmrDocument static method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.AlignmentPopulator.get_missing_alignments">get_missing_alignments() (zensols.amr.alignpop.AlignmentPopulator method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.tree.TreeNavigator.get_node">get_node() (zensols.amr.tree.TreeNavigator method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.get_overlapping_span">get_overlapping_span() (zensols.amr.container.AmrFeatureDocument method)</a>
+</li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.get_var_concept_map">get_var_concept_map() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.get_var_index_map">get_var_index_map() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.AlignmentPopulator.graph">graph (zensols.amr.alignpop.AlignmentPopulator attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.graph">(zensols.amr.sent.AmrSentence property)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.tree.TreeNavigator.graph">(zensols.amr.tree.TreeNavigator attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.tree.TreePruner.graph">(zensols.amr.tree.TreePruner attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.graph_only">graph_only (zensols.amr.sent.AmrSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.graph_single_line">graph_single_line (zensols.amr.sent.AmrSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.graph_string">graph_string (zensols.amr.doc.AmrDocument property)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.graph_string">(zensols.amr.sent.AmrSentence property)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.GraphParser">GraphParser (class in zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.GraphParser.graphs_to_triples">graphs_to_triples() (zensols.amr.wlk.graph_helpers.GraphParser method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.GraphvizDumper">GraphvizDumper (class in zensols.amr.dumper)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="H" class="genindex-section">
+  <h2>H</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.has_alignments">has_alignments (zensols.amr.sent.AmrSentence property)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.coref.CoreferenceResolver.hasher">hasher (zensols.amr.coref.CoreferenceResolver attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.HFTrainer">HFTrainer (class in zensols.amr.trainer)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="I" class="genindex-section">
+  <h2>I</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.ID_FIELD">ID_FIELD (zensols.amr.doc.AmrDocument attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.id_name">id_name (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.id_regexp">id_regexp (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include">Include (class in zensols.amr.serial)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.AmrSerializedFactory.includes">includes (zensols.amr.serial.AmrSerializedFactory attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.serial.Serialized.includes">(zensols.amr.serial.Serialized attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.PathAlignment.index">index (zensols.amr.alignpop.PathAlignment attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator.indexed">indexed (zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureSentence.indexed_alignments">indexed_alignments (zensols.amr.container.AmrFeatureSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.amrlib.AmrlibParser.init_nlp_model">init_nlp_model() (zensols.amr.amrlib.AmrlibParser method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.model.AmrParser.init_nlp_model">(zensols.amr.model.AmrParser method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.FileCorpusWriter.input_file">input_file (zensols.amr.annotate.FileCorpusWriter attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.installer">installer (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.coref.CoreferenceResolver.installer">(zensols.amr.coref.CoreferenceResolver attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepper.installer">(zensols.amr.corpprep.CorpusPrepper attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.instances">instances (zensols.amr.sent.AmrSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.invalidate_graph_string">invalidate_graph_string() (zensols.amr.sent.AmrSentence method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.is_comment">is_comment() (zensols.amr.doc.AmrDocument class method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.is_done">is_done (zensols.amr.corpprep.CorpusPrepperManager property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.is_failure">is_failure (zensols.amr.container.AmrFeatureDocument property)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureSentence.is_failure">(zensols.amr.container.AmrFeatureSentence property)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.is_failure">(zensols.amr.doc.AmrDocument property)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.is_failure">(zensols.amr.sent.AmrSentence property)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.model.AmrParser.is_missing_metadata">is_missing_metadata() (zensols.amr.model.AmrParser static method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.PathAlignment.is_role">is_role (zensols.amr.alignpop.PathAlignment property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.iter_aligns">iter_aligns() (zensols.amr.sent.AmrSentence method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="J" class="genindex-section">
+  <h2>J</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Format.json">json (zensols.amr.app.Format attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="K" class="genindex-section">
+  <h2>K</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.score.AmrScoreParser.keep_keys">keep_keys (zensols.amr.score.AmrScoreParser attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.tree.TreePruner.keep_root_meta">keep_root_meta (zensols.amr.tree.TreePruner attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.key_splits">key_splits (zensols.amr.corpprep.CorpusPrepperManager attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.keys">keys() (zensols.amr.annotate.AnnotatedAmrDocumentStash method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.keys">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="L" class="genindex-section">
+  <h2>L</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.load">load() (zensols.amr.annotate.AnnotatedAmrDocumentStash method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.load">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.BaseApplication.log_config">log_config (zensols.amr.app.BaseApplication attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="M" class="genindex-section">
+  <h2>M</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.cli.main">main() (in module zensols.amr.cli)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.MAX_SHORT_NAME_LEN">MAX_SHORT_NAME_LEN (zensols.amr.sent.AmrSentence attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.maybe_fix_if_concept_node_same_as_var_node">maybe_fix_if_concept_node_same_as_var_node() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.metadata">metadata (zensols.amr.sent.AmrSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator.method">method (zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.domain.Feature.mode">mode (zensols.amr.domain.Feature attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.coref.CoreferenceResolver.model">model (zensols.amr.coref.CoreferenceResolver property)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.model.AmrParser.model">(zensols.amr.model.AmrParser attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.model_installer">model_installer (zensols.amr.trainer.Trainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.model_name">model_name (zensols.amr.trainer.Trainer attribute)</a>
+</li>
+        <li>
+    module
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr">zensols.amr</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.align">zensols.amr.align</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.alignpop">zensols.amr.alignpop</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.amrlib">zensols.amr.amrlib</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.annotate">zensols.amr.annotate</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.app">zensols.amr.app</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.cli">zensols.amr.cli</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.container">zensols.amr.container</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.coref">zensols.amr.coref</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.corpprep">zensols.amr.corpprep</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.doc">zensols.amr.doc</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.docfac">zensols.amr.docfac</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.docparser">zensols.amr.docparser</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.domain">zensols.amr.domain</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.dumper">zensols.amr.dumper</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.model">zensols.amr.model</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.score">zensols.amr.score</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.sent">zensols.amr.sent</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.serial">zensols.amr.serial</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.spacyadapt">zensols.amr.spacyadapt</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.trainer">zensols.amr.trainer</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.tree">zensols.amr.tree</a>
+</li>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.varidx">zensols.amr.varidx</a>
+</li>
+          <li><a href="api/zensols.amr.wlk.html#module-zensols.amr.wlk">zensols.amr.wlk</a>
+</li>
+          <li><a href="api/zensols.amr.wlk.html#module-zensols.amr.wlk.graph_helpers">zensols.amr.wlk.graph_helpers</a>
+</li>
+          <li><a href="api/zensols.amr.wlk.html#module-zensols.amr.wlk.score">zensols.amr.wlk.score</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="N" class="genindex-section">
+  <h2>N</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepper.name">name (zensols.amr.corpprep.CorpusPrepper attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.name">(zensols.amr.corpprep.CorpusPrepperManager attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.docfac.AmrFeatureDocumentFactory.name">(zensols.amr.docfac.AmrFeatureDocumentFactory attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator.name">(zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator attribute)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.T5WithTenseGeneratorTrainer.nltk_lib_dir">nltk_lib_dir (zensols.amr.trainer.T5WithTenseGeneratorTrainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.normalize">normalize() (zensols.amr.doc.AmrDocument method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.normalize">(zensols.amr.sent.AmrSentence method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.nx_digraph_to_triples">nx_digraph_to_triples() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="O" class="genindex-section">
+  <h2>O</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.SentenceType.OTHER">OTHER (zensols.amr.annotate.SentenceType attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.output_dir">output_dir (zensols.amr.trainer.Trainer property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.FileCorpusWriter.output_file">output_file (zensols.amr.annotate.FileCorpusWriter attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.output_model_dir">output_model_dir (zensols.amr.trainer.Trainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.overwrite_dir">overwrite_dir (zensols.amr.dumper.Dumper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.overwrite_sent_file">overwrite_sent_file (zensols.amr.dumper.Dumper attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.package_dir">package_dir (zensols.amr.trainer.Trainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.score.WeisfeilerLemanKernelScoreCalculator.params">params (zensols.amr.wlk.score.WeisfeilerLemanKernelScoreCalculator attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Application.parse">parse() (zensols.amr.app.Application method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser.parse">(zensols.amr.docparser.AnnotationFeatureDocumentParser method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.score.AmrScoreParser.parse">(zensols.amr.score.AmrScoreParser method)</a>
+</li>
+          <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.GraphParser.parse">(zensols.amr.wlk.graph_helpers.GraphParser method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.parse_id">parse_id() (zensols.amr.annotate.AnnotatedAmrDocumentStash method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.ScorerApplication.parse_penman">parse_penman() (zensols.amr.app.ScorerApplication method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.PathAlignment.path">path (zensols.amr.alignpop.PathAlignment attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.path">(zensols.amr.doc.AmrDocument attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.PathAlignment">PathAlignment (class in zensols.amr.alignpop)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.penmangraph2triples">penmangraph2triples() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Application.plot">plot() (zensols.amr.app.Application method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.plot_doc">plot_doc() (zensols.amr.dumper.Dumper method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Application.plot_file">plot_file() (zensols.amr.app.Application method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.plot_sent">plot_sent() (zensols.amr.dumper.Dumper method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.TrainerApplication.prep_corpus">prep_corpus() (zensols.amr.app.TrainerApplication method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.prepare">prepare() (zensols.amr.corpprep.CorpusPrepperManager method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.preppers">preppers (zensols.amr.corpprep.CorpusPrepperManager attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.pretrained_path_or_model">pretrained_path_or_model (zensols.amr.trainer.Trainer property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.prime">prime() (zensols.amr.annotate.AnnotatedAmrDocumentStash method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash.prime">(zensols.amr.annotate.AnnotatedAmrFeatureDocumentStash method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="R" class="genindex-section">
+  <h2>R</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.align.AmrAlignmentPopulator.raise_exception">raise_exception (zensols.amr.align.AmrAlignmentPopulator attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.AmrReleaseCorpusPrepper.read_docs">read_docs() (zensols.amr.corpprep.AmrReleaseCorpusPrepper method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepper.read_docs">(zensols.amr.corpprep.CorpusPrepper method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.SingletonCorpusPrepper.read_docs">(zensols.amr.corpprep.SingletonCorpusPrepper method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.Reference">Reference (class in zensols.amr.container)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.ReferenceObject">ReferenceObject (class in zensols.amr.container)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.Relation.references">references (zensols.amr.container.Relation attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.reify_nodes">reify_nodes() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.varidx.VariableIndexer.reindex">reindex() (zensols.amr.varidx.VariableIndexer method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.reindex_variables">reindex_variables() (zensols.amr.doc.AmrDocument method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.ReindexVariableFeatureDocumentDecorator">ReindexVariableFeatureDocumentDecorator (class in zensols.amr.container)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.Relation">Relation (class in zensols.amr.container)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.relation_set">relation_set (zensols.amr.container.AmrFeatureDocument property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.RelationSet.relations">relations (zensols.amr.container.RelationSet attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.RelationSet">RelationSet (class in zensols.amr.container)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.remove_alignments">remove_alignments (zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.remove_alignments">remove_alignments() (zensols.amr.doc.AmrDocument method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.remove_alignments">(zensols.amr.sent.AmrSentence method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepper.remove_wiki">remove_wiki (zensols.amr.corpprep.CorpusPrepper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.ScorerApplication.remove_wiki">remove_wiki() (zensols.amr.app.ScorerApplication method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.remove_wiki_attribs">remove_wiki_attribs (zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.remove_wiki_attribs">remove_wiki_attribs() (zensols.amr.doc.AmrDocument method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.remove_wiki_attribs">(zensols.amr.sent.AmrSentence method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.render">render() (zensols.amr.dumper.Dumper method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.AnnotationFeatureDocumentParser.reparse">reparse (zensols.amr.docparser.AnnotationFeatureDocumentParser attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.resolve_source">resolve_source() (zensols.amr.doc.AmrDocument static method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.TrainerApplication.restore_splits">restore_splits() (zensols.amr.app.TrainerApplication method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.restore_splits">(zensols.amr.corpprep.CorpusPrepperManager method)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.coref.CoreferenceResolver.robust">robust (zensols.amr.coref.CoreferenceResolver attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="S" class="genindex-section">
+  <h2>S</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.ScorerApplication.score">score() (zensols.amr.app.ScorerApplication method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.ScorerApplication">ScorerApplication (class in zensols.amr.app)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.SentenceType.SECTION">SECTION (zensols.amr.annotate.SentenceType attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrSectionDocument.section_sents">section_sents (zensols.amr.annotate.AnnotatedAmrSectionDocument attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocument.sections">sections (zensols.amr.annotate.AnnotatedAmrDocument property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.Reference.sent">sent (zensols.amr.container.Reference attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.domain.AmrFailure.sent">(zensols.amr.domain.AmrFailure attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.sent_file_format">sent_file_format (zensols.amr.dumper.Dumper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.sent_type_col">sent_type_col (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocumentStash.sent_type_mapping">sent_type_mapping (zensols.amr.annotate.AnnotatedAmrDocumentStash attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.SerializedAmrSentence.sentence">sentence (zensols.amr.serial.SerializedAmrSentence attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include.sentence_graph">sentence_graph (zensols.amr.serial.Include attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include.sentence_id">sentence_id (zensols.amr.serial.Include attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include.sentence_metadata">sentence_metadata (zensols.amr.serial.Include attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.score.SmatchScoreCalculator.sentence_score">sentence_score() (zensols.amr.score.SmatchScoreCalculator method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include.sentence_text">sentence_text (zensols.amr.serial.Include attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Include.sentences">sentences (zensols.amr.serial.Include attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.SentenceType">SentenceType (class in zensols.amr.annotate)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.sents">sents (zensols.amr.doc.AmrDocument attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrGeneratedDocument.sents">(zensols.amr.doc.AmrGeneratedDocument attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.spacyadapt.SpacyDocAdapter.sents">(zensols.amr.spacyadapt.SpacyDocAdapter property)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.Relation.seq_id">seq_id (zensols.amr.container.Relation attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.Serialized">Serialized (class in zensols.amr.serial)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.SerializedAmrDocument">SerializedAmrDocument (class in zensols.amr.serial)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.SerializedAmrSentence">SerializedAmrSentence (class in zensols.amr.serial)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.serial.SerializedAnnotatedAmrDocument">SerializedAnnotatedAmrDocument (class in zensols.amr.serial)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.set_metadata">set_metadata() (zensols.amr.sent.AmrSentence method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.Reference.short">short (zensols.amr.container.Reference property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.short_name">short_name (zensols.amr.sent.AmrSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepper.shuffle">shuffle (zensols.amr.corpprep.CorpusPrepper attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.shuffle">(zensols.amr.corpprep.CorpusPrepperManager attribute)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.SingletonCorpusPrepper">SingletonCorpusPrepper (class in zensols.amr.corpprep)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.score.SmatchScoreCalculator">SmatchScoreCalculator (class in zensols.amr.score)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.spacyadapt.SpacyDocAdapter">SpacyDocAdapter (class in zensols.amr.spacyadapt)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.SpringTrainer">SpringTrainer (class in zensols.amr.trainer)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.stage_dir">stage_dir (zensols.amr.corpprep.CorpusPrepperManager attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.coref.CoreferenceResolver.stash">stash (zensols.amr.coref.CoreferenceResolver attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.stringamr2graph">stringamr2graph() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.tree.TreeNavigator.strip_alignments">strip_alignments (zensols.amr.tree.TreeNavigator attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.Reference.subtree">subtree (zensols.amr.container.Reference property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocument.summary">summary (zensols.amr.annotate.AnnotatedAmrDocument property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.SentenceType.SUMMARY">SUMMARY (zensols.amr.annotate.SentenceType attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.suppress_warnings">suppress_warnings() (in module zensols.amr)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.sync_amr_sents">sync_amr_sents() (zensols.amr.container.AmrFeatureDocument method)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="T" class="genindex-section">
+  <h2>T</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.T5Trainer">T5Trainer (class in zensols.amr.trainer)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.T5WithTenseGeneratorTrainer">T5WithTenseGeneratorTrainer (class in zensols.amr.trainer)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.Reference.target">target (zensols.amr.container.Reference property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.target_dir">target_dir (zensols.amr.dumper.Dumper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.temporary_dir">temporary_dir (zensols.amr.trainer.Trainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.text">text (zensols.amr.doc.AmrDocument property)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrGeneratedSentence.text">(zensols.amr.sent.AmrGeneratedSentence attribute)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.text">(zensols.amr.sent.AmrSentence property)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.SentenceType.TITLE">TITLE (zensols.amr.annotate.SentenceType attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.to_annotated_doc">to_annotated_doc() (zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory.to_annotated_sent">to_annotated_sent() (zensols.amr.annotate.AnnotatedAmrFeatureDocumentFactory method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.to_document">to_document() (zensols.amr.doc.AmrDocument class method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Format.to_ext">to_ext() (zensols.amr.app.Format class method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.domain.AmrError.to_failure">to_failure() (zensols.amr.domain.AmrError method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docfac.AmrFeatureDocumentFactory.to_feature_doc">to_feature_doc() (zensols.amr.docfac.AmrFeatureDocumentFactory method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.HFTrainer.token_model_name">token_model_name (zensols.amr.trainer.HFTrainer property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator">TokenAnnotationFeatureDocumentDecorator (class in zensols.amr.docparser)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.tokenized_text">tokenized_text (zensols.amr.sent.AmrSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.TrainerApplication.train">train() (zensols.amr.app.TrainerApplication method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.train">(zensols.amr.trainer.Trainer method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.SpringTrainer.train_files">train_files (zensols.amr.trainer.SpringTrainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer">Trainer (class in zensols.amr.trainer)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.TrainerApplication.trainer">trainer (zensols.amr.app.TrainerApplication property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.trainer_class">trainer_class (zensols.amr.trainer.Trainer property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.TrainerApplication">TrainerApplication (class in zensols.amr.app)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.training_config">training_config (zensols.amr.trainer.Trainer property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.SpringTrainer.training_config_file">training_config_file (zensols.amr.trainer.SpringTrainer property)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.training_config_file">(zensols.amr.trainer.Trainer property)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.training_config_overrides">training_config_overrides (zensols.amr.trainer.Trainer attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.training_file">training_file (zensols.amr.corpprep.CorpusPrepperManager property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepper.TRAINING_SPLIT_NAME">TRAINING_SPLIT_NAME (zensols.amr.corpprep.CorpusPrepper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepper.transform_ascii">transform_ascii (zensols.amr.corpprep.CorpusPrepper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.tree">tree (zensols.amr.sent.AmrSentence property)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.tree.TreeNavigator">TreeNavigator (class in zensols.amr.tree)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.tree.TreePruner">TreePruner (class in zensols.amr.tree)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.alignpop.PathAlignment.triple">triple (zensols.amr.alignpop.PathAlignment attribute)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.Reference.triple">(zensols.amr.container.Reference property)</a>
+</li>
+        </ul></li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.triples2penmangraph">triples2penmangraph() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.graph_helpers.tsv2triples">tsv2triples() (in module zensols.amr.wlk.graph_helpers)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Format.txt">txt (zensols.amr.app.Format attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="U" class="genindex-section">
+  <h2>U</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.coref.CoreferenceResolver.use_multithreading">use_multithreading (zensols.amr.coref.CoreferenceResolver attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator.use_sent_index">use_sent_index (zensols.amr.docparser.TokenAnnotationFeatureDocumentDecorator attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.amrlib.AmrlibGenerator.use_tense">use_tense (zensols.amr.amrlib.AmrlibGenerator attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="V" class="genindex-section">
+  <h2>V</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.domain.FeatureMarker.value">value (zensols.amr.domain.FeatureMarker attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.container.Reference.variable">variable (zensols.amr.container.Reference attribute)</a>
+</li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.varidx.VariableIndexer">VariableIndexer (class in zensols.amr.varidx)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.Trainer.version">version (zensols.amr.trainer.Trainer attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="W" class="genindex-section">
+  <h2>W</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.wlk.html#zensols.amr.wlk.score.WeisfeilerLemanKernelScoreCalculator">WeisfeilerLemanKernelScoreCalculator (class in zensols.amr.wlk.score)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.width">width (zensols.amr.dumper.Dumper attribute)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrDocument.write">write() (zensols.amr.annotate.AnnotatedAmrDocument method)</a>
+
+        <ul>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.AnnotatedAmrSectionDocument.write">(zensols.amr.annotate.AnnotatedAmrSectionDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.annotate.CorpusWriter.write">(zensols.amr.annotate.CorpusWriter method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureDocument.write">(zensols.amr.container.AmrFeatureDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.AmrFeatureSentence.write">(zensols.amr.container.AmrFeatureSentence method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.Reference.write">(zensols.amr.container.Reference method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.Relation.write">(zensols.amr.container.Relation method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.container.RelationSet.write">(zensols.amr.container.RelationSet method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.corpprep.CorpusPrepperManager.write">(zensols.amr.corpprep.CorpusPrepperManager method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.write">(zensols.amr.doc.AmrDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.doc.AmrGeneratedDocument.write">(zensols.amr.doc.AmrGeneratedDocument method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrGeneratedSentence.write">(zensols.amr.sent.AmrGeneratedSentence method)</a>
+</li>
+          <li><a href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.write">(zensols.amr.sent.AmrSentence method)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.TrainerApplication.write_corpus">write_corpus() (zensols.amr.app.TrainerApplication method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.app.Application.write_metadata">write_metadata() (zensols.amr.app.Application method)</a>
+</li>
+        <li><a href="api/zensols.amr.html#zensols.amr.dumper.Dumper.write_text">write_text (zensols.amr.dumper.Dumper attribute)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="X" class="genindex-section">
+  <h2>X</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api/zensols.amr.html#zensols.amr.trainer.XfmTrainer">XfmTrainer (class in zensols.amr.trainer)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="Z" class="genindex-section">
+  <h2>Z</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    zensols.amr
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.align
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.align">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.alignpop
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.alignpop">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.amrlib
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.amrlib">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.annotate
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.annotate">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.app
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.app">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.cli
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.cli">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.container
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.container">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.coref
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.coref">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.corpprep
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.corpprep">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.doc
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.doc">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.docfac
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.docfac">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.docparser
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.docparser">module</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li>
+    zensols.amr.domain
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.domain">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.dumper
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.dumper">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.model
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.model">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.score
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.score">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.sent
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.sent">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.serial
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.serial">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.spacyadapt
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.spacyadapt">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.trainer
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.trainer">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.tree
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.tree">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.varidx
+
+        <ul>
+          <li><a href="api/zensols.amr.html#module-zensols.amr.varidx">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.wlk
+
+        <ul>
+          <li><a href="api/zensols.amr.wlk.html#module-zensols.amr.wlk">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.wlk.graph_helpers
+
+        <ul>
+          <li><a href="api/zensols.amr.wlk.html#module-zensols.amr.wlk.graph_helpers">module</a>
+</li>
+        </ul></li>
+        <li>
+    zensols.amr.wlk.score
+
+        <ul>
+          <li><a href="api/zensols.amr.wlk.html#module-zensols.amr.wlk.score">module</a>
+</li>
+        </ul></li>
+    </ul></td>
+  </tr></table>
+</section>
+
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2025 Paul Landes
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=8db09a1e"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>

@@ -1,0 +1,19 @@
+Adapts amrlib in the Zensols framework.
+=======================================
+Provides support for AMR graph manipulation, annotations and feature generation.
+
+.. toctree::
+   :maxdepth: 3
+   :glob:
+
+   Overview <index.md>
+   doc/*
+   API Reference <api.rst>
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

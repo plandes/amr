@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+
+<html class="no-js" data-content_root="./" lang="en">
+<head><meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="light dark" name="color-scheme"/><meta content="width=device-width, initial-scale=1" name="viewport">
+<link href="genindex.html" rel="index" title="Index"/><link href="search.html" rel="search" title="Search"/><link href="api.html" rel="next" title="API Reference"/><link href="top.html" rel="prev" title="Adapts amrlib in the Zensols framework."/>
+<!-- Generated with Sphinx 7.4.7 and Furo 2025.09.25 -->
+<title>AMR annotation and feature generation - Adapts amrlib in the Zensols framework. 0.2.10 documentation</title>
+<link href="_static/pygments.css?v=03e43079" rel="stylesheet" type="text/css">
+<link href="_static/styles/furo.css?v=580074bf" rel="stylesheet" type="text/css">
+<link href="_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css">
+<link href="_static/sphinx-codeautolink.css?v=b2176991" rel="stylesheet" type="text/css">
+<link href="_static/graphviz.css" rel="stylesheet" type="text/css"/>
+<link href="_static/styles/furo-extensions.css?v=8dab3a3b" rel="stylesheet" type="text/css"/>
+<link href="_static/codeautolink.css?v=57550ae3" rel="stylesheet" type="text/css"/>
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></link></link></link></link></meta></head>
+<body>
+<script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+<svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+<symbol id="svg-toc" viewbox="0 0 24 24">
+<title>Contents</title>
+<svg fill="currentColor" stroke="currentColor" stroke-width="0" viewbox="0 0 1024 1024">
+<path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"></path>
+</svg>
+</symbol>
+<symbol id="svg-menu" viewbox="0 0 24 24">
+<title>Menu</title>
+<svg class="feather-menu" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<line x1="3" x2="21" y1="12" y2="12"></line>
+<line x1="3" x2="21" y1="6" y2="6"></line>
+<line x1="3" x2="21" y1="18" y2="18"></line>
+</svg>
+</symbol>
+<symbol id="svg-arrow-right" viewbox="0 0 24 24">
+<title>Expand</title>
+<svg class="feather-chevron-right" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</symbol>
+<symbol id="svg-sun" viewbox="0 0 24 24">
+<title>Light mode</title>
+<svg class="feather-sun" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="5"></circle>
+<line x1="12" x2="12" y1="1" y2="3"></line>
+<line x1="12" x2="12" y1="21" y2="23"></line>
+<line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line>
+<line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line>
+<line x1="1" x2="3" y1="12" y2="12"></line>
+<line x1="21" x2="23" y1="12" y2="12"></line>
+<line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line>
+<line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line>
+</svg>
+</symbol>
+<symbol id="svg-moon" viewbox="0 0 24 24">
+<title>Dark mode</title>
+<svg class="icon-tabler-moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" fill="none" stroke="none"></path>
+<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+</svg>
+</symbol>
+<symbol id="svg-sun-with-moon" viewbox="0 0 24 24">
+<title>Auto light/dark, in light mode</title>
+<svg class="icon-custom-derived-from-feather-sun-and-tabler-moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z" style="opacity: 50%"></path>
+<line x1="14.5" x2="14.5" y1="3.25" y2="1.25"></line>
+<line x1="14.5" x2="14.5" y1="15.85" y2="17.85"></line>
+<line x1="10.044" x2="8.63" y1="5.094" y2="3.68"></line>
+<line x1="19" x2="20.414" y1="14.05" y2="15.464"></line>
+<line x1="8.2" x2="6.2" y1="9.55" y2="9.55"></line>
+<line x1="20.8" x2="22.8" y1="9.55" y2="9.55"></line>
+<line x1="10.044" x2="8.63" y1="14.006" y2="15.42"></line>
+<line x1="19" x2="20.414" y1="5.05" y2="3.636"></line>
+<circle cx="14.5" cy="9.55" r="3.6"></circle>
+</svg>
+</symbol>
+<symbol id="svg-moon-with-sun" viewbox="0 0 24 24">
+<title>Auto light/dark, in dark mode</title>
+<svg class="icon-custom-derived-from-feather-sun-and-tabler-moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"></path>
+<line style="opacity: 50%" x1="18" x2="18" y1="3.705" y2="2.5"></line>
+<line style="opacity: 50%" x1="18" x2="18" y1="11.295" y2="12.5"></line>
+<line style="opacity: 50%" x1="15.316" x2="14.464" y1="4.816" y2="3.964"></line>
+<line style="opacity: 50%" x1="20.711" x2="21.563" y1="10.212" y2="11.063"></line>
+<line style="opacity: 50%" x1="14.205" x2="13.001" y1="7.5" y2="7.5"></line>
+<line style="opacity: 50%" x1="21.795" x2="23" y1="7.5" y2="7.5"></line>
+<line style="opacity: 50%" x1="15.316" x2="14.464" y1="10.184" y2="11.036"></line>
+<line style="opacity: 50%" x1="20.711" x2="21.563" y1="4.789" y2="3.937"></line>
+<circle cx="18" cy="7.5" r="2.169" style="opacity: 50%"></circle>
+</svg>
+</symbol>
+<symbol id="svg-pencil" viewbox="0 0 24 24">
+<svg class="icon-tabler-pencil-code" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4"></path>
+<path d="M13.5 6.5l4 4"></path>
+<path d="M20 21l2 -2l-2 -2"></path>
+<path d="M17 17l-2 2l2 2"></path>
+</svg>
+</symbol>
+<symbol id="svg-eye" viewbox="0 0 24 24">
+<svg class="icon-tabler-eye-code" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" fill="none" stroke="none"></path>
+<path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+<path d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008"></path>
+<path d="M20 21l2 -2l-2 -2"></path>
+<path d="M17 17l-2 2l2 2"></path>
+</svg>
+</symbol>
+</svg>
+<input aria-label="Toggle site navigation sidebar" class="sidebar-toggle" id="__navigation" name="__navigation" type="checkbox"/>
+<input aria-label="Toggle table of contents sidebar" class="sidebar-toggle" id="__toc" name="__toc" type="checkbox"/>
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+<div class="page">
+<header class="mobile-header">
+<div class="header-left">
+<label class="nav-overlay-icon" for="__navigation">
+<span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+</label>
+</div>
+<div class="header-center">
+<a href="top.html"><div class="brand">Adapts amrlib in the Zensols framework. 0.2.10 documentation</div></a>
+</div>
+<div class="header-right">
+<div class="theme-toggle-container theme-toggle-header">
+<button aria-label="Toggle Light / Dark / Auto color theme" class="theme-toggle">
+<svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+<svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+<svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+<svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+</button>
+</div>
+<label class="toc-overlay-icon toc-header-icon" for="__toc">
+<span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+</label>
+</div>
+</header>
+<aside class="sidebar-drawer">
+<div class="sidebar-container">
+<div class="sidebar-sticky"><a class="sidebar-brand" href="top.html">
+<span class="sidebar-brand-text">Adapts amrlib in the Zensols framework. 0.2.10 documentation</span>
+</a><form action="search.html" class="sidebar-search-container" method="get" role="search">
+<input aria-label="Search" class="sidebar-search" name="q" placeholder="Search"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/zensols.amr.html">zensols.amr package</a><input aria-label="Toggle navigation of zensols.amr package" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/zensols.amr.wlk.html">zensols.amr.wlk package</a></li>
+</ul>
+</input></li>
+<li class="toctree-l2"><a class="reference internal" href="api/zensols.amr.wlk.html">zensols.amr.wlk package</a></li>
+</ul>
+</input></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<div class="main">
+<div class="content">
+<div class="article-container">
+<a class="back-to-top muted-link" href="#">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+</svg>
+<span>Back to top</span>
+</a>
+<div class="content-icon-container">
+<div class="view-this-page">
+<a class="muted-link" href="_sources/index.md.txt" title="View this page">
+<svg><use href="#svg-eye"></use></svg>
+<span class="visually-hidden">View this page</span>
+</a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+<button aria-label="Toggle Light / Dark / Auto color theme" class="theme-toggle">
+<svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+<svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+<svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+<svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+</button>
+</div>
+<label class="toc-overlay-icon toc-content-icon" for="__toc">
+<span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+</label>
+</div>
+<article id="furo-main-content" role="main">
+<section id="amr-annotation-and-feature-generation">
+<h1>AMR annotation and feature generation<a class="headerlink" href="#amr-annotation-and-feature-generation" title="Link to this heading">¶</a></h1>
+<p><a class="reference external" href="https://pypi.python.org/pypi/zensols.amr"><img alt="PyPI" src="https://img.shields.io/pypi/v/zensols.amr.svg"/></a>
+<a class="reference external" href="https://www.python.org/downloads/release/python-3110"><img alt="Python 3.11" src="https://img.shields.io/badge/python-3.11-blue.svg"/></a>
+<a class="reference external" href="https://www.python.org/downloads/release/python-3120"><img alt="Python 3.12" src="https://img.shields.io/badge/python-3.12-blue.svg"/></a>
+<a class="reference external" href="https://github.com/plandes/amr/actions"><img alt="Build Status" src="https://github.com/plandes/amr/workflows/CI/badge.svg"/></a></p>
+<p>Provides support for AMR graph manipulation, annotations and feature
+generation.</p>
+<p>Features:</p>
+<ul class="simple">
+<li><p>Annotation in AMR metadata.  For example, sentence types found in the Proxy
+report AMR corpus.</p></li>
+<li><p>AMR token alignment as <a class="reference external" href="https://spacy.io">spaCy</a> components.</p></li>
+<li><p>Integrates natural language parsing and features with Zensols
+<a class="reference external" href="https://github.com/plandes/nlparse">zensols.nlparse</a> library.</p></li>
+<li><p>A scoring API that includes <a class="reference external" href="https://github.com/snowblink14/smatch">Smatch</a> and <a class="reference external" href="https://github.com/flipz357/weisfeiler-leman-amr-metrics">WLK</a>, which extends a more general
+<a class="reference external" href="https://plandes.github.io/nlparse/api/zensols.nlp.html#zensols-nlp-score">NLP scoring module</a>.</p></li>
+<li><p>AMR parsing (<a class="reference external" href="https://github.com/bjascob/amrlib">amrlib</a>) and AMR co-reference (<a class="reference external" href="https://github.com/bjascob/amr_coref">amr_coref</a>).</p></li>
+<li><p>Command line and API utilities for AMR graph Penman graphs, debugging and
+files.</p></li>
+<li><p>Tools for <a class="reference external" href="#training">training and evaluating</a> new AMR parse (text to graph)
+and generation (graph to text) models.</p></li>
+<li><p>A method for re-indexing and updating AMR graph variables so that all in a
+document collection are unique.</p></li>
+</ul>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://plandes.github.io/amr/index.html">Full documentation</a>.</p></li>
+<li><p><a class="reference external" href="https://plandes.github.io/amr/api.html">API reference</a></p></li>
+</ul>
+</section>
+<section id="installing">
+<h2>Installing<a class="headerlink" href="#installing" title="Link to this heading">¶</a></h2>
+<p>The library can be installed with pip from the <a class="reference external" href="https://pypi.org/project/zensols.amr/">pypi</a> repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>zensols.amr
+</pre></div>
+</div>
+<section id="installing-the-gsii-model">
+<h3>Installing the Gsii Model<a class="headerlink" href="#installing-the-gsii-model" title="Link to this heading">¶</a></h3>
+<p>The Gsii model link expires and requires a manual download of the model.  To
+install it, do the following:</p>
+<ol>
+<li><p>Download the <a class="reference external" href="https://u.pcloud.link/publink/show?code=XZD2z0XZOqRtS2mNMHhMG4UhXOCNO4yzeaLk">Gsii model</a> (click “direct download”).</p></li>
+<li><p>Move the file to the local directory.</p></li>
+<li><p>Install the file by forcing a test parse:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>amr<span class="w"> </span>parse<span class="w"> </span><span class="s1">'Test sentence.'</span><span class="w"> </span>--override<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>amr_parse_gsii_resource.url<span class="o">=</span>file:model_parse_gsii-v0_1_0.tar.gz
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/typing.html#module-typing" title="typing"><span class="nn">typing</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/typing.html#typing.List" title="typing.List"><span class="n">List</span></a>
+<span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/pathlib.html#module-pathlib" title="pathlib"><span class="nn">pathlib</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="pathlib.Path"><span class="n">Path</span></a>
+<span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="https://penman.readthedocs.io/en/latest/api/penman.graph.html#module-penman.graph" title="penman.graph"><span class="nn">penman.graph</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://penman.readthedocs.io/en/latest/api/penman.graph.html#penman.graph.Graph" title="penman.graph.Graph"><span class="n">Graph</span></a>
+<span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="https://plandes.github.io/nlparse/api/zensols.nlp.html#module-zensols.nlp" title="zensols.nlp"><span class="nn">zensols.nlp</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="https://plandes.github.io/nlparse/api/zensols.nlp.html#zensols.nlp.container.FeatureDocument" title="zensols.nlp.container.FeatureDocument"><span class="n">FeatureDocument</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="https://plandes.github.io/nlparse/api/zensols.nlp.html#zensols.nlp.parser.FeatureDocumentParser" title="zensols.nlp.parser.FeatureDocumentParser"><span class="n">FeatureDocumentParser</span></a>
+<span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="api/zensols.amr.html#module-zensols.amr" title="zensols.amr"><span class="nn">zensols.amr</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.doc.AmrDocument" title="zensols.amr.doc.AmrDocument"><span class="n">AmrDocument</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.sent.AmrSentence" title="zensols.amr.sent.AmrSentence"><span class="n">AmrSentence</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.dumper.Dumper" title="zensols.amr.dumper.Dumper"><span class="n">Dumper</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.cli.ApplicationFactory" title="zensols.amr.cli.ApplicationFactory"><span class="n">ApplicationFactory</span></a>
+<span class="kn">import</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="https://pandas.pydata.org/pandas-docs/stable/index.html#module-pandas" title="pandas"><span class="nn">pandas</span></a>
+
+<span class="n">sent</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/stdtypes.html#str" title="str"><span class="nb">str</span></a> <span class="o">=</span> <span class="s2">"""</span>
+
+<span class="s2">He was George Washington and first president of the United States.</span>
+<span class="s2">He was born On February 22, 1732.</span>
+
+<span class="s2">"""</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="s1">' '</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+<span class="c1"># get the AMR document parser</span>
+<a class="sphinx-codeautolink-a" href="https://plandes.github.io/nlparse/api/zensols.nlp.html#zensols.nlp.parser.FeatureDocumentParser" title="zensols.nlp.parser.FeatureDocumentParser"><span class="n">doc_parser</span></a><span class="p">:</span> <a class="sphinx-codeautolink-a" href="https://plandes.github.io/nlparse/api/zensols.nlp.html#zensols.nlp.parser.FeatureDocumentParser" title="zensols.nlp.parser.FeatureDocumentParser"><span class="n">FeatureDocumentParser</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.cli.ApplicationFactory.get_doc_parser" title="zensols.amr.cli.ApplicationFactory.get_doc_parser"><span class="n">ApplicationFactory</span><span class="o">.</span><span class="n">get_doc_parser</span></a><span class="p">()</span>
+
+<span class="c1"># the parser creates a NLP centric feature document as provided in the</span>
+<span class="c1"># zensols.nlp package</span>
+<a class="sphinx-codeautolink-a" href="https://plandes.github.io/nlparse/api/zensols.nlp.html#zensols.nlp.container.FeatureDocument" title="zensols.nlp.container.FeatureDocument"><span class="n">doc</span></a><span class="p">:</span> <a class="sphinx-codeautolink-a" href="https://plandes.github.io/nlparse/api/zensols.nlp.html#zensols.nlp.container.FeatureDocument" title="zensols.nlp.container.FeatureDocument"><span class="n">FeatureDocument</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="https://plandes.github.io/nlparse/api/zensols.nlp.html#zensols.nlp.parser.FeatureDocumentParser" title="zensols.nlp.parser.FeatureDocumentParser"><span class="n">doc_parser</span></a><span class="p">(</span><span class="n">sent</span><span class="p">)</span>
+
+<span class="c1"># the AMR object graph data structure is provided in the feature document</span>
+<a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.doc.AmrDocument" title="zensols.amr.doc.AmrDocument"><span class="n">amr_doc</span></a><span class="p">:</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.doc.AmrDocument" title="zensols.amr.doc.AmrDocument"><span class="n">AmrDocument</span></a> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">amr</span>
+
+<span class="c1"># dump a human readable output of the AMR document</span>
+<a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.doc.AmrDocument.write" title="zensols.amr.doc.AmrDocument.write"><span class="n">amr_doc</span><span class="o">.</span><span class="n">write</span></a><span class="p">()</span>
+
+<span class="c1"># get the first AMR sentence instance</span>
+<a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.sent.AmrSentence" title="zensols.amr.sent.AmrSentence"><span class="n">amr_sent</span></a><span class="p">:</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.sent.AmrSentence" title="zensols.amr.sent.AmrSentence"><span class="n">AmrSentence</span></a> <span class="o">=</span> <span class="n">amr_doc</span><span class="o">.</span><span class="n">sents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#print" title="print"><span class="nb">print</span></a><span class="p">(</span><span class="s1">'sentence:'</span><span class="p">)</span>
+<a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#print" title="print"><span class="nb">print</span></a><span class="p">(</span><span class="s1">' '</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.text" title="zensols.amr.sent.AmrSentence.text"><span class="n">amr_sent</span><span class="o">.</span><span class="n">text</span></a><span class="p">)</span>
+<a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#print" title="print"><span class="nb">print</span></a><span class="p">(</span><span class="s1">'tuples:'</span><span class="p">)</span>
+
+<span class="c1"># show the Penman graph representation</span>
+<a class="sphinx-codeautolink-a" href="https://penman.readthedocs.io/en/latest/api/penman.graph.html#penman.graph.Graph" title="penman.graph.Graph"><span class="n">pgraph</span></a><span class="p">:</span> <a class="sphinx-codeautolink-a" href="https://penman.readthedocs.io/en/latest/api/penman.graph.html#penman.graph.Graph" title="penman.graph.Graph"><span class="n">Graph</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.sent.AmrSentence.graph" title="zensols.amr.sent.AmrSentence.graph"><span class="n">amr_sent</span><span class="o">.</span><span class="n">graph</span></a>
+<a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#print" title="print"><span class="nb">print</span></a><span class="p">(</span><span class="sa">f</span><span class="s1">'variables: </span><span class="si">{</span><span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><a class="sphinx-codeautolink-a" href="https://penman.readthedocs.io/en/latest/api/penman.graph.html#penman.graph.Graph.variables" title="penman.graph.Graph.variables"><span class="n">pgraph</span><span class="o">.</span><span class="n">variables</span></a><span class="p">())</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">pgraph</span><span class="o">.</span><span class="n">triples</span><span class="p">:</span>
+    <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#print" title="print"><span class="nb">print</span></a><span class="p">(</span><span class="s1">' '</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+<a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#print" title="print"><span class="nb">print</span></a><span class="p">(</span><span class="s1">'edges:'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <a class="sphinx-codeautolink-a" href="https://penman.readthedocs.io/en/latest/api/penman.graph.html#penman.graph.Graph.edges" title="penman.graph.Graph.edges"><span class="n">pgraph</span><span class="o">.</span><span class="n">edges</span></a><span class="p">():</span>
+    <a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/functions.html#print" title="print"><span class="nb">print</span></a><span class="p">(</span><span class="s1">' '</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+<span class="c1"># visualize the graph as a PDF</span>
+<a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.dumper.Dumper" title="zensols.amr.dumper.Dumper"><span class="n">dumper</span></a><span class="p">:</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.dumper.Dumper" title="zensols.amr.dumper.Dumper"><span class="n">Dumper</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.cli.ApplicationFactory.get_dumper" title="zensols.amr.cli.ApplicationFactory.get_dumper"><span class="n">ApplicationFactory</span><span class="o">.</span><span class="n">get_dumper</span></a><span class="p">()</span>
+<a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/typing.html#typing.List" title="typing.List"><span class="n">List</span></a><span class="p">[</span><a class="sphinx-codeautolink-a" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="pathlib.Path"><span class="n">Path</span></a><span class="p">]</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.dumper.Dumper" title="zensols.amr.dumper.Dumper"><span class="n">dumper</span></a><span class="p">(</span><a class="sphinx-codeautolink-a" href="api/zensols.amr.html#zensols.amr.doc.AmrDocument" title="zensols.amr.doc.AmrDocument"><span class="n">amr_doc</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="resources/default.conf">default.conf</a> sets the default AMR parser, which
+is overridden by the <code class="docutils literal notranslate"><span class="pre">amr_default:parse_mode</span></code> property.  You can select the
+large BART AMR parser with <code class="docutils literal notranslate"><span class="pre">--override=amr_default:parse_mode=xfm_bart_large</span></code>
+on the command line.</p>
+<section id="library">
+<h3>Library<a class="headerlink" href="#library" title="Link to this heading">¶</a></h3>
+<p>When adding the <code class="docutils literal notranslate"><span class="pre">amr</span></code> spaCy pipeline component, the <code class="docutils literal notranslate"><span class="pre">doc._.amr</span></code> attribute is
+set on the <code class="docutils literal notranslate"><span class="pre">Doc</span></code> instance.  You can either configure spaCy yourself, or you can
+use the configuration files in <a class="reference external" href="test-resources">test-resources</a> as an example
+using the <a class="reference external" href="https://plandes.github.io/util/doc/config.html">zensols.util configuration framework</a>.  The command line application
+provides an example how to do this, along with the <a class="reference external" href="test/python/test_amr.py">test
+case</a>.</p>
+</section>
+<section id="command-line">
+<h3>Command Line<a class="headerlink" href="#command-line" title="Link to this heading">¶</a></h3>
+<p>This library is written mostly to be used by other program, but the command
+line utility <code class="docutils literal notranslate"><span class="pre">amr</span></code> is also available to demonstrate its usage and to generate
+ARM graphs on the command line.</p>
+<p>To parse:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>amr<span class="w"> </span>parse<span class="w"> </span>-c<span class="w"> </span>test-resources/t5.conf<span class="w"> </span><span class="s1">'This is a test of the AMR command line utility.'</span>
+</pre></div>
+</div>
+<p>output:</p>
+<div class="highlight-clojure notranslate"><div class="highlight"><pre><span></span><span class="o">#</span><span class="w"> </span><span class="ss">::snt</span><span class="w"> </span><span class="nv">This</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="nb">test </span><span class="nv">of</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">AMR</span><span class="w"> </span><span class="nv">command</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">utility.</span>
+<span class="p">(</span><span class="nf">t</span><span class="w"> </span><span class="nb">/ </span><span class="nv">test-01</span>
+<span class="w">   </span><span class="ss">:ARG1</span><span class="w"> </span><span class="p">(</span><span class="nf">u</span><span class="w"> </span><span class="nb">/ </span><span class="nv">utility</span>
+<span class="w">            </span><span class="ss">:mod</span><span class="w"> </span><span class="p">(</span><span class="nf">c</span><span class="w"> </span><span class="nb">/ </span><span class="nv">command-line</span><span class="p">)</span>
+<span class="w">            </span><span class="ss">:name</span><span class="w"> </span><span class="p">(</span><span class="nf">n</span><span class="w"> </span><span class="nb">/ </span><span class="nv">name</span>
+<span class="w">                     </span><span class="ss">:op1</span><span class="w"> </span><span class="s">"AMR"</span>
+<span class="w">                     </span><span class="ss">:toki1</span><span class="w"> </span><span class="s">"6"</span><span class="p">)</span>
+<span class="w">            </span><span class="ss">:toki1</span><span class="w"> </span><span class="s">"9"</span><span class="p">)</span>
+<span class="w">   </span><span class="ss">:domain</span><span class="w"> </span><span class="p">(</span><span class="nf">t2</span><span class="w"> </span><span class="nb">/ </span><span class="nv">this</span>
+<span class="w">               </span><span class="ss">:toki1</span><span class="w"> </span><span class="s">"0"</span><span class="p">)</span>
+<span class="w">   </span><span class="ss">:toki1</span><span class="w"> </span><span class="s">"3"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To generate graphs in PDF format:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>amr<span class="w"> </span>plot<span class="w"> </span>-c<span class="w"> </span>test-resources/t5.conf<span class="w"> </span><span class="s1">'This is a test of the AMR command line utility.'</span>
+wrote:<span class="w"> </span>amr-graph/this-is-a-test-of-the-amr-comm.pdf
+</pre></div>
+</div>
+</section>
+</section>
+<section id="training">
+<h2>Training<a class="headerlink" href="#training" title="Link to this heading">¶</a></h2>
+<p>This package uses the <a class="reference external" href="https://github.com/bjascob/amrlib">amrlib</a> training, but adds a command line and
+downloadable corpus aggregation / API.  To train:</p>
+<ol class="simple">
+<li><p>Choose a model (i.e. SPRING, T5).</p></li>
+<li><p>Optionally edit the <a class="reference external" href="train-config">train configuration</a> directory of the
+model you choose.</p></li>
+<li><p>Optionally edit the <code class="docutils literal notranslate"><span class="pre">resources/train.yml</span></code> to select/add more corpora (see
+<a class="reference external" href="adding-corpora">Adding Corpora</a>).</p></li>
+<li><p>Train the model: <code class="docutils literal notranslate"><span class="pre">./amr</span> <span class="pre">--config</span> <span class="pre">train-config/&lt;model&gt;.conf</span></code></p></li>
+</ol>
+<section id="pretrained-models">
+<h3>Pretrained Models<a class="headerlink" href="#pretrained-models" title="Link to this heading">¶</a></h3>
+<p>This library was used to train all of the <a class="reference external" href="https://github.com/bjascob/amrlib">amrlib</a> models (using the same
+checkpoints as <a class="reference external" href="https://github.com/bjascob/amrlib">amrlib</a>), except the T5 Base v1 model, with additional
+examples from publicly available human annotated corpora.  The differences of
+these trained models include:</p>
+<ul class="simple">
+<li><p>None of the models were tested against a training set, only the development
+SMATCH scores are available.  This was intentional to provide more training
+examples.</p></li>
+<li><p>The AMR Release 3.0 (<a class="reference external" href="https://catalog.ldc.upenn.edu/LDC2020T02">LDC2020T02</a>) test set was added to the training set.</p></li>
+<li><p>The <a class="reference external" href="https://amr.isi.edu/download.html">Little Prince and Bio AMR</a> corpora
+where used to train the models.  The first 85% of the AMR sentences were
+added to training set and the remaining 15% were added to the development
+set.</p></li>
+<li><p>The mini-batch size changed for <code class="docutils literal notranslate"><span class="pre">generate-t5wtense-base</span></code> due to memory
+constraints.</p></li>
+<li><p>The number of training epochs were increased to account for the additional
+number of training examples.</p></li>
+<li><p>Models have the same naming conventions but are prefixed with <code class="docutils literal notranslate"><span class="pre">zsl</span></code>.</p></li>
+<li><p>Generative models were trained on graphs metadata annotated by the Sci spaCy
+<code class="docutils literal notranslate"><span class="pre">en_core_sci_md</span></code> model.</p></li>
+</ul>
+<p>The performance of these models:</p>
+<p>| Model Name           | Model Type | Checkpoint             | Performance   |
+|———————-|————|————————|—————|
+| <code class="docutils literal notranslate"><span class="pre">zsl_spring</span></code>         | parse      | <a class="reference external" href="https://huggingface.co/facebook/bart-large">facebook/bart-large</a>  | SMATCH: 81.26 |
+| <code class="docutils literal notranslate"><span class="pre">zsl_xfm_bart_base</span></code>  | parse      | <a class="reference external" href="https://huggingface.co/facebook/bart-base">facebook/bart-base</a>   | SMATCH: 80.5  |
+| <code class="docutils literal notranslate"><span class="pre">zsl_xfm_bart_large</span></code> | parse      | <a class="reference external" href="https://huggingface.co/facebook/bart-large">facebook/bart-large</a>  | SMATCH: 82.7  |
+| <code class="docutils literal notranslate"><span class="pre">zsl_t5wtense_base</span></code>  | generative | <a class="reference external" href="https://huggingface.co/google-t5/t5-base">t5-base</a>              | BLEU: 42.20   |
+| <code class="docutils literal notranslate"><span class="pre">zsl_t5wtense_large</span></code> | generative | <a class="reference external" href="https://huggingface.co/google/flan-t5-large">google/flan-t5-large</a> | BLEU: 44.01   |</p>
+<p>These models are available upon request.</p>
+</section>
+<section id="adding-corpora">
+<h3>Adding Corpora<a class="headerlink" href="#adding-corpora" title="Link to this heading">¶</a></h3>
+<p>You can retrain your own model and add additional training corpora by modifying
+the list of <code class="docutils literal notranslate"><span class="pre">${amr_prep_manager:preppers}</span></code> in <code class="docutils literal notranslate"><span class="pre">resources/train.yml</span></code>.  This file
+defines downloaded corpora for the Little Prince and Bio AMR corpora.  To use
+the AMR 3.0 release, add the LDC downloaded file to (a new) <code class="docutils literal notranslate"><span class="pre">download</span></code>
+directory.</p>
+</section>
+</section>
+<section id="attribution">
+<h2>Attribution<a class="headerlink" href="#attribution" title="Link to this heading">¶</a></h2>
+<p>This project, or reference model code, uses:</p>
+<ul class="simple">
+<li><p>Python 3.11</p></li>
+<li><p><a class="reference external" href="https://github.com/bjascob/amrlib">amrlib</a> for AMR parsing.</p></li>
+<li><p><a class="reference external" href="https://github.com/bjascob/amr_coref">amr_coref</a> for AMR co-reference</p></li>
+<li><p><a class="reference external" href="https://spacy.io">spaCy</a> for natural language parsing.</p></li>
+<li><p><a class="reference external" href="https://github.com/plandes/nlparse">zensols.nlparse</a> for natural language features.</p></li>
+<li><p><a class="reference external" href="https://github.com/snowblink14/smatch">Smatch</a> (Cai and Knight. 2013) and <a class="reference external" href="https://github.com/flipz357/weisfeiler-leman-amr-metrics">WLK</a> (Opitz et. al. 2021) for scoring.</p></li>
+</ul>
+</section>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading">¶</a></h2>
+<p>If you use this project in your research please use the following BibTeX entry:</p>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">landes-etal-2023-deepzensols</span><span class="p">,</span>
+<span class="w">	</span><span class="na">title</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"{D}eep{Z}ensols: A Deep Learning Natural Language Processing Framework for Experimentation and Reproducibility"</span><span class="p">,</span>
+<span class="w">	</span><span class="na">author</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"Landes, Paul  and</span>
+<span class="s">	  Di Eugenio, Barbara  and</span>
+<span class="s">	  Caragea, Cornelia"</span><span class="p">,</span>
+<span class="w">	</span><span class="na">editor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"Tan, Liling  and</span>
+<span class="s">	  Milajevs, Dmitrijs  and</span>
+<span class="s">	  Chauhan, Geeticka  and</span>
+<span class="s">	  Gwinnup, Jeremy  and</span>
+<span class="s">	  Rippeth, Elijah"</span><span class="p">,</span>
+<span class="w">	</span><span class="na">booktitle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"Proceedings of the 3rd Workshop for Natural Language Processing Open Source Software (NLP-OSS 2023)"</span><span class="p">,</span>
+<span class="w">	</span><span class="na">month</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nv">dec</span><span class="p">,</span>
+<span class="w">	</span><span class="na">year</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"2023"</span><span class="p">,</span>
+<span class="w">	</span><span class="na">address</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"Singapore, Singapore"</span><span class="p">,</span>
+<span class="w">	</span><span class="na">publisher</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"Association for Computational Linguistics"</span><span class="p">,</span>
+<span class="w">	</span><span class="na">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"https://aclanthology.org/2023.nlposs-1.16"</span><span class="p">,</span>
+<span class="w">	</span><span class="na">pages</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">"141--146"</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="changelog">
+<h2>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h2>
+<p>An extensive changelog is available <a class="reference external" href="https://docs.python.org/3/whatsnew/changelog.html#changelog" title="(in Python v3.14)"><a class="reference external" href="CHANGELOG">here</a></a>.</p>
+</section>
+<section id="community">
+<h2>Community<a class="headerlink" href="#community" title="Link to this heading">¶</a></h2>
+<p>Please star this repository and let me know how and where you use this API.
+<a class="reference external" href="CONTRIBUTIONS">Contributions</a> as pull requests, feedback and any input is
+welcome.</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="LICENSE">MIT License</a></p>
+<p>Copyright (c) 2021 - 2025 Paul Landes</p>
+<!-- links --></section>
+</section>
+</article>
+</div>
+<footer>
+<div class="related-pages">
+<a class="next-page" href="api.html">
+<div class="page-info">
+<div class="context">
+<span>Next</span>
+</div>
+<div class="title">API Reference</div>
+</div>
+<svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+</a>
+<a class="prev-page" href="top.html">
+<svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+<div class="page-info">
+<div class="context">
+<span>Previous</span>
+</div>
+<div class="title">Home</div>
+</div>
+</a>
+</div>
+<div class="bottom-of-page">
+<div class="left-details">
+<div class="copyright">
+                Copyright © 2025 Paul Landes
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+</div>
+<div class="right-details">
+</div>
+</div>
+</footer>
+</div>
+<aside class="toc-drawer">
+<div class="toc-sticky toc-scroll">
+<div class="toc-title-container">
+<span class="toc-title">
+            On this page
+          </span>
+</div>
+<div class="toc-tree-container">
+<div class="toc-tree">
+<ul>
+<li><a class="reference internal" href="#">AMR annotation and feature generation</a><ul>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
+<li><a class="reference internal" href="#installing">Installing</a><ul>
+<li><a class="reference internal" href="#installing-the-gsii-model">Installing the Gsii Model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#library">Library</a></li>
+<li><a class="reference internal" href="#command-line">Command Line</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#training">Training</a><ul>
+<li><a class="reference internal" href="#pretrained-models">Pretrained Models</a></li>
+<li><a class="reference internal" href="#adding-corpora">Adding Corpora</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attribution">Attribution</a></li>
+<li><a class="reference internal" href="#citation">Citation</a></li>
+<li><a class="reference internal" href="#changelog">Changelog</a></li>
+<li><a class="reference internal" href="#community">Community</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div><script src="_static/documentation_options.js?v=8db09a1e"></script>
+<script src="_static/doctools.js?v=9a2dae69"></script>
+<script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+<script src="_static/scripts/furo.js?v=46bd48cc"></script>
+<script src="_static/clipboard.min.js?v=a7894cd8"></script>
+<script src="_static/copybutton.js?v=f281be69"></script>
+</body>
+</html>
