@@ -133,6 +133,16 @@ class AmrSentence(PersistableContainer, Writable):
         """The failure if :obj:`is_failure` is ``True``."""
         return self._failure
 
+    @failure.setter
+    def failure(self, failure: AmrFailure):
+        """The failure if :obj:`is_failure` is ``True``."""
+        graph_string: str = '()'
+        try:
+            graph_string = self.graph_string
+        except Exception as e:
+            logger.warning(f'cannot parse graph string for failure: {e}')
+        self._set_failure(failure, graph_string)
+
     @property
     def text(self) -> str:
         """The text of the natural language form of the sentence."""

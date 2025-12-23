@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 
+## [0.2.9] - 2025-12-22
+### Changed
+- Make `AmrSentence.failure` writable to modify a sentence into a failure.
+
+
 ## [0.2.8] - 2025-12-08
 ### Changed
 - Robust error handling and reporting.
@@ -141,7 +146,8 @@ transformers version 4.48.
 
 
 <!-- links -->
-[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.8...HEAD
+[Unreleased]: https://github.com/Paul Landes/amr/compare/v0.2.9...HEAD
+[0.2.9]: https://github.com/Paul Landes/amr/compare/v0.2.8...v0.2.9
 [0.2.8]: https://github.com/Paul Landes/amr/compare/v0.2.7...v0.2.8
 [0.2.7]: https://github.com/Paul Landes/amr/compare/v0.2.6...v0.2.7
 [0.2.6]: https://github.com/Paul Landes/amr/compare/v0.2.5...v0.2.6
